@@ -1,0 +1,430 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════════════
+   MOSRAC DESIGN SYSTEM — CSS Custom Properties
+   All public + applicant + student portal pages inherit these.
+   Admin panel is intentionally excluded.
+═══════════════════════════════════════════════════════ */
+
+@layer base {
+    :root {
+        /* ── Brand Colors ── */
+        --MOSRAC-navy:       #011C3E;
+        --MOSRAC-navy-dark:  #011627;
+        --MOSRAC-navy-light: #0a3060;
+        --MOSRAC-crimson:    #611818;
+        --MOSRAC-crimson-dark: #4a1010;
+        --MOSRAC-crimson-light: #7a2020;
+
+        /* ── Surface / Background ── */
+        --MOSRAC-surface:    #f0f4f8;
+        --MOSRAC-surface-2:  #e8edf3;
+        --MOSRAC-white:      #ffffff;
+
+        /* ── Text ── */
+        --MOSRAC-text-primary:   #0f172a;
+        --MOSRAC-text-secondary: #475569;
+        --MOSRAC-text-muted:     #94a3b8;
+        --MOSRAC-text-inverse:   #ffffff;
+
+        /* ── Border ── */
+        --MOSRAC-border:       #e2e8f0;
+        --MOSRAC-border-focus: #3b82f6;
+
+        /* ── Semantic ── */
+        --MOSRAC-success:     #16a34a;
+        --MOSRAC-success-bg:  #dcfce7;
+        --MOSRAC-warning:     #d97706;
+        --MOSRAC-warning-bg:  #fef3c7;
+        --MOSRAC-danger:      #dc2626;
+        --MOSRAC-danger-bg:   #fee2e2;
+        --MOSRAC-info:        #2563eb;
+        --MOSRAC-info-bg:     #dbeafe;
+
+        /* ── Spacing scale ── */
+        --MOSRAC-radius-sm:   4px;
+        --MOSRAC-radius:      8px;
+        --MOSRAC-radius-md:   12px;
+        --MOSRAC-radius-lg:   16px;
+        --MOSRAC-radius-xl:   24px;
+
+        /* ── Shadows ── */
+        --MOSRAC-shadow-sm:  0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+        --MOSRAC-shadow:     0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.06);
+        --MOSRAC-shadow-lg:  0 10px 30px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.06);
+        --MOSRAC-shadow-xl:  0 20px 50px rgba(0,0,0,0.12), 0 8px 16px rgba(0,0,0,0.06);
+
+        /* ── Typography ── */
+        --font-serif:  'Georgia', 'Times New Roman', serif;
+        --font-sans:   'Figtree', system-ui, -apple-system, sans-serif;
+    }
+
+    /* ── Base HTML ── */
+    html {
+        font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: var(--font-sans);
+        color: var(--MOSRAC-text-primary);
+        background-color: var(--MOSRAC-white);
+        line-height: 1.7;
+    }
+
+    /* ── Typography Scale ── */
+    h1, .h1 {
+        font-family: var(--font-serif);
+        font-size: clamp(1.875rem, 4vw, 2.5rem);
+        font-weight: 700;
+        line-height: 1.2;
+        color: var(--MOSRAC-navy);
+        letter-spacing: -0.02em;
+    }
+
+    h2, .h2 {
+        font-family: var(--font-serif);
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-weight: 700;
+        line-height: 1.25;
+        color: var(--MOSRAC-navy);
+        letter-spacing: -0.015em;
+    }
+
+    h3, .h3 {
+        font-family: var(--font-serif);
+        font-size: clamp(1.125rem, 2vw, 1.375rem);
+        font-weight: 600;
+        line-height: 1.35;
+        color: var(--MOSRAC-navy);
+    }
+
+    h4, .h4 {
+        font-family: var(--font-sans);
+        font-size: 1rem;
+        font-weight: 700;
+        line-height: 1.4;
+        color: var(--MOSRAC-navy);
+        letter-spacing: 0.01em;
+    }
+
+    p {
+        line-height: 1.75;
+        color: var(--MOSRAC-text-secondary);
+    }
+
+    /* ── Section label (eyebrow text) ── */
+    .label-section {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--MOSRAC-crimson);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════
+   COMPONENT LAYER
+═══════════════════════════════════════════════════════ */
+
+@layer components {
+
+    /* ── Buttons ── */
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200 cursor-pointer select-none;
+        font-size: 0.875rem;
+        letter-spacing: 0.01em;
+        border-radius: var(--MOSRAC-radius);
+        padding: 0.625rem 1.5rem;
+        line-height: 1.25;
+        text-decoration: none;
+        border: 2px solid transparent;
+    }
+
+    .btn:focus-visible {
+        outline: 2px solid var(--MOSRAC-border-focus);
+        outline-offset: 3px;
+    }
+
+    .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    /* Primary — navy */
+    .btn-primary {
+        @apply btn;
+        background-color: var(--MOSRAC-navy);
+        color: var(--MOSRAC-text-inverse);
+        border-color: var(--MOSRAC-navy);
+    }
+    .btn-primary:hover {
+        background-color: var(--MOSRAC-navy-light);
+        border-color: var(--MOSRAC-navy-light);
+        transform: translateY(-1px);
+        box-shadow: var(--MOSRAC-shadow);
+    }
+    .btn-primary:active { transform: translateY(0); }
+
+    /* Crimson */
+    .btn-crimson {
+        @apply btn;
+        background-color: var(--MOSRAC-crimson);
+        color: var(--MOSRAC-text-inverse);
+        border-color: var(--MOSRAC-crimson);
+    }
+    .btn-crimson:hover {
+        background-color: var(--MOSRAC-crimson-dark);
+        border-color: var(--MOSRAC-crimson-dark);
+        transform: translateY(-1px);
+        box-shadow: var(--MOSRAC-shadow);
+    }
+
+    /* Outline navy */
+    .btn-outline {
+        @apply btn;
+        background-color: transparent;
+        color: var(--MOSRAC-navy);
+        border-color: var(--MOSRAC-navy);
+    }
+    .btn-outline:hover {
+        background-color: var(--MOSRAC-navy);
+        color: var(--MOSRAC-text-inverse);
+    }
+
+    /* Outline crimson */
+    .btn-outline-crimson {
+        @apply btn;
+        background-color: transparent;
+        color: var(--MOSRAC-crimson);
+        border-color: var(--MOSRAC-crimson);
+    }
+    .btn-outline-crimson:hover {
+        background-color: var(--MOSRAC-crimson);
+        color: var(--MOSRAC-text-inverse);
+    }
+
+    /* Ghost */
+    .btn-ghost {
+        @apply btn;
+        background-color: transparent;
+        color: var(--MOSRAC-text-secondary);
+        border-color: var(--MOSRAC-border);
+    }
+    .btn-ghost:hover {
+        background-color: var(--MOSRAC-surface);
+        color: var(--MOSRAC-text-primary);
+        border-color: var(--MOSRAC-border);
+    }
+
+    /* White (for dark backgrounds) */
+    .btn-white {
+        @apply btn;
+        background-color: var(--MOSRAC-white);
+        color: var(--MOSRAC-navy);
+        border-color: var(--MOSRAC-white);
+    }
+    .btn-white:hover {
+        background-color: var(--MOSRAC-surface);
+        transform: translateY(-1px);
+        box-shadow: var(--MOSRAC-shadow);
+    }
+
+    /* Sizes */
+    .btn-sm {
+        font-size: 0.8125rem;
+        padding: 0.4375rem 1rem;
+    }
+    .btn-lg {
+        font-size: 1rem;
+        padding: 0.875rem 2rem;
+        border-radius: var(--MOSRAC-radius-md);
+    }
+
+    /* ── Badges / Status Pills ── */
+    .badge {
+        @apply inline-flex items-center font-semibold;
+        font-size: 0.6875rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        border-radius: 999px;
+        padding: 0.25rem 0.75rem;
+        line-height: 1.4;
+    }
+
+    .badge-navy    { @apply badge; background: #e0e8f0; color: var(--MOSRAC-navy); }
+    .badge-crimson { @apply badge; background: #f5e0e0; color: var(--MOSRAC-crimson); }
+    .badge-success { @apply badge; background: var(--MOSRAC-success-bg); color: var(--MOSRAC-success); }
+    .badge-warning { @apply badge; background: var(--MOSRAC-warning-bg); color: var(--MOSRAC-warning); }
+    .badge-danger  { @apply badge; background: var(--MOSRAC-danger-bg); color: var(--MOSRAC-danger); }
+    .badge-info    { @apply badge; background: var(--MOSRAC-info-bg); color: var(--MOSRAC-info); }
+    .badge-gray    { @apply badge; background: #f1f5f9; color: #64748b; }
+
+    /* Application status badges */
+    .badge-draft              { @apply badge-gray; }
+    .badge-submitted          { @apply badge-info; }
+    .badge-under_review       { @apply badge-navy; }
+    .badge-documents_requested{ @apply badge-warning; }
+    .badge-approved           { @apply badge-success; }
+    .badge-rejected           { @apply badge-danger; }
+
+    /* ── Alert Banners ── */
+    .alert {
+        @apply flex items-start gap-3 rounded-xl px-4 py-3.5;
+        font-size: 0.875rem;
+        line-height: 1.6;
+        border-left: 4px solid transparent;
+    }
+    .alert-success { @apply alert; background: var(--MOSRAC-success-bg); color: #15803d; border-color: var(--MOSRAC-success); }
+    .alert-warning { @apply alert; background: var(--MOSRAC-warning-bg); color: #92400e; border-color: var(--MOSRAC-warning); }
+    .alert-danger  { @apply alert; background: var(--MOSRAC-danger-bg);  color: #991b1b; border-color: var(--MOSRAC-danger); }
+    .alert-info    { @apply alert; background: var(--MOSRAC-info-bg);    color: #1e40af; border-color: var(--MOSRAC-info); }
+
+    /* ── Form Inputs ── */
+    .MOSRAC-input {
+        @apply w-full transition-all duration-200 bg-white text-sm;
+        padding: 0.625rem 1rem;
+        border-radius: var(--MOSRAC-radius);
+        border: 1.5px solid var(--MOSRAC-border);
+        color: var(--MOSRAC-text-primary);
+        line-height: 1.5;
+    }
+    .MOSRAC-input:focus {
+        outline: none;
+        border-color: var(--MOSRAC-navy);
+        box-shadow: 0 0 0 3px rgba(1, 28, 62, 0.1);
+    }
+    .MOSRAC-input::placeholder { color: var(--MOSRAC-text-muted); }
+    .MOSRAC-input.has-error { border-color: var(--MOSRAC-danger); }
+    .MOSRAC-input.has-error:focus { box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1); }
+
+    .MOSRAC-label {
+        @apply block font-semibold mb-1.5;
+        font-size: 0.875rem;
+        color: var(--MOSRAC-navy);
+    }
+
+    .MOSRAC-select {
+        @apply MOSRAC-input appearance-none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        padding-right: 2.5rem;
+    }
+
+    .MOSRAC-textarea {
+        @apply MOSRAC-input;
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    /* ── Card ── */
+    .MOSRAC-card {
+        @apply bg-white;
+        border-radius: var(--MOSRAC-radius-lg);
+        box-shadow: var(--MOSRAC-shadow-sm);
+        border: 1px solid var(--MOSRAC-border);
+        overflow: hidden;
+        transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .MOSRAC-card:hover { box-shadow: var(--MOSRAC-shadow); }
+    .MOSRAC-card-hover:hover { transform: translateY(-2px); box-shadow: var(--MOSRAC-shadow-lg); }
+
+    /* ── Page section ── */
+    .MOSRAC-section {
+        @apply py-20 md:py-24;
+    }
+    .MOSRAC-section-sm {
+        @apply py-12 md:py-16;
+    }
+    .MOSRAC-container {
+        @apply max-w-7xl mx-auto px-4 md:px-6;
+    }
+
+    /* ── Section heading block ── */
+    .MOSRAC-section-heading {
+        @apply mb-12 md:mb-16;
+    }
+    .MOSRAC-section-heading .label-section {
+        @apply block mb-3;
+    }
+    .MOSRAC-section-heading h2 {
+        @apply mb-0;
+    }
+    .MOSRAC-section-divider {
+        @apply w-14 h-1 rounded mt-4;
+        background-color: var(--MOSRAC-crimson);
+    }
+
+    /* ── Divider ── */
+    .MOSRAC-divider {
+        @apply w-full border-0 my-0;
+        height: 1px;
+        background-color: var(--MOSRAC-border);
+    }
+
+    /* ── Page hero (internal pages) ── */
+    .MOSRAC-page-hero {
+        @apply relative py-20 overflow-hidden;
+        background-color: var(--MOSRAC-navy);
+    }
+    .MOSRAC-page-hero-content {
+        @apply relative z-10 MOSRAC-container text-center;
+    }
+    .MOSRAC-page-hero h1 {
+        @apply text-white mb-4;
+    }
+    .MOSRAC-page-hero .label-section {
+        color: rgba(255,255,255,0.55);
+        @apply mb-4;
+    }
+
+    /* ── Prose content ── */
+    .MOSRAC-prose {
+        font-size: 1.0625rem;
+        line-height: 1.8;
+        color: var(--MOSRAC-text-secondary);
+    }
+    .MOSRAC-prose p + p { margin-top: 1.25em; }
+    .MOSRAC-prose strong { color: var(--MOSRAC-text-primary); font-weight: 600; }
+    .MOSRAC-prose a { color: var(--MOSRAC-navy); text-decoration: underline; }
+    .MOSRAC-prose a:hover { color: var(--MOSRAC-crimson); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   UTILITY LAYER — helpers
+═══════════════════════════════════════════════════════ */
+
+@layer utilities {
+    .text-navy    { color: var(--MOSRAC-navy); }
+    .text-crimson { color: var(--MOSRAC-crimson); }
+    .bg-navy      { background-color: var(--MOSRAC-navy); }
+    .bg-crimson   { background-color: var(--MOSRAC-crimson); }
+    .bg-surface   { background-color: var(--MOSRAC-surface); }
+
+    .font-serif { font-family: var(--font-serif); }
+    .font-sans  { font-family: var(--font-sans); }
+
+    .shadow-MOSRAC-sm { box-shadow: var(--MOSRAC-shadow-sm); }
+    .shadow-MOSRAC    { box-shadow: var(--MOSRAC-shadow); }
+    .shadow-MOSRAC-lg { box-shadow: var(--MOSRAC-shadow-lg); }
+
+    /* Line clamp utilities */
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+    /* Scrollbar hide */
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Focus ring */
+    .focus-MOSRAC:focus-visible {
+        outline: 2px solid var(--MOSRAC-border-focus);
+        outline-offset: 3px;
+    }
+}

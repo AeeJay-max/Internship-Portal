@@ -1,0 +1,810 @@
+﻿
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\ApplicationController.php =====
+ApplicantPersonalInfo::updateOrCreate(
+ApplicantAcademicInfo::updateOrCreate(
+ApplicantFamilyInfo::updateOrCreate(
+'previous_degree_program', 'completed_semesters',
+ApplicantTransferInfo::updateOrCreate(
+'admission_cycle_id' => 'required|exists:admission_cycles,id',
+Application::create([
+ApplicantPersonalInfo::updateOrCreate(
+ApplicantAcademicInfo::updateOrCreate(
+ApplicantFamilyInfo::updateOrCreate(
+'completed_semesters'          => 'nullable|integer|min:0',
+ApplicantTransferInfo::updateOrCreate(
+ApplicationDocument::updateOrCreate(
+ApplicationDocument::updateOrCreate(
+$application->update([
+ApplicationDocument::updateOrCreate(
+ApplicationDocument::updateOrCreate(
+$application->update([
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\ProfileController.php =====
+public function update(ProfileUpdateRequest $request): RedirectResponse
+// Block deletion if user has any applications
+if ($user->applications()->exists()) {
+'password' => 'Your account cannot be deleted because you have submitted applications. Please contact the admissions office if you need assistance.',
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\Admin\AdminUserController.php =====
+public function create()
+User::create([
+$user->update(['password' => Hash::make($request->password)]);
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\Admin\AdmissionCycleController.php =====
+public function create()
+$programs = Program::where('is_active', true)->orderBy('name')->get();
+return view('admin.cycles.create', compact('programs'));
+'program_id'  => 'required|exists:programs,id',
+AdmissionCycle::create($validated);
+$programs = Program::where('is_active', true)->orderBy('name')->get();
+return view('admin.cycles.edit', compact('cycle', 'programs'));
+public function update(Request $request, AdmissionCycle $cycle)
+'program_id'  => 'required|exists:programs,id',
+$cycle->update($validated);
+// Only delete if no applications are linked
+if ($cycle->applications()->count() > 0) {
+return back()->with('error', 'Cannot delete a cycle that has applications linked to it.');
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\Admin\ApplicantController.php =====
+->with(['applications' => function ($q) {
+$query->whereHas('applications', fn($q) =>
+$query->whereHas('applications.program', fn($q) =>
+->whereHas('applications', fn($q) => $q->where('status', 'draft'));
+->whereHas('applications', fn($q) => $q->where('status', 'draft')
+->whereHas('applications', fn($q) => $q->where('status', 'draft'))
+->whereHas('applications', fn($q) => $q->where('status', 'draft')
+$programs = Program::where('is_active', true)->orderBy('name')->get();
+'users', 'filter', 'search', 'stats', 'programs', 'program', 'level'
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\Admin\ApplicationController.php =====
+use App\Notifications\ApplicationApproved;
+use App\Notifications\ApplicationRejected;
+use App\Notifications\ApplicationUnderReview;
+use App\Notifications\DocumentsRequested;
+$applications = $query->orderBy('created_at', 'desc')->paginate(20)->withQueryString();
+'students'             => Student::count(),
+// Resubmitted applications — applicant uploaded new docs, waiting for admin review
+return view('admin.applications.index', compact('applications', 'stats', 'resubmitted'));
+$application->update(['needs_reupload_review' => false]);
+return view('admin.applications.show', compact('application'));
+$application->update([
+$application->update([
+$application->update([
+$student = Student::create([
+// 3. Auto-enroll student in Year 1 subjects of their program for current semester
+$subjects = \App\Models\Subject::where('program_id', $application->program_id)
+foreach ($subjects as $subject) {
+\App\Models\StudentSubjectEnrollment::firstOrCreate([
+$enrolledCount = $subjects->count();
+$application->user->update(['profile_photo' => $portraitDoc->file_path]);
+"Application approved. Student number {$studentNumber} assigned. Auto-enrolled in {$enrolledCount} subjects.",
+$application->update([
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\Admin\DashboardController.php =====
+'total_applications'    => Application::whereNotIn('status', [Application::STATUS_DRAFT])->count(),
+'total_students'        => Student::count(),
+// Applications by program for chart
+$recentApplications = Application::with(['user', 'program'])
+return view('admin.dashboard.index', compact('stats', 'recentApplications', 'byProgram', 'monthlyData'));
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\Admin\NewsController.php =====
+public function create()
+News::create([
+public function update(Request $request, News $news)
+$news->update([
+$news->update(['is_featured' => !$news->is_featured]);
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\Admin\ProgramController.php =====
+$programs = Program::withTrashed()->with('admissionCycles')
+return view('admin.programs.index', compact('programs', 'featured'));
+public function create()
+return view('admin.programs.create');
+$validated['image_path'] = $request->file('image')->store('programs', 'public');
+Program::create($validated);
+return redirect()->route('admin.programs.index')
+return view('admin.programs.edit', compact('program', 'isSuperAdmin'));
+public function update(Request $request, Program $program)
+$validated['image_path'] = $request->file('image')->store('programs', 'public');
+$program->update($validated);
+return redirect()->route('admin.programs.index')
+$data['image_path'] = $request->file('image')->store('programs', 'public');
+$program->update($data);
+return redirect()->route('admin.programs.index')
+$program->update(['is_featured' => !$program->is_featured]);
+return redirect()->route('admin.programs.index')->with('success', 'Program deleted.');
+return redirect()->route('admin.programs.index')->with('success', 'Program restored.');
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\Admin\StudentController.php =====
+$students = $query->latest()->paginate(20)->withQueryString();
+$programs   = \App\Models\Program::where('is_active', true)->orderBy('name')->get();
+$totalStudents  = Student::count();
+return view('admin.students.index', compact('students', 'programs', 'maxYear', 'totalStudents', 'byLevel'));
+return view('admin.students.show', compact('student'));
+$student->user->update(['profile_photo' => $path]);
+$student->update(['current_year' => $newYear]);
+$subjects = \App\Models\Subject::where('program_id', $student->application->program_id)
+foreach ($subjects as $subject) {
+$created = \App\Models\StudentSubjectEnrollment::firstOrCreate([
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\Admin\Portal\EnrollmentController.php =====
+use App\Models\StudentSubjectEnrollment;
+$semesters       = Semester::orderByDesc('starts_at')->get();
+$currentSemester = Semester::current() ?? $semesters->first();
+// Programs that have subjects this semester
+$programs = Program::whereHas('subjects', fn($q) => $q->where('semester_id', $semesterId))
+->withCount(['subjects as subjectCount' => fn($q) => $q->where('semester_id', $semesterId)])
+$programStudents = collect();
+$subjects        = collect();
+// All subjects for this program this semester
+$subjects = $subjectQuery->get();
+// Students enrolled in this program via approved applications
+$programStudents = Student::with(['user', 'application'])
+->map(function ($student) use ($subjects, $semesterId) {
+// Check which subjects this student is enrolled in
+$enrolledIds = StudentSubjectEnrollment::where('student_id', $student->id)
+$student->missingSubjects    = $subjects->whereNotIn('id', $enrolledIds);
+'semesters', 'semesterId', 'currentSemester',
+'programs', 'programId', 'selectedProgram',
+'programStudents', 'subjects', 'yearOfStudy'
+* Sync a student — enroll them in all subjects of their program they're missing
+'student_id'  => 'required|exists:students,id',
+'semester_id' => 'required|exists:semesters,id',
+$subjects = Subject::where('program_id', $programId)
+foreach ($subjects as $subject) {
+$created = StudentSubjectEnrollment::firstOrCreate([
+* Sync ALL students in a program
+'program_id'  => 'required|exists:programs,id',
+'semester_id' => 'required|exists:semesters,id',
+$subjects = Subject::where('program_id', $request->program_id)
+$students = Student::whereHas('application', fn($q) => $q->where('program_id', $request->program_id))
+foreach ($students as $student) {
+foreach ($subjects as $subject) {
+$created = StudentSubjectEnrollment::firstOrCreate([
+return back()->with('success', "All {$students->count()} students synced — {$totalEnrolled} new enrollment(s) created.");
+public function destroy(StudentSubjectEnrollment $enrollment)
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\Admin\Portal\GradeController.php =====
+use App\Models\StudentSubjectEnrollment;
+$semesters       = Semester::orderByDesc('starts_at')->get();
+$currentSemester = Semester::current() ?? $semesters->first();
+// Only programs that have subjects in this semester, grouped by degree level
+$programs = Program::whereHas('subjects', fn($q) => $q->where('semester_id', $semesterId))
+->withCount(['subjects as subjectCount' => fn($q) => $q->where('semester_id', $semesterId)])
+// Subjects only load when a program is selected
+$subjects        = collect();
+$subjects = $subjectQuery->get();
+return view('admin.portal.grades.index', compact(
+'semesters', 'semesterId', 'currentSemester',
+'programs', 'programId', 'selectedProgram', 'subjects',
+return view('admin.portal.grades.subject', compact('subject'));
+$enrollment = StudentSubjectEnrollment::findOrFail($request->enrollment_id);
+Grade::updateOrCreate(
+public function update(Request $request, Grade $grade)
+$grade->update(array_merge(['midterm' => $midterm, 'final' => $final], $calculated));
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\Admin\Portal\LecturerController.php =====
+$lecturers = Lecturer::withCount('scheduleSlots')->orderBy('name')->get();
+return view('admin.portal.lecturers.index', compact('lecturers'));
+public function create()
+return view('admin.portal.lecturers.create');
+'email'   => 'required|email|unique:lecturers,email',
+Lecturer::create($request->only('name', 'title', 'email', 'faculty'));
+return redirect()->route('admin.portal.lecturers.index')
+return view('admin.portal.lecturers.edit', compact('lecturer'));
+public function update(Request $request, Lecturer $lecturer)
+'email'   => 'required|email|unique:lecturers,email,' . $lecturer->id,
+$lecturer->update($request->only('name', 'title', 'email', 'faculty'));
+return redirect()->route('admin.portal.lecturers.index')
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\Admin\Portal\ScheduleController.php =====
+$semesters       = Semester::orderByDesc('starts_at')->get();
+$currentSemester = Semester::current() ?? $semesters->first();
+$programs = Program::whereHas('subjects', fn($q) => $q->where('semester_id', $semesterId))
+->withCount(['subjects as subjectCount' => fn($q) => $q->where('semester_id', $semesterId)])
+$subjects         = collect();
+$lecturers        = Lecturer::orderBy('name')->get();
+$availableSubjects = collect(); // subjects that still need more slots
+$subjects = $subjectQuery->get();
+foreach ($subjects as $subject) {
+// Subjects that still need more slots (for clickable cell modal)
+$availableSubjects = $subjects->filter(fn($s) => !$s->isFullyScheduled())
+'semesters', 'semesterId', 'currentSemester',
+'programs', 'programId', 'selectedProgram',
+'subjects', 'lecturers', 'calendarData',
+'availableSubjects', 'yearOfStudy'
+'subject_id'  => 'required|exists:subjects,id',
+'lecturer_id' => 'required|exists:lecturers,id',
+ScheduleSlot::create($request->only(
+public function update(Request $request, ScheduleSlot $slot)
+'lecturer_id' => 'required|exists:lecturers,id',
+$slot->update($request->only(
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\Admin\Portal\SemesterController.php =====
+// Only super admin can manage semesters
+$semesters = Semester::orderByDesc('starts_at')->get();
+return view('admin.portal.semesters.index', compact('semesters'));
+public function create()
+return view('admin.portal.semesters.create');
+Semester::create($request->only('name', 'academic_year', 'starts_at', 'ends_at'));
+return redirect()->route('admin.portal.semesters.index')
+return view('admin.portal.semesters.edit', compact('semester'));
+public function update(Request $request, Semester $semester)
+$semester->update($request->only('name', 'academic_year', 'starts_at', 'ends_at'));
+return redirect()->route('admin.portal.semesters.index')
+Semester::query()->update(['is_current' => false]);
+$semester->update(['is_current' => true]);
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\Admin\Portal\SubjectController.php =====
+$semesters       = Semester::orderByDesc('starts_at')->get();
+$currentSemester = Semester::current() ?? $semesters->first();
+// Programs that have subjects this semester
+$programs = Program::whereHas('subjects', fn($q) => $q->where('semester_id', $semesterId))
+->withCount(['subjects as subjectCount' => fn($q) => $q->where('semester_id', $semesterId)])
+$subjects        = collect();
+$subjects = $subjectQuery->get();
+return view('admin.portal.subjects.index', compact(
+'semesters', 'semesterId', 'currentSemester',
+'programs', 'programId', 'selectedProgram', 'subjects', 'yearOfStudy'
+public function create(Request $request)
+$semesters       = Semester::orderByDesc('starts_at')->get();
+$currentSemester = Semester::current() ?? $semesters->first();
+$programs        = Program::where('is_active', true)->orderBy('degree_level')->orderBy('name')->get();
+$lecturers       = Lecturer::orderBy('name')->get();
+->whereIn('program_id', $programs->pluck('id'))
+$programPrefixes = $programs->mapWithKeys(function($p) {
+return view('admin.portal.subjects.create', compact(
+'semesters', 'programs', 'lecturers', 'preProgram',
+'semester_id'   => 'required|exists:semesters,id',
+'program_id'    => 'required|exists:programs,id',
+$subject = Subject::create($request->only(
+return redirect()->route('admin.portal.subjects.show', $subject)
+$lecturers = Lecturer::orderBy('name')->get();
+return view('admin.portal.subjects.show', compact('subject', 'lecturers'));
+$semesters = Semester::orderByDesc('starts_at')->get();
+$programs  = Program::where('is_active', true)->orderBy('name')->get();
+return view('admin.portal.subjects.edit', compact('subject', 'semesters', 'programs'));
+public function update(Request $request, Subject $subject)
+'semester_id'   => 'required|exists:semesters,id',
+'program_id'    => 'required|exists:programs,id',
+$subject->update($request->only(
+return redirect()->route('admin.portal.subjects.show', $subject)
+return redirect()->route('admin.portal.subjects.index')->with('success', 'Subject deleted.');
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\Auth\AuthenticatedSessionController.php =====
+public function create(): View
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\Auth\NewPasswordController.php =====
+public function create(Request $request): View
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\Auth\PasswordController.php =====
+public function update(Request $request): RedirectResponse
+$request->user()->update([
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\Auth\PasswordResetLinkController.php =====
+public function create(): View
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\Auth\RegisteredUserController.php =====
+public function create(): View
+$user = User::create([
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\StudentPortal\DashboardController.php =====
+// Current enrollments with subjects, schedule and grades
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Http\Controllers\StudentPortal\GradesController.php =====
+class GradesController extends Controller
+$semesters = Semester::orderByDesc('starts_at')->get();
+foreach ($semesters as $semester) {
+return view('portal.grades.index', compact(
+$semesters = Semester::orderBy('starts_at')->get();
+foreach ($semesters as $semester) {
+return view('portal.grades.transcript', compact(
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Models\AdmissionCycle.php =====
+protected $fillable = [
+protected $casts = [
+public function applications()
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Models\ApplicantAcademicInfo.php =====
+protected $table = 'applicant_academic_info';
+protected $fillable = [
+protected $casts = [
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Models\ApplicantFamilyInfo.php =====
+protected $fillable = [
+protected $casts = [
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Models\ApplicantPersonalInfo.php =====
+protected $table = 'applicant_personal_info';
+protected $fillable = [
+protected $casts = [
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Models\ApplicantTransferInfo.php =====
+protected $fillable = [
+'completed_semesters',
+protected $casts = [
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Models\Application.php =====
+protected $fillable = [
+protected $casts = [
+$this->update([
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Models\ApplicationDocument.php =====
+protected $fillable = [
+protected $casts = [
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Models\ApplicationLog.php =====
+protected $fillable = [
+return self::create([
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Models\DocumentType.php =====
+protected $fillable = [
+protected $casts = [
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Models\Grade.php =====
+protected $fillable = [
+protected $casts = [
+return $this->belongsTo(StudentSubjectEnrollment::class, 'enrollment_id');
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Models\Lecturer.php =====
+protected $fillable = [
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Models\News.php =====
+protected $fillable = [
+protected $casts = [
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Models\Program.php =====
+protected $fillable = [
+protected $casts = [
+public function applications()
+public function subjects()
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Models\ScheduleSlot.php =====
+protected $fillable = [
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Models\Semester.php =====
+protected $fillable = [
+protected $casts = [
+public function subjects(): HasMany
+return $this->hasMany(StudentSubjectEnrollment::class);
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Models\Student.php =====
+protected $fillable = [
+protected $casts = [
+return $this->hasMany(StudentSubjectEnrollment::class);
+return $this->hasMany(StudentSubjectEnrollment::class)
+// Calculate cumulative GPA across all semesters
+// Total credits enrolled across all semesters
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Models\StudentSubjectEnrollment.php =====
+class StudentSubjectEnrollment extends Model
+protected $fillable = [
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Models\Subject.php =====
+protected $fillable = [
+protected $casts = [
+public function enrollments(): HasMany   { return $this->hasMany(StudentSubjectEnrollment::class); }
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Models\User.php =====
+use Illuminate\Notifications\Notifiable;
+use App\Notifications\CustomVerifyEmail;
+protected $fillable = [
+protected function casts(): array
+public function applications()
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Notifications\ApplicationApproved.php =====
+namespace App\Notifications;
+use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\MailMessage;
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Notifications\ApplicationRejected.php =====
+namespace App\Notifications;
+use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\MailMessage;
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Notifications\ApplicationUnderReview.php =====
+namespace App\Notifications;
+use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\MailMessage;
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Notifications\CustomVerifyEmail.php =====
+namespace App\Notifications;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Notifications\Messages\MailMessage;
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\app\Notifications\DocumentsRequested.php =====
+namespace App\Notifications;
+use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\MailMessage;
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\0001_01_01_000000_create_users_table.php =====
+Schema::create('users', function (Blueprint $table) {
+Schema::create('password_reset_tokens', function (Blueprint $table) {
+Schema::create('sessions', function (Blueprint $table) {
+$table->foreignId('user_id')->nullable()->index();
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\0001_01_01_000001_create_cache_table.php =====
+Schema::create('cache', function (Blueprint $table) {
+Schema::create('cache_locks', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\0001_01_01_000002_create_jobs_table.php =====
+Schema::create('jobs', function (Blueprint $table) {
+Schema::create('job_batches', function (Blueprint $table) {
+Schema::create('failed_jobs', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_01_01_000000_create_applications_table.php =====
+if (!Schema::hasTable('applications')) {
+Schema::create('applications', function (Blueprint $table) {
+$table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+Schema::dropIfExists('applications');
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_01_01_000001_create_applicant_personal_info_table.php =====
+if (!Schema::hasTable('applicant_personal_info')) {
+Schema::create('applicant_personal_info', function (Blueprint $table) {
+$table->foreignId('application_id')->nullable()->constrained('applications')->nullOnDelete();
+Schema::dropIfExists('applicant_personal_info');
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_02_16_110837_add_missing_fields_to_applications_table.php =====
+Schema::table('applications', function (Blueprint $table) {
+Schema::table('applications', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_02_21_172223_cleanup_applications_structure.php =====
+if (Schema::hasColumn('applications', $column)) {
+Schema::table('applications', function (Blueprint $table) use ($column) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_02_21_205053_create_applicant_family_info_table.php =====
+Schema::create('applicant_family_info', function (Blueprint $table) {
+$table->foreignId('application_id')
+->constrained('applications')
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_02_21_213706_add_official_fields_to_applicant_personal_info_table.php =====
+Schema::table('applicant_personal_info', function (Blueprint $table) {
+Schema::table('applicant_personal_info', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_02_23_080647_add_official_fields_to_applicant_academic_info_table.php =====
+Schema::table('applicant_academic_info', function (Blueprint $table) {
+Schema::table('applicant_academic_info', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_02_23_095504_create_admission_cycles_table.php =====
+Schema::create('admission_cycles', function (Blueprint $table) {
+$table->foreignId('program_id')
+Schema::dropIfExists('admission_cycles');
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_02_23_095827_add_admission_cycle_id_to_applications_table.php =====
+Schema::table('applications', function (Blueprint $table) {
+$table->foreignId('admission_cycle_id')
+Schema::table('applications', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_02_27_211309_add_is_transfer_to_applications_table.php =====
+Schema::table('applications', function (Blueprint $table) {
+Schema::table('applications', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_02_27_211939_create_applicant_transfer_info_table.php =====
+Schema::create('applicant_transfer_info', function (Blueprint $table) {
+$table->foreignId('application_id')
+$table->integer('completed_semesters')->nullable();
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_03_11_000001_fix_users_role_and_fillable.php =====
+* 2. Adds role, phone, nationality, is_active to $fillable (they exist in DB but not in
+*    the original User model $fillable — this migration is a no-op on schema, just documents
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_03_11_213037_add_documents_requested_status.php =====
+DB::statement("ALTER TABLE applications MODIFY COLUMN status ENUM('draft','submitted','under_review','documents_requested','approved','rejected') NOT NULL DEFAULT 'draft'");
+Schema::table('applications', function (Blueprint $table) {
+Schema::table('applications', function (Blueprint $table) {
+DB::statement("ALTER TABLE applications MODIFY COLUMN status ENUM('draft','submitted','under_review','approved','rejected') NOT NULL DEFAULT 'draft'");
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_03_13_214918_add_language_and_ngo_to_applicant_personal_info.php =====
+Schema::table('applicant_personal_info', function (Blueprint $table) {
+Schema::table('applicant_personal_info', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_03_15_193546_create_news_table.php =====
+Schema::create('news', function (Blueprint $table) {
+$table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_03_16_010612_add_needs_reupload_review_to_applications.php =====
+Schema::table('applications', function (Blueprint $table) {
+Schema::table('applications', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_03_16_024442_add_research_topic_to_applicant_academic_info.php =====
+Schema::table('applicant_academic_info', function (Blueprint $table) {
+Schema::table('applicant_academic_info', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_03_22_222659_add_featured_to_programs.php =====
+Schema::table('programs', function (Blueprint $table) {
+Schema::table('programs', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_03_22_224751_add_image_to_programs.php =====
+Schema::table('programs', function (Blueprint $table) {
+Schema::table('programs', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_03_22_233554_add_profile_photo_to_users.php =====
+Schema::table('users', function (Blueprint $table) {
+Schema::table('users', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_03_23_014309_add_cert_name_to_application_documents.php =====
+Schema::table('application_documents', function (Blueprint $table) {
+Schema::table('application_documents', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_03_23_015640_make_document_type_id_nullable_in_application_documents.php =====
+Schema::table('application_documents', function (Blueprint $table) {
+Schema::table('application_documents', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_03_28_212549_add_phd_fields_to_applicant_academic_info.php =====
+Schema::table('applicant_academic_info', function (Blueprint $table) {
+Schema::table('applicant_academic_info', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_03_28_230524_session5_compatibility_columns.php =====
+// ── applicant_academic_info ───────────────────────────────────────
+Schema::table('applicant_academic_info', function (Blueprint $table) {
+if (!Schema::hasColumn('applicant_academic_info', 'research_topic')) {
+if (!Schema::hasColumn('applicant_academic_info', 'bachelor_gpa')) {
+if (!Schema::hasColumn('applicant_academic_info', 'master_university')) {
+if (!Schema::hasColumn('applicant_academic_info', 'master_degree_obtained')) {
+if (!Schema::hasColumn('applicant_academic_info', 'master_gpa')) {
+// ── applicant_personal_info ───────────────────────────────────────
+Schema::table('applicant_personal_info', function (Blueprint $table) {
+if (!Schema::hasColumn('applicant_personal_info', 'armenian_language_proficiency')) {
+if (!Schema::hasColumn('applicant_personal_info', 'other_languages')) {
+if (!Schema::hasColumn('applicant_personal_info', 'ngo_membership')) {
+Schema::table('users', function (Blueprint $table) {
+// ── applications ──────────────────────────────────────────────────
+Schema::table('applications', function (Blueprint $table) {
+if (!Schema::hasColumn('applications', 'needs_reupload_review')) {
+// ── application_documents ─────────────────────────────────────────
+Schema::table('application_documents', function (Blueprint $table) {
+if (!Schema::hasColumn('application_documents', 'cert_name')) {
+Schema::table('applicant_academic_info', function (Blueprint $table) {
+if (Schema::hasColumn('applicant_academic_info', $col)) $table->dropColumn($col);
+Schema::table('applicant_personal_info', function (Blueprint $table) {
+if (Schema::hasColumn('applicant_personal_info', $col)) $table->dropColumn($col);
+Schema::table('users', function (Blueprint $table) {
+Schema::table('applications', function (Blueprint $table) {
+if (Schema::hasColumn('applications', 'needs_reupload_review')) $table->dropColumn('needs_reupload_review');
+Schema::table('application_documents', function (Blueprint $table) {
+if (Schema::hasColumn('application_documents', 'cert_name')) $table->dropColumn('cert_name');
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_04_02_183934_add_flagged_cert_names_to_applications.php =====
+Schema::table('applications', function (Blueprint $table) {
+Schema::table('applications', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_04_02_235054_create_semesters_table.php =====
+Schema::create('semesters', function (Blueprint $table) {
+Schema::dropIfExists('semesters');
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_04_02_235054_create_subjects_table.php =====
+Schema::create('subjects', function (Blueprint $table) {
+$table->foreignId('semester_id')->constrained()->cascadeOnDelete();
+$table->foreignId('program_id')->constrained()->cascadeOnDelete();
+Schema::dropIfExists('subjects');
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_04_02_235055_create_lecturers_table.php =====
+Schema::create('lecturers', function (Blueprint $table) {
+Schema::dropIfExists('lecturers');
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_04_02_235055_create_schedule_slots_table.php =====
+Schema::create('schedule_slots', function (Blueprint $table) {
+$table->foreignId('subject_id')->constrained()->cascadeOnDelete();
+$table->foreignId('lecturer_id')->constrained()->cascadeOnDelete();
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_04_02_235055_create_student_subject_enrollments_table.php =====
+Schema::create('student_subject_enrollments', function (Blueprint $table) {
+$table->foreignId('student_id')->constrained()->cascadeOnDelete();
+$table->foreignId('subject_id')->constrained()->cascadeOnDelete();
+$table->foreignId('semester_id')->constrained()->cascadeOnDelete();
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_04_02_235209_create_grades_table.php =====
+Schema::create('grades', function (Blueprint $table) {
+$table->foreignId('enrollment_id')
+Schema::dropIfExists('grades');
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_04_09_013606_add_type_hours_to_subjects_table.php =====
+Schema::table('subjects', function (Blueprint $table) {
+Schema::table('subjects', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_04_10_183029_create_notifications_table.php =====
+Schema::create('notifications', function (Blueprint $table) {
+Schema::dropIfExists('notifications');
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_05_01_235027_add_current_year_to_students_table.php =====
+Schema::table('students', function (Blueprint $table) {
+Schema::table('students', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_05_03_141127_add_is_featured_to_news.php =====
+Schema::table('news', function (Blueprint $table) {
+Schema::table('news', function (Blueprint $table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\migrations\2026_05_03_160904_add_audit_fields_to_all_tables.php =====
+'applications',
+'applicant_personal_info',
+'applicant_academic_info',
+'application_documents',
+'programs',
+'admission_cycles',
+'students',
+'semesters',
+'subjects',
+'lecturers',
+'grades',
+Schema::table($table, function (Blueprint $t) use ($table) {
+Schema::table($table, function (Blueprint $t) use ($table) {
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\seeders\DatabaseSeeder.php =====
+DocumentType::firstOrCreate(['code' => $dt['code']], $dt);
+User::firstOrCreate(['email' => 'superadmin@MOSRAC.am'], [
+User::firstOrCreate(['email' => 'admin@MOSRAC.am'], [
+User::firstOrCreate(['email' => 'applicant@MOSRAC.am'], [
+// ── Programs ─────────────────────────────────────────────────────
+$programs = [
+foreach ($programs as $p) {
+Program::firstOrCreate(
+AdmissionCycle::firstOrCreate(
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\seeders\NewsSeeder.php =====
+'title'        => 'MOSRAC Opens Applications for Fall 2026 Intake',
+'excerpt'      => 'The National Internship Portal of Armenia is now accepting applications for the Fall 2026 academic year across all Bachelor, Master, and PhD programs.',
+'body'         => "The National Internship Portal of Armenia (MOSRAC) is pleased to announce that applications for the Fall 2026 academic year are now open.\n\nProspective students may apply for Bachelor's, Master's, and PhD programs across all faculties including Computer Science and Engineering, Electrical Engineering, Mechanical Engineering, Architecture, and Business Management.\n\nThe application deadline is July 15, 2026. Applicants are required to submit their academic transcripts, a personal statement, and two letters of recommendation.\n\nFor international students, MOSRAC offers a dedicated admissions support team and English-language programs at the Master's level. Scholarship opportunities are available for high-achieving applicants.\n\nTo begin your application, visit the Admissions Portal at admissions.polytech.am or contact us at info@mosrac.gov.zw.",
+'excerpt'      => 'A new academic exchange and joint research agreement has been signed between MOSRAC and TH Köln, opening new opportunities for students and faculty.',
+'body'         => "The National Internship Portal of Armenia and TH Köln (Cologne University of Applied Sciences) have signed a comprehensive partnership agreement aimed at strengthening academic ties between Armenia and Germany.\n\nThe agreement covers student exchange programs, joint research initiatives, and faculty development opportunities. Starting from the 2026–2027 academic year, up to ten MOSRAC students per semester will have the opportunity to study at TH Köln, while German students will be welcomed at MOSRAC.\n\nMOSRAC Rector Professor Aram Sahakyan stated: \"This partnership reflects our commitment to internationalising our academic programs and providing our students with world-class opportunities.\"\n\nThe two universities will also collaborate on research projects in the fields of sustainable engineering, robotics, and smart city technologies.",
+'body'         => "The National Internship Portal of Armenia has once again been recognised as one of the top engineering universities in the South Caucasus region, according to the latest QS World University Rankings by Subject.\n\nMOSRAC ranked highest among Armenian universities in the Engineering & Technology category, reflecting the institution's sustained investment in research infrastructure, faculty development, and industry partnerships.\n\nKey highlights from this year's ranking include strong performance in Academic Reputation, Employer Reputation, and Research Citations per Faculty.\n\nVice Rector for Academic Affairs, Professor Lilit Mkrtchyan, commented: \"This recognition is a testament to the dedication of our faculty, students, and staff. We remain committed to delivering world-class engineering education.\"\n\nMOSRAC continues to invest in new laboratory facilities and international collaborations to maintain and improve its regional standing.",
+'body'         => "The National Internship Portal of Armenia officially opened its new Robotics and Artificial Intelligence Laboratory on March 5, 2026, marking a major milestone in the university's research infrastructure development.\n\nThe 400-square-metre facility is equipped with six industrial robotic arms, advanced computer vision systems, GPU-accelerated deep learning workstations, and a dedicated testing arena for autonomous vehicle prototypes.\n\nThe laboratory was established through a joint investment by the Armenian government, MOSRAC, and industry partners including Synopsys Armenia and EPAM Systems.\n\nResearch teams will use the facility to develop projects in areas such as industrial automation, medical robotics, smart manufacturing, and autonomous systems.\n\nFinal-year Bachelor students and all Master's students in the Computer Science and Mechanical Engineering faculties will have regular access to the laboratory as part of their curriculum.\n\n\"This facility positions MOSRAC as the leading robotics research centre in the region,\" said Lab Director Dr. Vardan Petrosyan.",
+'title'        => 'MOSRAC Students Win First Place at International Engineering Olympiad',
+'excerpt'      => 'A team of four MOSRAC students took first place at the International Engineering Olympiad held in Tbilisi, Georgia, competing against teams from 18 countries.',
+'body'         => "A team of four students from the National Internship Portal of Armenia has claimed first place at the 2026 International Engineering Olympiad, held in Tbilisi, Georgia from February 20–23.\n\nThe MOSRAC team, consisting of Armen Hovhannisyan, Mariam Grigoryan, Tigran Hakobyan, and Nare Sargsyan, competed against 47 teams from 18 countries across three disciplines: structural design, electrical systems, and software integration.\n\nThe winning project — a low-cost seismic monitoring system designed for deployment in earthquake-prone regions — was praised by the jury for its innovation, practicality, and technical execution.\n\n\"We are incredibly proud of our students,\" said their faculty supervisor, Dr. Ashot Karapetyan. \"Their success reflects the quality of engineering education at MOSRAC and their own exceptional dedication.\"\n\nThe team will represent Armenia at the World Engineering Championships to be held in Singapore in September 2026.",
+'body'         => "The National Internship Portal of Armenia is proud to announce the launch of a new Master's program in Cybersecurity, set to begin in September 2026.\n\nThe two-year program was developed in close collaboration with industry partners including Picsart, Unibank, and the National Cybersecurity Center of Armenia, ensuring that the curriculum reflects the real-world demands of the cybersecurity sector.\n\nThe program covers network security, cryptography, ethical hacking, digital forensics, cloud security, and security policy and compliance. Students will complete a six-month industry internship as part of the degree.\n\nAdmissions for the inaugural cohort will open on March 15, 2026. The program accepts up to 30 students per year and is taught in English.\n\nApplicants should hold a Bachelor's degree in Computer Science, Information Technology, Electrical Engineering, or a related field.\n\nFor more information, contact the Faculty of Computer Science and Engineering at cs@polytech.am.",
+'excerpt'      => 'MOSRAC invites students, researchers, and industry professionals to participate in the Annual Science and Innovation Fair, taking place on May 20–21, 2026 on the main campus.',
+'body'         => "The National Internship Portal of Armenia is pleased to announce the Annual Science and Innovation Fair 2026, which will take place on May 20–21, 2026 on the MOSRAC main campus at 105 Terian Street, Yerevan.\n\nThe fair is open to MOSRAC students, postgraduate researchers, faculty members, and external participants from partner universities and industry.\n\nParticipants are invited to present projects in the following categories:\n- Robotics and Automation\n- Software Engineering and AI\n- Sustainable Energy and Environment\n- Electronics and Embedded Systems\n- Architecture and Urban Design\n- Business Innovation and Entrepreneurship\n\nProjects will be evaluated by a jury of academic and industry experts. Cash prizes totalling AMD 2,000,000 will be awarded across categories.\n\nRegistration deadline: April 30, 2026. To register your project, visit fair.polytech.am or contact events@polytech.am.\n\nAll MOSRAC students are encouraged to attend, and admission is free for registered visitors.",
+$adminId = DB::table('users')->where('role', 'admin')->orWhere('role', 'super_admin')->value('id') ?? 1;
+if (DB::table('news')->where('slug', $slug)->exists()) {
+DB::table('news')->insert([
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\seeders\ProgramSeeder.php =====
+class ProgramSeeder extends Seeder
+$programs = [
+'description'  => 'A rigorous 4-year program covering algorithms, data structures, software engineering, operating systems, computer networks, and artificial intelligence. Students gain hands-on experience through laboratory work, team projects, and a final-year capstone with an industry partner. Graduates are highly sought by leading technology companies in Armenia and internationally.',
+'description'  => 'Covers the theory and application of electricity, electronics, and electromagnetism. Core topics include circuit analysis, digital electronics, signal processing, power systems, and embedded systems design. Students complete practical lab projects and an industrial placement in their third year.',
+'description'  => 'Combines thermodynamics, fluid mechanics, material science, and machine design with modern CAD/CAM tools. Students learn to design, analyse, and manufacture mechanical systems. The program includes a strong practical component with access to MOSRAC\'s state-of-the-art engineering workshops.',
+'description'  => 'Blends creative design with engineering principles to prepare architects for 21st-century challenges. Topics include architectural history, structural systems, environmental design, urban planning, and digital modelling. Students develop a professional portfolio through studio projects and international design competitions.',
+'description'  => 'Explores the design and optimisation of chemical processes, materials synthesis, and industrial chemistry. Students work in fully equipped analytical laboratories and gain experience with modern simulation software. Career paths include the pharmaceutical, energy, and manufacturing sectors.',
+'description'  => 'An advanced 2-year program at the cutting edge of machine learning, deep learning, natural language processing, computer vision, and big data analytics. Students work on real datasets provided by industry partners and complete a research thesis. The program is taught in English and attracts students from across the region.',
+'description'  => 'Addresses the growing demand for clean energy engineers. Covers solar, wind, hydro, and biomass energy systems, smart grid technology, energy storage, and policy frameworks. Students conduct applied research in MOSRAC\'s energy laboratory and collaborate with the Armenian Energy Regulatory Commission.',
+foreach ($programs as $program) {
+if (DB::table('programs')->where('name', $program['name'])->exists()) {
+DB::table('programs')->insert(array_merge($program, [
+$this->command->info('✓ Programs seeded — ' . count($programs) . ' programs inserted.');
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\seeders\StudentPortalSeeder.php =====
+use App\Models\StudentSubjectEnrollment;
+Semester::query()->update(['is_current' => false]);
+$semester = Semester::updateOrCreate(
+// ── 2. LECTURERS ─────────────────────────────────────────────
+$lecturers = [
+// Building 5 — IT/CS lecturers
+'simonyan'      => Lecturer::firstOrCreate(['email' => 'a.simonyan@MOSRAC.am'],      ['name' => 'Armen Simonyan',       'title' => 'Assoc. Prof.', 'faculty' => 'Faculty of Informatics & Applied Mathematics']),
+'sharkhatunyan' => Lecturer::firstOrCreate(['email' => 'h.sharkhatunyan@MOSRAC.am'], ['name' => 'Hayk Sharkhatunyan',   'title' => 'Dr.',          'faculty' => 'Faculty of Informatics & Applied Mathematics']),
+'danielyan'     => Lecturer::firstOrCreate(['email' => 'n.danielyan@MOSRAC.am'],     ['name' => 'Nadya Danielyan',      'title' => 'Dr.',          'faculty' => 'Faculty of Informatics & Applied Mathematics']),
+'petrosyan'     => Lecturer::firstOrCreate(['email' => 'a.petrosyan@MOSRAC.am'],     ['name' => 'Armen Petrosyan',      'title' => 'Prof.',        'faculty' => 'Faculty of Informatics & Applied Mathematics']),
+'harutyunyan'   => Lecturer::firstOrCreate(['email' => 'n.harutyunyan@MOSRAC.am'],   ['name' => 'Narine Harutyunyan',   'title' => 'Dr.',          'faculty' => 'Faculty of Informatics & Applied Mathematics']),
+'grigoryan'     => Lecturer::firstOrCreate(['email' => 'v.grigoryan@MOSRAC.am'],     ['name' => 'Vardan Grigoryan',     'title' => 'Assoc. Prof.', 'faculty' => 'Faculty of Informatics & Applied Mathematics']),
+'mkrtchyan'     => Lecturer::firstOrCreate(['email' => 's.mkrtchyan@MOSRAC.am'],     ['name' => 'Sona Mkrtchyan',       'title' => 'Dr.',          'faculty' => 'Faculty of Informatics & Applied Mathematics']),
+'gevorgyan'     => Lecturer::firstOrCreate(['email' => 'l.gevorgyan@MOSRAC.am'],     ['name' => 'Lilit Gevorgyan',      'title' => 'Dr.',          'faculty' => 'Faculty of Social Sciences & Humanities']),
+'sahakyan'      => Lecturer::firstOrCreate(['email' => 'a.sahakyan@MOSRAC.am'],      ['name' => 'Anna Sahakyan',        'title' => 'Dr.',          'faculty' => 'Faculty of Social Sciences & Humanities']),
+'abrahamyan'    => Lecturer::firstOrCreate(['email' => 't.abrahamyan@MOSRAC.am'],    ['name' => 'Tigran Abrahamyan',    'title' => 'Prof.',        'faculty' => 'Faculty of Engineering']),
+'sargsyan'      => Lecturer::firstOrCreate(['email' => 'v.sargsyan@MOSRAC.am'],      ['name' => 'Vahagn Sargsyan',      'title' => 'Assoc. Prof.', 'faculty' => 'Faculty of Engineering']),
+'hovhannisyan'  => Lecturer::firstOrCreate(['email' => 'g.hovhannisyan@MOSRAC.am'],  ['name' => 'Gagik Hovhannisyan',   'title' => 'Coach',        'faculty' => 'Faculty of Physical Education']),
+$this->command->info('  ✓ ' . count($lecturers) . ' lecturers ready');
+$subjectsByProgram = [
+$students = Student::with(['application.program'])->get();
+foreach ($students as $student) {
+if (!$programName || !isset($subjectsByProgram[$programName])) {
+$subjectList = $subjectsByProgram[$programName];
+$grades      = $gradeProfiles[$student->student_number] ?? null;
+$subject = Subject::firstOrCreate(
+ScheduleSlot::firstOrCreate(
+'lecturer_id' => $lecturers[$sd['lecturer']]->id,
+$enrollment = StudentSubjectEnrollment::firstOrCreate(
+// Add grades
+if ($grades && isset($grades[$index])) {
+[$midterm1, $midterm2, $final] = $grades[$index];
+Grade::updateOrCreate(
+$this->command->info('    ✓ ' . count($subjectList) . ' subjects seeded with grades');
+$this->command->info('  Students : ' . $students->count() . ' processed');
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\database\seeders\TestApplicationsSeeder.php =====
+* TestApplicationsSeeder
+* Each run: deletes only the PREVIOUS test applications for the 5 test accounts,
+* One user CAN have multiple applications (history is preserved).
+* Run: php artisan db:seed --class=TestApplicationsSeeder
+class TestApplicationsSeeder extends Seeder
+$this->cleanupPreviousTestApplications();
+ApplicantPersonalInfo::create(['application_id' => $a1->id, 'first_name' => 'Ani', 'last_name' => 'Petrosyan', 'date_of_birth' => '2004-05-14', 'gender' => 'female', 'passport_number' => 'AM1234567', 'country_of_birth' => 'Armenia', 'place_of_birth' => 'Yerevan', 'resident_country' => 'Armenia', 'citizenship' => 'Armenian', 'nationality' => 'Armenian', 'marital_status' => 'single', 'city' => 'Yerevan', 'phone' => '+37491234567', 'address' => '15 Tigranyan Street Yerevan', 'armenian_language_proficiency' => 'Native', 'other_languages' => 'English (B2), Russian (B1)', 'ngo_membership' => 'AIESEC Armenia']);
+ApplicantAcademicInfo::create(['application_id' => $a1->id, 'school_name' => 'Quantum College Yerevan', 'institution_city' => 'Yerevan', 'institution_country' => 'Armenia', 'graduation_date' => '2022-06-01', 'graduation_year' => 2022, 'gpa' => 3.85, 'specialization' => 'Mathematics & Physics', 'language_of_instruction' => 'Armenian', 'additional_certifications' => [['name' => 'IELTS', 'month' => 3, 'year' => 2023], ['name' => 'Python PCEP', 'month' => 9, 'year' => 2023]]]);
+ApplicantFamilyInfo::create(array_merge(['application_id' => $a1->id], $family));
+ApplicantPersonalInfo::create(['application_id' => $a2->id, 'first_name' => 'Davit', 'last_name' => 'Hovhannisyan', 'date_of_birth' => '2002-11-20', 'gender' => 'male', 'passport_number' => 'AM7654321', 'country_of_birth' => 'Armenia', 'place_of_birth' => 'Gyumri', 'resident_country' => 'Armenia', 'citizenship' => 'Armenian', 'nationality' => 'Armenian', 'marital_status' => 'single', 'city' => 'Gyumri', 'phone' => '+37494567890', 'address' => '7 Vardanants Square Gyumri', 'armenian_language_proficiency' => 'Native', 'other_languages' => 'English (C1), French (A2)', 'ngo_membership' => null]);
+ApplicantAcademicInfo::create(['application_id' => $a2->id, 'school_name' => 'State Engineering University of Armenia', 'institution_city' => 'Yerevan', 'institution_country' => 'Armenia', 'graduation_date' => '2021-07-01', 'graduation_year' => 2021, 'gpa' => 3.20, 'specialization' => 'Civil Construction', 'language_of_instruction' => 'Armenian']);
+ApplicantFamilyInfo::create(array_merge(['application_id' => $a2->id], $family));
+ApplicantTransferInfo::create(['application_id' => $a2->id, 'previous_institution_name' => 'State Engineering University of Armenia', 'previous_institution_country' => 'Armenia', 'previous_degree_program' => 'Civil Engineering', 'completed_semesters' => 4, 'earned_credits' => 120, 'reason_for_transfer' => 'Seeking a more internationally recognized program. MOSRAC offers better alignment with career goals.']);
+$a3->update(['reviewed_by' => $admin?->id, 'reviewed_at' => now()->subDays(2)]);
+ApplicantPersonalInfo::create(['application_id' => $a3->id, 'first_name' => 'Lilit', 'last_name' => 'Grigoryan', 'date_of_birth' => '1999-03-08', 'gender' => 'female', 'passport_number' => 'AM9988776', 'country_of_birth' => 'Armenia', 'place_of_birth' => 'Vanadzor', 'resident_country' => 'Armenia', 'citizenship' => 'Armenian', 'nationality' => 'Armenian', 'marital_status' => 'single', 'city' => 'Yerevan', 'phone' => '+37477112233', 'address' => '42 Komitas Avenue Yerevan', 'armenian_language_proficiency' => 'Native', 'other_languages' => 'English (C2), German (B1)', 'ngo_membership' => 'Armenian Tech Hub']);
+ApplicantAcademicInfo::create(['application_id' => $a3->id, 'school_name' => 'Yerevan State University', 'institution_city' => 'Yerevan', 'institution_country' => 'Armenia', 'graduation_date' => '2021-06-01', 'graduation_year' => 2021, 'gpa' => 3.92, 'previous_university' => 'Yerevan State University', 'degree_obtained' => 'Bachelor of Science (BSc)', 'specialization' => 'Computer Science', 'language_of_instruction' => 'Armenian', 'additional_certifications' => [['name' => 'AWS Cloud Practitioner', 'month' => 6, 'year' => 2022]]]);
+ApplicantFamilyInfo::create(array_merge(['application_id' => $a3->id], $family));
+ApplicantPersonalInfo::create(['application_id' => $a4->id, 'first_name' => 'Saro', 'last_name' => 'Asatryan', 'date_of_birth' => '1997-08-15', 'gender' => 'male', 'passport_number' => 'AM3322110', 'country_of_birth' => 'Armenia', 'place_of_birth' => 'Abovyan', 'resident_country' => 'Armenia', 'citizenship' => 'Armenian', 'nationality' => 'Armenian', 'marital_status' => 'married', 'city' => 'Yerevan', 'phone' => '+37455667788', 'address' => '9 Charents Street Yerevan', 'armenian_language_proficiency' => 'Native', 'other_languages' => 'English (B2), Russian (C1)', 'ngo_membership' => null]);
+ApplicantAcademicInfo::create(['application_id' => $a4->id, 'school_name' => 'National Internship Portal of Armenia', 'institution_city' => 'Yerevan', 'institution_country' => 'Armenia', 'graduation_date' => '2019-06-01', 'graduation_year' => 2019, 'gpa' => 3.45, 'previous_university' => 'National Internship Portal of Armenia', 'degree_obtained' => 'Bachelor of Engineering (BEng)', 'specialization' => 'Industrial Engineering', 'language_of_instruction' => 'Armenian']);
+ApplicantFamilyInfo::create(array_merge(['application_id' => $a4->id], $family));
+ApplicantTransferInfo::create(['application_id' => $a4->id, 'previous_institution_name' => 'Russian-Armenian University', 'previous_institution_country' => 'Armenia', 'previous_degree_program' => 'Master of Engineering Management', 'completed_semesters' => 2, 'earned_credits' => 60, 'reason_for_transfer' => 'Lack of practical industry exposure. MOSRAC Engineering Management has stronger industry ties and better career placement support.']);
+ApplicantPersonalInfo::create(['application_id' => $a5->id, 'first_name' => 'Vardan', 'last_name' => 'Mkrtchyan', 'date_of_birth' => '1995-07-22', 'gender' => 'male', 'passport_number' => 'AM5544332', 'country_of_birth' => 'Armenia', 'place_of_birth' => 'Yerevan', 'resident_country' => 'Armenia', 'citizenship' => 'Armenian', 'nationality' => 'Armenian', 'marital_status' => 'married', 'city' => 'Yerevan', 'phone' => '+37493445566', 'address' => '3 Marshal Baghramyan Ave Yerevan', 'armenian_language_proficiency' => 'Native', 'other_languages' => 'English (C1), Russian (C2)', 'ngo_membership' => null]);
+ApplicantAcademicInfo::create(['application_id' => $a5->id, 'school_name' => 'American University of Armenia', 'institution_city' => 'Yerevan', 'institution_country' => 'Armenia', 'graduation_date' => '2017-05-01', 'graduation_year' => 2017, 'gpa' => 3.75, 'bachelor_gpa' => 3.75, 'previous_university' => 'American University of Armenia', 'degree_obtained' => 'Bachelor of Science (BSc)', 'specialization' => 'Computer Science', 'master_university' => 'National Internship Portal of Armenia', 'master_degree_obtained' => 'Master of Science (MSc)', 'master_gpa' => 3.90, 'research_topic' => 'Deep Learning for NLP in Armenian: Challenges for Low-Resource Language Models', 'language_of_instruction' => 'English']);
+* Deletes only the test applications from the 5 test accounts.
+* (which is correct — one user CAN have multiple applications).
+private function cleanupPreviousTestApplications(): void
+DocumentType::firstOrCreate(['code' => $dt['code']], $dt);
+return User::firstOrCreate(['email' => $email], [
+return Application::create([
+ApplicationDocument::create([
+ApplicationDocument::create([
+
+===== C:\Users\taten\OneDrive\Desktop\university_enrollment-master\routes\web.php =====
+$featuredPrograms = \App\Models\Program::where('is_active', true)
+return view('home', compact('news', 'featuredPrograms'));
+Route::get('/programs', function() {
+$programs = \App\Models\Program::where('is_active', true)
+'total_programs' => \App\Models\Program::where('is_active', true)->count(),
+return view('programs', compact('programs', 'stats'));
+})->name('programs.public');
+// Notifications
+Route::post('/notifications/{id}/read', function ($id) {
+Auth::user()->notifications()->findOrFail($id)->markAsRead();
+})->name('notifications.read');
+Route::post('/notifications/read-all', function () {
+Auth::user()->unreadNotifications->markAsRead();
+})->name('notifications.readAll');
+Route::get('/grades',     [StudentPortal\GradesController::class,    'index'])->name('grades');
+Route::get('/transcript', [StudentPortal\GradesController::class,    'transcript'])->name('transcript');
+// Applications
+Route::get('/applications',                        [Admin\ApplicationController::class, 'index'])->name('applications.index');
+Route::get('/applications/{id}',                   [Admin\ApplicationController::class, 'show'])->name('applications.show');
+Route::post('/applications/{id}/under-review',        [Admin\ApplicationController::class, 'markUnderReview'])->name('applications.underReview');
+Route::post('/applications/{id}/request-documents',   [Admin\ApplicationController::class, 'requestDocuments'])->name('applications.requestDocuments');
+Route::post('/applications/{id}/approve',             [Admin\ApplicationController::class, 'approve'])->name('applications.approve');
+Route::post('/applications/{id}/reject',              [Admin\ApplicationController::class, 'reject'])->name('applications.reject');
+// Students
+Route::get('/students',     [Admin\StudentController::class, 'index'])->name('students.index');
+Route::get('/students/{id}',  [Admin\StudentController::class, 'show'])->name('students.show');
+Route::post('/students/{id}/promote-year', [Admin\StudentController::class, 'promoteYear'])->name('students.promoteYear');
+Route::post('/students/{id}/photo',        [Admin\StudentController::class, 'updatePhoto'])->name('students.updatePhoto');
+// Programs (super admin only)
+Route::get('/programs',                        [Admin\ProgramController::class, 'index'])->name('programs.index');
+Route::get('/programs/create',                 [Admin\ProgramController::class, 'create'])->name('programs.create');
+Route::post('/programs',                       [Admin\ProgramController::class, 'store'])->name('programs.store');
+Route::get('/programs/{program}/edit',         [Admin\ProgramController::class, 'edit'])->name('programs.edit');
+Route::put('/programs/{program}',              [Admin\ProgramController::class, 'update'])->name('programs.update');
+Route::post('/programs/{program}/content',     [Admin\ProgramController::class, 'updateContent'])->name('programs.updateContent');
+Route::delete('/programs/{program}',           [Admin\ProgramController::class, 'destroy'])->name('programs.destroy');
+Route::post('/programs/{program}/toggle-featured', [Admin\ProgramController::class, 'toggleFeatured'])->name('programs.toggleFeatured');
+Route::post('/programs/{id}/restore',          [Admin\ProgramController::class, 'restore'])->name('programs.restore');
+// Semesters (super admin only — controls academic calendar)
+Route::get('/portal/semesters',                    [Admin\Portal\SemesterController::class, 'index'])->name('portal.semesters.index');
+Route::get('/portal/semesters/create',             [Admin\Portal\SemesterController::class, 'create'])->name('portal.semesters.create');
+Route::post('/portal/semesters',                   [Admin\Portal\SemesterController::class, 'store'])->name('portal.semesters.store');
+Route::get('/portal/semesters/{semester}/edit',    [Admin\Portal\SemesterController::class, 'edit'])->name('portal.semesters.edit');
+Route::put('/portal/semesters/{semester}',         [Admin\Portal\SemesterController::class, 'update'])->name('portal.semesters.update');
+Route::post('/portal/semesters/{semester}/current',[Admin\Portal\SemesterController::class, 'setCurrent'])->name('portal.semesters.setCurrent');
+// Lecturers (super admin only)
+Route::get('/portal/lecturers',                    [Admin\Portal\LecturerController::class, 'index'])->name('portal.lecturers.index');
+Route::get('/portal/lecturers/create',             [Admin\Portal\LecturerController::class, 'create'])->name('portal.lecturers.create');
+Route::post('/portal/lecturers',                   [Admin\Portal\LecturerController::class, 'store'])->name('portal.lecturers.store');
+Route::get('/portal/lecturers/{lecturer}/edit',    [Admin\Portal\LecturerController::class, 'edit'])->name('portal.lecturers.edit');
+Route::put('/portal/lecturers/{lecturer}',         [Admin\Portal\LecturerController::class, 'update'])->name('portal.lecturers.update');
+Route::delete('/portal/lecturers/{lecturer}',      [Admin\Portal\LecturerController::class, 'destroy'])->name('portal.lecturers.destroy');
+// Subjects (super admin only — curriculum structure)
+Route::get('/portal/subjects',                     [Admin\Portal\SubjectController::class, 'index'])->name('portal.subjects.index');
+Route::get('/portal/subjects/create',              [Admin\Portal\SubjectController::class, 'create'])->name('portal.subjects.create');
+Route::post('/portal/subjects',                    [Admin\Portal\SubjectController::class, 'store'])->name('portal.subjects.store');
+Route::get('/portal/subjects/{subject}',           [Admin\Portal\SubjectController::class, 'show'])->name('portal.subjects.show');
+Route::get('/portal/subjects/{subject}/edit',      [Admin\Portal\SubjectController::class, 'edit'])->name('portal.subjects.edit');
+Route::put('/portal/subjects/{subject}',           [Admin\Portal\SubjectController::class, 'update'])->name('portal.subjects.update');
+Route::delete('/portal/subjects/{subject}',        [Admin\Portal\SubjectController::class, 'destroy'])->name('portal.subjects.destroy');
+// Grades (admin + super admin)
+Route::get('/portal/grades',                       [Admin\Portal\GradeController::class, 'index'])->name('portal.grades.index');
+Route::get('/portal/grades/{subject}',             [Admin\Portal\GradeController::class, 'subject'])->name('portal.grades.subject');
+Route::post('/portal/grades',                      [Admin\Portal\GradeController::class, 'store'])->name('portal.grades.store');
+Route::put('/portal/grades/{grade}',               [Admin\Portal\GradeController::class, 'update'])->name('portal.grades.update');
