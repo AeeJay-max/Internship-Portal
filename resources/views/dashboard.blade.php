@@ -67,6 +67,66 @@
                 <p class="text-[11px] text-amber-100/90 mt-3 pt-3 border-t border-white/20">
                     📌 <strong>Notice:</strong> Please ensure all supervisor clearance forms, logbooks, and final attachment assessment reports are completed before <strong>{{ $expiringPlacement->end_date ? $expiringPlacement->end_date->format('d M Y') : 'Final Date' }}</strong>.
                 </p>
+        @endif
+
+        {{-- INTERVIEW SCHEDULED BANNER --}}
+        @php $interviewApp = $applications->firstWhere('status', 'interview_required'); @endphp
+        @if($interviewApp)
+            <div class="p-8 rounded-2xl bg-gradient-to-br from-blue-900 via-indigo-950 to-slate-950 text-white shadow-xl space-y-5 border border-blue-600/50">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-blue-700/60 pb-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center font-extrabold text-white text-2xl shadow-inner">📅</span>
+                        <div>
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-amber-400 text-slate-950">Action Required: Interview Scheduled</span>
+                            <h2 class="text-2xl font-extrabold text-white mt-1">Ministry Internship Interview Scheduled</h2>
+                            <p class="text-xs text-blue-200">Application Ref: <strong>{{ $interviewApp->reference_number }}</strong> — Ministry of Sport, Recreation, Arts & Culture</p>
+                        </div>
+                    </div>
+                    <span class="px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-blue-500/30 text-blue-200 border border-blue-400/40 uppercase tracking-wider self-start md:self-auto">
+                        Interview Scheduled
+                    </span>
+                </div>
+
+                {{-- Scheduled Date, Time & Venue Card --}}
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+                    <div class="p-4 rounded-xl bg-blue-950/80 border border-blue-700/50">
+                        <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-300 block mb-1">Scheduled Date</span>
+                        <p class="text-base font-extrabold text-white flex items-center gap-2">
+                            <span>📆</span>
+                            {{ $interviewApp->interview_date ? $interviewApp->interview_date->format('l, d F Y') : 'Date to be confirmed' }}
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-blue-950/80 border border-blue-700/50">
+                        <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-300 block mb-1">Scheduled Time</span>
+                        <p class="text-base font-extrabold text-white flex items-center gap-2">
+                            <span>⏰</span>
+                            {{ $interviewApp->interview_time ? \Carbon\Carbon::parse($interviewApp->interview_time)->format('g:i A') : 'Time to be confirmed' }}
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-blue-950/80 border border-blue-700/50">
+                        <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-300 block mb-1">Venue / Location</span>
+                        <p class="text-xs font-bold text-white leading-snug flex items-start gap-1.5">
+                            <span class="shrink-0 mt-0.5">📍</span>
+                            <span>{{ $interviewApp->interview_location ?? 'Chinengundu Mashayamombe Building, 95 Cnr N.Mandela & S. V. Muzenda Street, Harare' }}</span>
+                        </p>
+                    </div>
+                </div>
+
+                @if($interviewApp->review_notes)
+                    <div class="p-4 rounded-xl bg-slate-900/90 border border-blue-800/60 text-xs text-blue-100 space-y-1.5">
+                        <span class="font-bold uppercase text-[10px] tracking-wider text-amber-300 block">Ministry Instructions:</span>
+                        <div class="whitespace-pre-line leading-relaxed font-sans">{{ $interviewApp->review_notes }}</div>
+                    </div>
+                @endif
+
+                <div class="flex flex-wrap gap-3 pt-1">
+                    <a href="{{ route('application.show', $interviewApp->id) }}" class="px-6 py-3 rounded-xl bg-white text-slate-950 font-extrabold text-xs hover:bg-blue-50 shadow transition inline-flex items-center gap-1.5">
+                        <span>View Application Details & Venue Map</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </a>
+                </div>
             </div>
         @endif
 

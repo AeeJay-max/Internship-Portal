@@ -351,14 +351,39 @@
             {{-- Interview Modal --}}
             <div id="interviewModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
                 <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 mx-4">
-                    <h2 class="text-lg font-bold text-slate-900 mb-2">Request Interview</h2>
-                    <p class="text-gray-600 text-xs mb-4">Set candidate status to Interview Required. You can include notes or instructions below.</p>
-                    <form method="POST" action="{{ route('admin.applications.requestInterview', $application->id) }}">
+                    <div class="flex justify-between items-center mb-3 border-b border-slate-100 pb-3">
+                        <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                            <span>📅</span> Schedule Candidate Interview
+                        </h2>
+                        <button type="button" onclick="closeInterviewModal()" class="text-gray-400 hover:text-gray-600 font-bold">✕</button>
+                    </div>
+                    <p class="text-gray-600 text-xs mb-4">Set candidate status to Interview Required and specify the interview date, time, and venue.</p>
+                    <form method="POST" action="{{ route('admin.applications.requestInterview', $application->id) }}" class="space-y-4">
                         @csrf
-                        <textarea name="review_notes" rows="3" placeholder="Enter interview details or instructions for applicant..." class="w-full border border-gray-300 rounded-lg p-2.5 text-xs mb-4 focus:ring-emerald-500 focus:border-emerald-500"></textarea>
-                        <div class="flex justify-end gap-2">
-                            <button type="button" onclick="closeInterviewModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-xs font-medium text-gray-700 hover:bg-gray-50">Cancel</button>
-                            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700">Request Interview</button>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Interview Date <span class="text-rose-500">*</span></label>
+                                <input type="date" name="interview_date" required min="{{ date('Y-m-d') }}" value="{{ $application->interview_date ? $application->interview_date->format('Y-m-d') : '' }}" class="w-full border border-gray-300 rounded-xl p-2.5 text-xs focus:ring-emerald-500 focus:border-emerald-500 font-semibold">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Interview Time <span class="text-rose-500">*</span></label>
+                                <input type="time" name="interview_time" required value="{{ $application->interview_time ?: '10:00' }}" class="w-full border border-gray-300 rounded-xl p-2.5 text-xs focus:ring-emerald-500 focus:border-emerald-500 font-semibold">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Venue / Location</label>
+                            <input type="text" name="interview_location" value="{{ $application->interview_location ?: 'Chinengundu Mashayamombe Building, 95 Cnr N.Mandela & S. V. Muzenda Street, Harare' }}" placeholder="e.g. Chinengundu Mashayamombe Building, Room 302 / Online (Google Meet)" class="w-full border border-gray-300 rounded-xl p-2.5 text-xs focus:ring-emerald-500 focus:border-emerald-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Additional Instructions (Optional)</label>
+                            <textarea name="review_notes" rows="2" placeholder="e.g. Bring original Academic Certificates and National ID card." class="w-full border border-gray-300 rounded-xl p-2.5 text-xs focus:ring-emerald-500 focus:border-emerald-500"></textarea>
+                        </div>
+
+                        <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                            <button type="button" onclick="closeInterviewModal()" class="px-4 py-2 border border-gray-300 rounded-xl text-xs font-bold text-gray-700 hover:bg-gray-50">Cancel</button>
+                            <button type="submit" class="px-5 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 shadow-md">Schedule & Send Details</button>
                         </div>
                     </form>
                 </div>

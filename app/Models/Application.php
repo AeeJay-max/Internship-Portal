@@ -32,6 +32,9 @@ class Application extends Model
         'reviewed_by',
         'reviewed_at',
         'review_notes',
+        'interview_date',
+        'interview_time',
+        'interview_location',
         'flagged_document_ids',
         'needs_reupload_review',
         'flagged_cert_names',
@@ -40,6 +43,7 @@ class Application extends Model
     protected $casts = [
         'submitted_at'          => 'datetime',
         'reviewed_at'           => 'datetime',
+        'interview_date'        => 'date',
         'flagged_document_ids'  => 'array',
         'needs_reupload_review' => 'boolean',
         'flagged_cert_names'    => 'array',

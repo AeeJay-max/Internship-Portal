@@ -191,22 +191,51 @@ class ApplicationController extends Controller
 
     public function requestInterview(Request $request, int $id)
     {
-        $application = Application::findOrFail($id);
-
-        if ($application->status === Application::STATUS_INTERVIEW_REQUIRED) {
-            return back()->with('info', 'Interview has already been requested for this application.');
-        }
-
-        $application->update([
-            'status'       => Application::STATUS_INTERVIEW_REQUIRED,
-            'reviewed_by'  => Auth::id(),
-            'reviewed_at'  => now(),
-            'review_notes' => $request->input('notes', 'Interview required by Ministry admin.'),
+        $request->validate([
+            'interview_date'     => 'required|date',
+            'interview_time'     => 'required|string',
+            'interview_location' => 'nullable|string|max:255',
+            'review_notes'       => 'nullable|string|max:1000',
+        ], [
+            'interview_date.required' => 'Please select the scheduled interview date.',
+            'interview_time.required' => 'Please select the scheduled interview time.',
         ]);
 
-        ApplicationLog::log($application->id, 'Interview requested by administrator.', Auth::id());
+        $application = Application::findOrFail($id);
 
-        return back()->with('success', 'Status updated to Interview Required.');
+        $dateStr = \Carbon\Carbon::parse($request->interview_date)->format('l, j F Y');
+        $timeStr = \Carbon\Carbon::parse($request->interview_time)->format('g:i A');
+        $location = $request->input('interview_location') ?: 'Ministry of Sport, Recreation, Arts and Culture Headquarters (Chinengundu Mashayamombe Building, Harare)';
+        $additionalNotes = $request->input('review_notes');
+
+        $notesParts = [
+            "INTERVIEW SCHEDULED DETAILS:",
+            "• Scheduled Date: {$dateStr}",
+            "• Scheduled Time: {$timeStr}",
+            "• Venue / Location: {$location}"
+        ];
+        if ($additionalNotes) {
+            $notesParts[] = "• Instructions: {$additionalNotes}";
+        }
+        $formattedNotes = implode("\n", $notesParts);
+
+        $application->update([
+            'status'             => Application::STATUS_INTERVIEW_REQUIRED,
+            'reviewed_by'        => Auth::id(),
+            'reviewed_at'        => now(),
+            'interview_date'     => $request->interview_date,
+            'interview_time'     => $request->interview_time,
+            'interview_location' => $location,
+            'review_notes'       => $formattedNotes,
+        ]);
+
+        ApplicationLog::log(
+            $application->id,
+            "Interview scheduled for {$dateStr} at {$timeStr} (Venue: {$location}).",
+            Auth::id()
+        );
+
+        return back()->with('success', "Interview successfully scheduled for {$dateStr} at {$timeStr}.");
     }
 
     public function approve(Request $request, int $id)

@@ -80,6 +80,11 @@
                                         <td class="py-3.5 px-4">{{ $app->preference->preferredDepartment->name ?? 'General' }}</td>
                                         <td class="py-3.5 px-4">
                                             <span class="px-2.5 py-1 rounded-full font-bold {{ $badge['class'] }}">{{ $badge['label'] }}</span>
+                                            @if($app->status === 'interview_required' && $app->interview_date)
+                                                <div class="text-[10px] text-blue-800 font-extrabold mt-1 bg-blue-50 px-2 py-0.5 rounded border border-blue-200 inline-block">
+                                                    📅 {{ $app->interview_date->format('d M Y') }} {{ $app->interview_time ? '@ ' . \Carbon\Carbon::parse($app->interview_time)->format('g:i A') : '' }}
+                                                </div>
+                                            @endif
                                         </td>
                                         <td class="py-3.5 px-4">{{ optional($app->submitted_at)->format('d M Y') }}</td>
                                         <td class="py-3.5 px-4 text-right">

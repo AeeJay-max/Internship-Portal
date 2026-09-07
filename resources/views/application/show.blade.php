@@ -25,6 +25,63 @@
             </div>
         </div>
 
+        {{-- INTERVIEW SCHEDULED CARD --}}
+        @if($application->status === 'interview_required')
+            <div class="bg-gradient-to-br from-blue-900 via-indigo-950 to-slate-950 text-white rounded-2xl p-6 md:p-8 shadow-xl space-y-6 border border-blue-600/40">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-blue-700/50 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-2xl bg-blue-600 flex items-center justify-center font-extrabold text-xl text-white shadow">
+                            📅
+                        </div>
+                        <div>
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-amber-400 text-slate-950">Action Required</span>
+                            <h3 class="text-2xl font-extrabold text-white mt-1">Ministry Internship Interview Scheduled</h3>
+                            <p class="text-xs text-blue-200">Ministry of Sport, Recreation, Arts & Culture</p>
+                        </div>
+                    </div>
+                    <span class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30 self-start md:self-auto">
+                        Status: Interview Scheduled
+                    </span>
+                </div>
+
+                {{-- Scheduled Date, Time & Venue --}}
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="p-4 rounded-xl bg-blue-950/80 border border-blue-700/50">
+                        <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-300 block mb-1">Interview Date</span>
+                        <p class="text-base font-extrabold text-white flex items-center gap-2">
+                            <span>📆</span>
+                            {{ $application->interview_date ? $application->interview_date->format('l, d F Y') : 'Date to be confirmed' }}
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-blue-950/80 border border-blue-700/50">
+                        <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-300 block mb-1">Interview Time</span>
+                        <p class="text-base font-extrabold text-white flex items-center gap-2">
+                            <span>⏰</span>
+                            {{ $application->interview_time ? \Carbon\Carbon::parse($application->interview_time)->format('g:i A') : 'Time to be confirmed' }}
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-blue-950/80 border border-blue-700/50">
+                        <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-300 block mb-1">Venue / Location</span>
+                        <p class="text-xs font-bold text-white leading-snug flex items-start gap-1.5">
+                            <span class="shrink-0 mt-0.5">📍</span>
+                            <span>{{ $application->interview_location ?? 'Chinengundu Mashayamombe Building, 95 Cnr N.Mandela & S. V. Muzenda Street, Harare' }}</span>
+                        </p>
+                    </div>
+                </div>
+
+                @if($application->review_notes)
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-amber-300">Ministry Interview Instructions:</h4>
+                        <div class="p-4 rounded-xl bg-slate-900/90 border border-blue-800/60 text-xs text-blue-100 whitespace-pre-line leading-relaxed">
+                            {{ $application->review_notes }}
+                        </div>
+                    </div>
+                @endif
+            </div>
+        @endif
+
         {{-- ACCEPTANCE & ONBOARDING CARD --}}
         @if(in_array($application->status, ['placement_pending', 'approved', 'placed']))
             <div class="bg-gradient-to-br from-emerald-900 via-slate-900 to-emerald-950 text-white rounded-2xl p-6 md:p-8 shadow-xl space-y-6 border border-emerald-700/40">
