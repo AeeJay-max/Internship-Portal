@@ -147,9 +147,15 @@ class ApplicationController extends Controller
 
     public function selectType(Request $request)
     {
-        $userId = Auth::id();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
 
-        $existing = Application::where('user_id', $userId)
+        if ($user->hasReachedMaxApplications()) {
+            return redirect()->route('dashboard')
+                ->with('toast_warning', 'Maximum number of application has been reached.');
+        }
+
+        $existing = Application::where('user_id', $user->id)
             ->where('status', Application::STATUS_DRAFT)
             ->first();
 
@@ -157,33 +163,51 @@ class ApplicationController extends Controller
             return redirect()->route('application.personal');
         }
 
-        $submitted = Application::where('user_id', $userId)
-            ->where('status', '!=', Application::STATUS_DRAFT)
-            ->exists();
-
-        if ($submitted && !$request->has('opportunity')) {
-            return redirect()->route('dashboard')
-                ->with('info', 'You have already submitted an internship application. You can track your application progress in your portal dashboard.');
-        }
-
         $opportunityId = $request->query('opportunity');
         $opportunity = null;
 
         if ($opportunityId) {
             $opportunity = InternshipOpportunity::with('department')->where('status', 'open')->find($opportunityId);
+
+            if ($user->hasOpportunityApplication()) {
+                return redirect()->route('dashboard')
+                    ->with('toast_warning', 'You have already submitted an application for a published opportunity.');
+            }
+
+            if ($opportunity && !$user->canApplyToDepartment($opportunity->department_id)) {
+                $appliedDept = $user->getAppliedDepartment();
+                $deptName = $appliedDept ? $appliedDept->name : 'your registered department';
+                return redirect()->route('internships.index')
+                    ->with('toast_warning', "You can only apply for internship opportunities within your registered department ({$deptName}).");
+            }
         }
 
-        $departments = Department::where('is_active', true)->orderBy('name')->get();
-        $opportunities = InternshipOpportunity::with('department')->where('status', 'open')->latest()->get();
+        $appliedDeptId = $user->getAppliedDepartmentId();
+        if ($appliedDeptId) {
+            $departments = Department::where('id', $appliedDeptId)->where('is_active', true)->get();
+            $opportunities = InternshipOpportunity::with('department')
+                ->where('department_id', $appliedDeptId)
+                ->where('status', 'open')
+                ->latest()->get();
+        } else {
+            $departments = Department::where('is_active', true)->orderBy('name')->get();
+            $opportunities = InternshipOpportunity::with('department')->where('status', 'open')->latest()->get();
+        }
 
         return view('application.select-type', compact('opportunity', 'departments', 'opportunities'));
     }
 
     public function createFromType(Request $request)
     {
-        $userId = Auth::id();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
 
-        $existing = Application::where('user_id', $userId)
+        if ($user->hasReachedMaxApplications()) {
+            return redirect()->route('dashboard')
+                ->with('toast_warning', 'Maximum number of application has been reached.');
+        }
+
+        $existing = Application::where('user_id', $user->id)
             ->where('status', Application::STATUS_DRAFT)
             ->first();
 
@@ -196,10 +220,40 @@ class ApplicationController extends Controller
             'preferred_department_id' => 'nullable|exists:departments,id',
         ]);
 
+        $oppId = $validated['opportunity_id'] ?? null;
+
+        if ($oppId) {
+            if ($user->hasOpportunityApplication()) {
+                return redirect()->route('dashboard')
+                    ->with('toast_warning', 'You have already submitted an application for a published opportunity.');
+            }
+
+            $opp = InternshipOpportunity::find($oppId);
+            if ($opp && !$user->canApplyToDepartment($opp->department_id)) {
+                $appliedDept = $user->getAppliedDepartment();
+                $deptName = $appliedDept ? $appliedDept->name : 'your registered department';
+                return redirect()->route('internships.index')
+                    ->with('toast_warning', "You can only apply for internship opportunities within your registered department ({$deptName}).");
+            }
+        } else {
+            if ($user->hasGeneralApplication()) {
+                return redirect()->route('dashboard')
+                    ->with('toast_warning', 'You have already submitted a general internship application.');
+            }
+
+            $prefDeptId = $validated['preferred_department_id'] ?? null;
+            if ($prefDeptId && !$user->canApplyToDepartment($prefDeptId)) {
+                $appliedDept = $user->getAppliedDepartment();
+                $deptName = $appliedDept ? $appliedDept->name : 'your registered department';
+                return redirect()->back()
+                    ->with('toast_warning', "You can only apply for internships within your registered department ({$deptName}).");
+            }
+        }
+
         $refNumber = Application::generateReferenceNumber();
 
         $application = Application::create([
-            'user_id'               => $userId,
+            'user_id'               => $user->id,
             'reference_number'      => $refNumber,
             'opportunity_id'        => $validated['opportunity_id'] ?? null,
             'status'                => Application::STATUS_DRAFT,
@@ -208,7 +262,7 @@ class ApplicationController extends Controller
         ]);
 
         // Auto-populate details from previous application if applicant has applied before
-        $previousApp = Application::where('user_id', $userId)
+        $previousApp = Application::where('user_id', $user->id)
             ->where('id', '!=', $application->id)
             ->latest()
             ->first();

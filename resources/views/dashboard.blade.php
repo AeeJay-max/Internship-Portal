@@ -11,10 +11,19 @@
                 <h1 class="text-3xl font-black text-slate-900">My Internship Applications</h1>
                 <p class="text-slate-600 text-xs mt-0.5">Ministry of Sport, Recreation, Arts & Culture — Government of Zimbabwe</p>
             </div>
-            <a href="{{ route('internships.index') }}" class="px-6 py-3 rounded-xl bg-[#005A2B] hover:bg-[#00421F] text-white font-extrabold text-xs uppercase tracking-wider transition shadow-md inline-flex items-center gap-2">
-                <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-                <span>New Internship Application</span>
-            </a>
+            @if(Auth::user()->hasReachedMaxApplications())
+                <button type="button" onclick="showToast('Maximum number of application has been reached.', 'warning')"
+                        class="px-6 py-3 rounded-xl bg-slate-300 text-slate-500 font-extrabold text-xs uppercase tracking-wider cursor-not-allowed shadow-none inline-flex items-center gap-2"
+                        title="Maximum number of application has been reached.">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                    <span>New Internship Application</span>
+                </button>
+            @else
+                <a href="{{ route('application.selectType') }}" class="px-6 py-3 rounded-xl bg-[#005A2B] hover:bg-[#00421F] text-white font-extrabold text-xs uppercase tracking-wider transition shadow-md inline-flex items-center gap-2">
+                    <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                    <span>New Internship Application</span>
+                </a>
+            @endif
         </div>
 
         @if(session('success'))

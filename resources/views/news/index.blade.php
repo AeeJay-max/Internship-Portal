@@ -10,8 +10,8 @@
              class="absolute pointer-events-none select-none opacity-5"
              style="width: 400px; right: 5%; top: 50%; transform: translateY(-50%);" alt="">
         <div class="relative z-10 max-w-7xl mx-auto px-6 text-center">
-            <p class="text-sm font-semibold tracking-widest uppercase mb-4" style="color: rgba(255,255,255,0.5);">
-                National Internship Portal of Armenia
+            <p class="text-xs font-bold tracking-widest uppercase mb-4 text-amber-400">
+                Ministry of Sport, Recreation, Arts & Culture — Government of Zimbabwe
             </p>
             <h1 class="text-4xl md:text-5xl font-bold text-white mb-4" style="font-family: 'Georgia', serif;">
                 {{ __('nav.news') }} & Announcements

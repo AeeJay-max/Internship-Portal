@@ -78,4 +78,72 @@ class User extends Authenticatable implements \Illuminate\Contracts\Auth\MustVer
     {
         return $this->hasMany(Application::class);
     }
+
+    /* ===============================
+       APPLICATION LIMIT & DEPT HELPERS
+    =============================== */
+
+    public function generalApplication()
+    {
+        return $this->applications()
+            ->whereNull('opportunity_id')
+            ->where('status', '!=', Application::STATUS_WITHDRAWN)
+            ->first();
+    }
+
+    public function hasGeneralApplication(): bool
+    {
+        return $this->applications()
+            ->whereNull('opportunity_id')
+            ->where('status', '!=', Application::STATUS_WITHDRAWN)
+            ->exists();
+    }
+
+    public function opportunityApplication()
+    {
+        return $this->applications()
+            ->whereNotNull('opportunity_id')
+            ->where('status', '!=', Application::STATUS_WITHDRAWN)
+            ->first();
+    }
+
+    public function hasOpportunityApplication(): bool
+    {
+        return $this->applications()
+            ->whereNotNull('opportunity_id')
+            ->where('status', '!=', Application::STATUS_WITHDRAWN)
+            ->exists();
+    }
+
+    public function hasReachedMaxApplications(): bool
+    {
+        return $this->hasGeneralApplication() && $this->hasOpportunityApplication();
+    }
+
+    public function getAppliedDepartment()
+    {
+        foreach ($this->applications()->where('status', '!=', Application::STATUS_WITHDRAWN)->get() as $app) {
+            if ($app->opportunity_id && $app->opportunity && $app->opportunity->department) {
+                return $app->opportunity->department;
+            }
+            if ($app->preference && $app->preference->preferredDepartment) {
+                return $app->preference->preferredDepartment;
+            }
+        }
+        return null;
+    }
+
+    public function getAppliedDepartmentId(): ?int
+    {
+        return $this->getAppliedDepartment()?->id;
+    }
+
+    public function canApplyToDepartment(?int $departmentId): bool
+    {
+        $appliedDeptId = $this->getAppliedDepartmentId();
+        if (!$appliedDeptId || !$departmentId) {
+            return true;
+        }
+        return (int) $appliedDeptId === (int) $departmentId;
+    }
 }

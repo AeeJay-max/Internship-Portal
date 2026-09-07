@@ -5,8 +5,8 @@
     {{-- Hero --}}
     <div class="py-20" style="background: linear-gradient(135deg, #011627 0%, #011C3E 100%);">
         <div class="max-w-7xl mx-auto px-6 text-center">
-            <p class="text-sm font-semibold tracking-widest uppercase mb-3" style="color: #90caf9;">
-                National Internship Portal of Armenia
+            <p class="text-xs font-bold tracking-widest uppercase mb-3 text-amber-400">
+                Ministry of Sport, Recreation, Arts & Culture — Government of Zimbabwe
             </p>
             <h1 class="text-5xl font-bold text-white mb-4" style="font-family: 'Georgia', serif;">
                 Academic Programs

@@ -21,12 +21,12 @@
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
 
         {{-- University Header --}}
-        <div class="px-10 py-8 text-center" style="background: linear-gradient(135deg, #011627, #011C3E);">
-            <p class="text-white/60 text-xs tracking-widest uppercase mb-2">Republic of Armenia</p>
-            <h2 class="text-white text-2xl font-bold" style="font-family: 'Georgia', serif;">
-                National Internship Portal of Armenia
+        <div class="px-10 py-8 text-center" style="background: linear-gradient(135deg, #005A2B, #00421F);">
+            <p class="text-amber-300 text-xs tracking-widest uppercase mb-2">Government of Zimbabwe</p>
+            <h2 class="text-white text-2xl font-bold">
+                Ministry of Sport, Recreation, Arts & Culture
             </h2>
-            <p class="text-white/60 text-sm mt-1">Gyumri Institute of Technology</p>
+            <p class="text-emerald-100 text-sm mt-1">MoSRAC Internship Application & Academic Portal</p>
             <div class="w-20 h-0.5 mx-auto mt-4 mb-4" style="background: rgba(255,255,255,0.3);"></div>
             <p class="text-white text-lg font-semibold tracking-wider uppercase" style="letter-spacing: 0.15em;">
                 Official Academic Transcript
@@ -172,7 +172,7 @@
                 This transcript is an unofficial document generated from the MoSRAC Student Portal for reference purposes only.
             </p>
             <p class="text-xs text-gray-400 mt-1">
-                For official certified transcripts, please contact the Registrar's Office at the National Internship Portal of Armenia.
+                For official certified transcripts, please contact the Head Office at the Ministry of Sport, Recreation, Arts & Culture.
             </p>
         </div>
     </div>

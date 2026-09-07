@@ -32,7 +32,13 @@
     </form>
 
     @php
-        $userHasApplied = Auth::check() && !Auth::user()->isAdmin() && Auth::user()->applications()->exists();
+        $user = Auth::user();
+        $isAdmin = $user && $user->isAdmin();
+        $hasReachedMax = $user && !$isAdmin && $user->hasReachedMaxApplications();
+        $hasGeneralApp = $user && !$isAdmin && $user->hasGeneralApplication();
+        $hasOppApp = $user && !$isAdmin && $user->hasOpportunityApplication();
+        $appliedDeptId = $user && !$isAdmin ? $user->getAppliedDepartmentId() : null;
+        $appliedDeptName = $user && !$isAdmin ? ($user->getAppliedDepartment()?->name ?? 'your department') : '';
     @endphp
 
     {{-- General Application Notice Card --}}
@@ -44,7 +50,17 @@
                 Applicants can submit a general internship application at any time, even when no specific vacancy is advertised for their preferred department.
             </p>
         </div>
-        @if(!$userHasApplied && (!Auth::check() || !Auth::user()->isAdmin()))
+        @if($hasReachedMax)
+            <button type="button" onclick="showToast('Maximum number of application has been reached.', 'warning')"
+                    class="px-6 py-3 rounded-xl bg-slate-400 text-slate-200 font-extrabold text-xs uppercase tracking-wider cursor-not-allowed shadow-none shrink-0">
+                General Application (Max Reached)
+            </button>
+        @elseif($hasGeneralApp)
+            <button type="button" onclick="showToast('You have already submitted a general internship application.', 'warning')"
+                    class="px-6 py-3 rounded-xl bg-slate-400 text-slate-200 font-extrabold text-xs uppercase tracking-wider cursor-not-allowed shadow-none shrink-0">
+                General Application Submitted
+            </button>
+        @elseif(!$isAdmin)
             <a href="{{ route('application.selectType') }}" class="px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-emerald-950 font-extrabold text-xs uppercase tracking-wider shadow shrink-0">
                 Submit General Application &rarr;
             </a>
@@ -65,7 +81,12 @@
                 There are currently no specific advertised internship vacancies matching your criteria. However, zero advertised vacancies NEVER prevent general applications.
             </p>
             <div class="pt-2">
-                @if(!$userHasApplied && (!Auth::check() || !Auth::user()->isAdmin()))
+                @if($hasReachedMax)
+                    <button type="button" onclick="showToast('Maximum number of application has been reached.', 'warning')"
+                            class="inline-block px-8 py-3.5 rounded-xl bg-slate-300 text-slate-500 font-extrabold text-xs uppercase tracking-wider cursor-not-allowed shadow-none">
+                        Submit General Internship Application
+                    </button>
+                @elseif(!$hasGeneralApp && !$isAdmin)
                     <a href="{{ route('application.selectType') }}" class="inline-block px-8 py-3.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-extrabold text-xs uppercase tracking-wider shadow">
                         Submit General Internship Application
                     </a>
@@ -79,6 +100,9 @@
     @else
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($opportunities as $opp)
+                @php
+                    $isWrongDept = $appliedDeptId && (int)$opp->department_id !== (int)$appliedDeptId;
+                @endphp
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
                     <div class="space-y-3">
                         <span class="text-[10px] font-extrabold px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 uppercase tracking-wide">
@@ -92,9 +116,19 @@
                         <p class="text-xs text-slate-600 leading-relaxed">{{ Str::limit($opp->description, 120) }}</p>
                     </div>
                     <div class="mt-6 pt-4 border-t border-slate-100">
-                        <a href="{{ route('opportunities.show', $opp->id) }}" class="block w-full text-center py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider transition">
-                            View Position & Apply
-                        </a>
+                        @if($hasReachedMax)
+                            <button type="button" onclick="showToast('Maximum number of application has been reached.', 'warning')" class="block w-full text-center py-2.5 rounded-xl bg-slate-200 text-slate-500 font-bold text-xs uppercase tracking-wider cursor-not-allowed">
+                                View Position (Max Reached)
+                            </button>
+                        @elseif($isWrongDept)
+                            <button type="button" onclick="showToast('You can only apply for opportunities in your registered department ({{ $appliedDeptName }}).', 'warning')" class="block w-full text-center py-2.5 rounded-xl bg-amber-100 text-amber-800 border border-amber-300 font-bold text-xs uppercase tracking-wider cursor-not-allowed">
+                                {{ $opp->department->code ?? 'Other' }} Department Only
+                            </button>
+                        @else
+                            <a href="{{ route('opportunities.show', $opp->id) }}" class="block w-full text-center py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider transition">
+                                View Position & Apply
+                            </a>
+                        @endif
                     </div>
                 </div>
             @endforeach

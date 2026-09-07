@@ -29,13 +29,40 @@
             <div>
                 <p class="text-xs text-slate-400">Department Contact: {{ $opportunity->department->contact_email ?? 'internships@mosrac.gov.zw' }}</p>
             </div>
-            <form method="POST" action="{{ route('application.createFromType') }}">
-                @csrf
-                <input type="hidden" name="opportunity_id" value="{{ $opportunity->id }}">
-                <button type="submit" class="px-8 py-3.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-extrabold text-xs uppercase tracking-wider shadow transition">
-                    Apply for this Opportunity &rarr;
+            @php
+                $user = Auth::user();
+                $isAdmin = $user && $user->isAdmin();
+                $hasReachedMax = $user && !$isAdmin && $user->hasReachedMaxApplications();
+                $hasOppApp = $user && !$isAdmin && $user->hasOpportunityApplication();
+                $appliedDeptId = $user && !$isAdmin ? $user->getAppliedDepartmentId() : null;
+                $isWrongDept = $appliedDeptId && (int)$opportunity->department_id !== (int)$appliedDeptId;
+                $appliedDeptName = $user && !$isAdmin ? ($user->getAppliedDepartment()?->name ?? 'your department') : '';
+            @endphp
+
+            @if($hasReachedMax)
+                <button type="button" onclick="showToast('Maximum number of application has been reached.', 'warning')"
+                        class="px-8 py-3.5 rounded-xl bg-slate-300 text-slate-500 font-extrabold text-xs uppercase tracking-wider cursor-not-allowed shadow-none">
+                    Apply for this Opportunity (Max Reached)
                 </button>
-            </form>
+            @elseif($hasOppApp)
+                <button type="button" onclick="showToast('You have already submitted an application for a published opportunity.', 'warning')"
+                        class="px-8 py-3.5 rounded-xl bg-slate-300 text-slate-500 font-extrabold text-xs uppercase tracking-wider cursor-not-allowed shadow-none">
+                    Opportunity Application Submitted
+                </button>
+            @elseif($isWrongDept)
+                <button type="button" onclick="showToast('You can only apply for internship opportunities within your registered department ({{ $appliedDeptName }}).', 'warning')"
+                        class="px-8 py-3.5 rounded-xl bg-amber-100 text-amber-800 border border-amber-300 font-extrabold text-xs uppercase tracking-wider cursor-not-allowed shadow-none">
+                    Department Restricted
+                </button>
+            @else
+                <form method="POST" action="{{ route('application.createFromType') }}">
+                    @csrf
+                    <input type="hidden" name="opportunity_id" value="{{ $opportunity->id }}">
+                    <button type="submit" class="px-8 py-3.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-extrabold text-xs uppercase tracking-wider shadow transition">
+                        Apply for this Opportunity &rarr;
+                    </button>
+                </form>
+            @endif
         </div>
     </div>
 </div>

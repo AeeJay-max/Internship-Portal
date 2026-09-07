@@ -18,6 +18,9 @@
 </head>
 <body class="font-sans antialiased bg-slate-50 text-slate-800">
 
+{{-- Global Toast Notification Container --}}
+<div id="mosrac-toast-container" class="fixed top-24 right-5 z-[9999] flex flex-col gap-3 max-w-md w-full pointer-events-none px-4 sm:px-0"></div>
+
 {{-- Global loading bar --}}
 <div id="mosrac-loader" style="
     position: fixed; top: 0; left: 0; right: 0;
@@ -109,6 +112,48 @@
 @stack('scripts')
 
 <script>
+    function showToast(message, type = 'warning') {
+        var container = document.getElementById('mosrac-toast-container');
+        if (!container) return;
+
+        var toast = document.createElement('div');
+        toast.className = 'pointer-events-auto flex items-center justify-between p-4 rounded-2xl shadow-2xl border text-xs font-bold transition-all duration-300 transform translate-y-2 opacity-0 ' +
+            (type === 'error' || type === 'warning'
+                ? 'bg-amber-900 text-amber-100 border-amber-500/60 shadow-amber-900/30'
+                : type === 'danger'
+                ? 'bg-rose-900 text-rose-100 border-rose-500/60 shadow-rose-900/30'
+                : 'bg-emerald-900 text-emerald-100 border-emerald-500/60 shadow-emerald-900/30');
+
+        toast.innerHTML = '<div class="flex items-center gap-3">' +
+            '<span class="text-base">' + (type === 'danger' ? '⛔' : type === 'warning' || type === 'error' ? '⚠️' : '✅') + '</span>' +
+            '<span>' + message + '</span>' +
+            '</div>' +
+            '<button onclick="this.parentElement.remove()" class="ml-4 text-white/70 hover:text-white font-black text-sm">&times;</button>';
+
+        container.appendChild(toast);
+
+        requestAnimationFrame(function() {
+            toast.classList.remove('translate-y-2', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+        });
+
+        setTimeout(function() {
+            toast.classList.remove('opacity-100');
+            toast.classList.add('opacity-0');
+            setTimeout(function() { toast.remove(); }, 300);
+        }, 5000);
+    }
+
+    @if(session('toast_warning') || session('toast_error'))
+        document.addEventListener('DOMContentLoaded', function() {
+            showToast("{{ session('toast_warning') ?? session('toast_error') }}", 'warning');
+        });
+    @elseif(session('toast_success'))
+        document.addEventListener('DOMContentLoaded', function() {
+            showToast("{{ session('toast_success') }}", 'success');
+        });
+    @endif
+
     (function() {
         var loader = document.getElementById('mosrac-loader');
         if (!loader) return;

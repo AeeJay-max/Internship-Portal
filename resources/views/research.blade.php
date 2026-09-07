@@ -6,7 +6,7 @@
     <div class="relative py-24 overflow-hidden" style="background: linear-gradient(135deg, #011627 0%, #011C3E 100%);">
         <div class="absolute inset-0 opacity-10" style="background-image:url('/images/programs/engineering.jpg');background-size:cover;background-position:center;"></div>
         <div class="relative max-w-7xl mx-auto px-6 text-center">
-            <p class="text-sm font-semibold tracking-widest uppercase mb-3" style="color:#90caf9;">National Internship Portal of Armenia</p>
+            <p class="text-xs font-bold tracking-widest uppercase mb-3 text-amber-400">Ministry of Sport, Recreation, Arts & Culture — Government of Zimbabwe</p>
             <h1 class="text-5xl font-bold text-white mb-4" style="font-family:'Georgia',serif;">Research & Innovation</h1>
             <div class="w-16 h-1 mx-auto rounded mb-6" style="background:#611818;"></div>
             <p class="text-lg max-w-2xl mx-auto" style="color:rgba(255,255,255,0.75);">Advancing knowledge through cutting-edge research, international collaboration and applied innovation across engineering and technology disciplines.</p>

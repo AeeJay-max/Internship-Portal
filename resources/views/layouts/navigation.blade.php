@@ -1,6 +1,8 @@
 @php
     $isAdmin = Auth::check() && Auth::user()->isAdmin();
-    $hasApplied = Auth::check() && !Auth::user()->isAdmin() && Auth::user()->applications()->exists();
+    $user = Auth::user();
+    $hasReachedMax = $user && !$isAdmin && $user->hasReachedMaxApplications();
+    $hasApplied = $user && !$isAdmin && $user->applications()->exists();
 @endphp
 
 <nav x-data="{ open: false, scrolled: false }"
@@ -71,11 +73,18 @@
             {{-- Right Actions --}}
             <div class="hidden lg:flex items-center gap-3">
                 @auth
-                    @if(!$isAdmin && !$hasApplied)
-                        <a href="{{ route('apply.start') }}"
-                           class="text-xs uppercase font-extrabold tracking-wider px-5 py-2.5 rounded-xl bg-[#005A2B] text-white hover:bg-[#00421F] transition-all duration-200 shadow-md">
-                            Apply Now
-                        </a>
+                    @if(!$isAdmin)
+                        @if($hasReachedMax)
+                            <button type="button" onclick="showToast('Maximum number of application has been reached.', 'warning')"
+                               class="text-xs uppercase font-extrabold tracking-wider px-5 py-2.5 rounded-xl bg-slate-300 text-slate-500 cursor-not-allowed shadow-none">
+                                Apply Now
+                            </button>
+                        @else
+                            <a href="{{ route('apply.start') }}"
+                               class="text-xs uppercase font-extrabold tracking-wider px-5 py-2.5 rounded-xl bg-[#005A2B] text-white hover:bg-[#00421F] transition-all duration-200 shadow-md">
+                                Apply Now
+                            </a>
+                        @endif
                     @endif
 
                     <x-dropdown align="right" width="48">

@@ -9,7 +9,7 @@
                             <tr>
                                 <td>
                                     <a href="{{ $url }}"
-                                       style="background-color:#011C3E; border:none; border-radius:8px; color:#ffffff !important; display:inline-block; font-family:Helvetica,Arial,sans-serif; font-size:15px; font-weight:bold; line-height:1; padding:16px 36px; text-decoration:none; text-align:center;">
+                                       style="background-color:#005A2B; border:none; border-radius:8px; color:#ffffff !important; display:inline-block; font-family:Helvetica,Arial,sans-serif; font-size:15px; font-weight:bold; line-height:1; padding:16px 36px; text-decoration:none; text-align:center;">
                                         {{ $slot }}
                                     </a>
                                 </td>

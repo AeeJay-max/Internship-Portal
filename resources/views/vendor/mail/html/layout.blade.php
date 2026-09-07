@@ -10,14 +10,14 @@
         body { background-color: #f0f4f8; margin: 0; padding: 0; }
         .wrapper { background-color: #f0f4f8; padding: 32px 0; }
         .content { width: 100%; }
-        .header { background-color: #011C3E; border-radius: 12px 12px 0 0; text-align: center; }
+        .header { background-color: #005A2B; border-radius: 12px 12px 0 0; text-align: center; }
         .inner-body { background-color: #ffffff; border-radius: 0 0 12px 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
         .content-cell { padding: 40px 48px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
         .footer { text-align: center; padding: 24px; }
-        .footer p, .footer a { color: #9ca3af; font-size: 12px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
-        h1 { color: #011C3E; font-family: Georgia, serif; font-size: 22px; font-weight: bold; margin-top: 0; }
-        p { color: #4a5568; font-size: 15px; line-height: 1.75; margin: 0 0 16px; }
-        .button { background-color: #011C3E !important; border-radius: 8px !important; color: #ffffff !important; font-size: 15px !important; font-weight: bold !important; padding: 14px 32px !important; text-decoration: none !important; display: inline-block !important; }
+        .footer p, .footer a { color: #6b7280; font-size: 12px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        h1 { color: #005A2B; font-family: Georgia, serif; font-size: 22px; font-weight: bold; margin-top: 0; }
+        p { color: #374151; font-size: 15px; line-height: 1.75; margin: 0 0 16px; }
+        .button { background-color: #005A2B !important; border-radius: 8px !important; color: #ffffff !important; font-size: 15px !important; font-weight: bold !important; padding: 14px 32px !important; text-decoration: none !important; display: inline-block !important; }
         .button a { color: #ffffff !important; }
         table.action { width: 100%; margin: 24px 0; text-align: center; }
         table.panel { background-color: #f0f4f8; border-radius: 8px; padding: 16px; margin: 20px 0; }
