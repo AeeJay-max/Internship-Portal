@@ -13,7 +13,7 @@
                 Admissions 2025–2026
             </span>
             <h1 class="text-4xl md:text-5xl font-bold text-white mb-5" style="font-family:'Georgia',serif;">
-                Begin Your Journey at MOSRAC
+                Begin Your Journey at MoSRAC
             </h1>
             <p class="text-lg max-w-xl mx-auto" style="color:rgba(255,255,255,0.75);">
                 Apply online for Internship at the Ministry of Sport, Recreation, Arts & Culture.

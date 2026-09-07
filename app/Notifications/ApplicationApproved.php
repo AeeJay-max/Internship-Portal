@@ -30,15 +30,15 @@ class ApplicationApproved extends Notification
         return (new MailMessage)
             ->subject('Congratulations — Your Application Has Been Approved')
             ->greeting('Congratulations, ' . $notifiable->name . '!')
-            ->line('We are delighted to inform you that your application to the **National Internship Portal of Armenia** has been reviewed and approved.')
+            ->line('We are delighted to inform you that your application to the **MoSRAC Internship Portal** has been reviewed and approved.')
             ->line('**Program:** ' . ($program?->name ?? 'N/A'))
             ->line('**Degree Level:** ' . ucfirst($program?->degree_level ?? 'N/A'))
             ->line('**Student Number:** ' . $studentNumber)
             ->line('**Enrollment Date:** ' . $enrollmentDate)
             ->action('View Your Application', url('/application/' . $this->application->id))
             ->line('Please log in to the portal to view your full application details and student information.')
-            ->line('Welcome to the MOSRAC family! We look forward to supporting you throughout your academic journey.')
-            ->salutation('MOSRAC Admissions Team');
+            ->line('Welcome to the MoSRAC family! We look forward to supporting you throughout your internship journey.')
+            ->salutation('MoSRAC Portal Team');
     }
 
     public function toDatabase(object $notifiable): array

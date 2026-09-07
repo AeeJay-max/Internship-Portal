@@ -1,44 +1,42 @@
 <x-guest-layout>
 
-    <div class="mb-8">
-        <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
-             style="background: linear-gradient(135deg, #011C3E 0%, #611818 100%);">
+    <div class="mb-6 text-center">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-[#005A2B] text-white shadow-md">
             <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
             </svg>
         </div>
-        <h2 class="text-3xl font-bold mb-2 text-center" style="color: #011C3E; font-family: 'Georgia', serif;">
+        <h2 class="text-2xl font-black text-slate-900 mb-1">
             Verify Your Email
         </h2>
-        <p class="text-gray-500 text-sm text-center leading-relaxed">
+        <p class="text-xs text-slate-500 font-medium leading-relaxed">
             Thanks for registering! Please check your inbox and click the verification link we sent you before continuing.
         </p>
     </div>
 
     @if (session('status') == 'verification-link-sent')
-        <div class="mb-6 p-4 rounded-lg bg-green-50 border border-green-200 flex items-center gap-3">
-            <svg class="w-5 h-5 text-green-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center gap-3">
+            <svg class="w-5 h-5 text-[#005A2B] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
-            <p class="text-sm text-green-700 font-medium">A new verification link has been sent to your email address.</p>
+            <p class="text-xs text-[#005A2B] font-medium">A new verification link has been sent to your email address.</p>
         </div>
     @endif
 
-    <div class="space-y-4">
+    <div class="space-y-3">
         <form method="POST" action="{{ route('verification.send') }}">
             @csrf
             <button type="submit" id="btn-resend"
-                    class="w-full py-3.5 font-semibold text-sm uppercase tracking-wide text-white rounded-lg transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
-                    style="background: linear-gradient(135deg, #011C3E 0%, #611818 100%);">
-                Resend Verification Email
+                    class="w-full py-3.5 px-4 font-bold text-xs uppercase tracking-wider text-white bg-[#005A2B] hover:bg-[#00421F] rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
+                <span>Resend Verification Email</span>
             </button>
         </form>
 
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit"
-                    class="w-full py-3 font-medium text-sm text-gray-500 hover:text-gray-700 transition-colors duration-200">
-                ← Log Out and go back
+                    class="w-full py-2.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors">
+                ← Log Out and return to homepage
             </button>
         </form>
     </div>

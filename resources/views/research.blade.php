@@ -33,7 +33,7 @@
                     <p class="text-sm font-semibold tracking-widest uppercase mb-3" style="color:#611818;">Our Approach</p>
                     <h2 class="text-4xl font-bold mb-6" style="color:#011C3E;font-family:'Georgia',serif;">Research That Makes a Difference</h2>
                     <div class="w-16 h-1 rounded mb-8" style="background:#611818;"></div>
-                    <p class="text-gray-600 leading-relaxed mb-5">At MOSRAC, research is not confined to laboratories — it is embedded in every aspect of our academic culture. Our faculty and students collaborate with industry partners, government agencies and international universities to tackle real-world engineering and technology challenges.</p>
+                    <p class="text-gray-600 leading-relaxed mb-5">At MoSRAC, research is not confined to laboratories — it is embedded in every aspect of our academic culture. Our faculty and students collaborate with industry partners, government agencies and international universities to tackle real-world engineering and technology challenges.</p>
                     <p class="text-gray-600 leading-relaxed mb-5">From AI and machine learning to sustainable energy systems, structural engineering and advanced materials, our research programs address the most pressing challenges facing Armenia and the global community.</p>
                     <p class="text-gray-600 leading-relaxed">Our graduates leave not just as practitioners, but as innovators — equipped with the mindset and tools to contribute to research throughout their careers.</p>
                 </div>
@@ -120,8 +120,8 @@
                     <p class="text-sm font-semibold tracking-widest uppercase mb-3" style="color:#611818;">Global Reach</p>
                     <h2 class="text-4xl font-bold mb-6" style="color:#011C3E;font-family:'Georgia',serif;">International Research Collaboration</h2>
                     <div class="w-16 h-1 rounded mb-8" style="background:#611818;"></div>
-                    <p class="text-gray-600 leading-relaxed mb-5">MOSRAC maintains active research partnerships with universities and research institutes across Europe, North America and Asia. Our researchers participate in joint projects, international conferences and student exchange programs that bring global perspectives to Armenian engineering.</p>
-                    <p class="text-gray-600 leading-relaxed mb-8">These collaborations result in co-authored publications, shared patents and joint research grants that strengthen both MOSRAC's profile and the quality of research conducted on campus.</p>
+                    <p class="text-gray-600 leading-relaxed mb-5">MoSRAC maintains active research partnerships with universities and research institutes across Europe, North America and Asia. Our researchers participate in joint projects, international conferences and student exchange programs that bring global perspectives to Armenian engineering.</p>
+                    <p class="text-gray-600 leading-relaxed mb-8">These collaborations result in co-authored publications, shared patents and joint research grants that strengthen both MoSRAC's profile and the quality of research conducted on campus.</p>
                     <div class="grid grid-cols-3 gap-4">
                         @foreach([['30+','Partner Universities'],['15+','Countries'],['50+','Joint Projects']] as $s)
                             <div class="bg-white rounded-xl p-4 text-center shadow-sm border border-gray-100">
@@ -157,13 +157,13 @@
     <div class="py-16" style="background:#011C3E;">
         <div class="max-w-3xl mx-auto px-6 text-center">
             <h2 class="text-3xl font-bold text-white mb-4" style="font-family:'Georgia',serif;">Join Our Research Community</h2>
-            <p class="mb-8" style="color:rgba(255,255,255,0.75);">Pursue a PhD at MOSRAC and contribute to research that shapes the future of engineering and technology in Armenia and beyond.</p>
+            <p class="mb-8" style="color:rgba(255,255,255,0.75);">Pursue a PhD at MoSRAC and contribute to research that shapes the future of engineering and technology in Armenia and beyond.</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="{{ route('apply.start') }}" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-lg text-sm font-bold transition-all hover:shadow-lg" style="background:white;color:#011C3E;">
                     Apply for PhD <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </a>
                 <a href="{{ route('about') }}" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-lg text-sm font-bold border border-white/30 text-white hover:bg-white/10 transition-all">
-                    About MOSRAC
+                    About MoSRAC
                 </a>
             </div>
         </div>

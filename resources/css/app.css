@@ -10,13 +10,18 @@
 
 @layer base {
     :root {
-        /* ── Brand Colors ── */
-        --MOSRAC-navy:       #011C3E;
-        --MOSRAC-navy-dark:  #011627;
-        --MOSRAC-navy-light: #0a3060;
-        --MOSRAC-crimson:    #611818;
-        --MOSRAC-crimson-dark: #4a1010;
-        --MOSRAC-crimson-light: #7a2020;
+        /* ── Official MoSRAC Green Palette ── */
+        --primary:           #005A2B;
+        --primary-dark:      #00421F;
+        --sidebar-bg:        #111A13;
+        --sidebar-hover:     #1C2A1E;
+
+        --MOSRAC-navy:       #005A2B;
+        --MOSRAC-navy-dark:  #00421F;
+        --MOSRAC-navy-light: #007A3B;
+        --MOSRAC-crimson:    #00421F;
+        --MOSRAC-crimson-dark: #002D15;
+        --MOSRAC-crimson-light: #005A2B;
 
         /* ── Surface / Background ── */
         --MOSRAC-surface:    #f0f4f8;
@@ -31,17 +36,17 @@
 
         /* ── Border ── */
         --MOSRAC-border:       #e2e8f0;
-        --MOSRAC-border-focus: #3b82f6;
+        --MOSRAC-border-focus: #005A2B;
 
         /* ── Semantic ── */
-        --MOSRAC-success:     #16a34a;
+        --MOSRAC-success:     #15803D;
         --MOSRAC-success-bg:  #dcfce7;
         --MOSRAC-warning:     #d97706;
         --MOSRAC-warning-bg:  #fef3c7;
         --MOSRAC-danger:      #dc2626;
         --MOSRAC-danger-bg:   #fee2e2;
-        --MOSRAC-info:        #2563eb;
-        --MOSRAC-info-bg:     #dbeafe;
+        --MOSRAC-info:        #005A2B;
+        --MOSRAC-info-bg:     #E8F5E9;
 
         /* ── Spacing scale ── */
         --MOSRAC-radius-sm:   4px;

@@ -24,9 +24,9 @@ class ApplicationRejected extends Notification
         $reason  = $this->application->review_notes;
 
         return (new MailMessage)
-            ->subject('Update on Your MOSRAC Application')
+            ->subject('Update on Your MoSRAC Application')
             ->greeting('Dear ' . $notifiable->name . ',')
-            ->line('Thank you for your interest in studying at the National Internship Portal of Armenia and for the time you invested in your application.')
+            ->line('Thank you for your interest in the Ministry of Sport, Recreation, Arts & Culture Internship Portal.')
             ->line('After careful review, we regret to inform you that your application for the following program has not been successful at this time:')
             ->line('**Program:** ' . ($program?->name ?? 'N/A'))
             ->line('**Degree Level:** ' . ucfirst($program?->degree_level ?? 'N/A'))
@@ -34,8 +34,8 @@ class ApplicationRejected extends Notification
                 return $mail->line('**Reason:** ' . $reason);
             })
             ->action('View Your Application', url('/application/' . $this->application->id))
-            ->line('We encourage you to review the feedback provided and consider reapplying in a future intake. If you have any questions, please do not hesitate to contact our admissions office.')
-            ->salutation('MOSRAC Admissions Team');
+            ->line('We encourage you to review the feedback provided and consider reapplying in a future intake.')
+            ->salutation('MoSRAC Portal Team');
     }
 
     public function toDatabase(object $notifiable): array

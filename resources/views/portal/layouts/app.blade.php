@@ -4,16 +4,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="theme-color" content="#011C3E">
-    <title>MOSRAC Student Portal</title>
+    <meta name="theme-color" content="#005A2B">
+    <title>MoSRAC Student Portal</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet"/>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        .portal-gradient { background: linear-gradient(135deg, #011627 0%, #011C3E 60%, #611818 100%); }
+        .portal-gradient { background: linear-gradient(135deg, #005A2B 0%, #00421F 60%, #0B120C 100%); }
         .card { background: white; border-radius: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #f1f5f9; }
         .card-hover { transition: all 0.2s; }
-        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(2,62,138,0.10); }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,90,43,0.12); }
         .bottom-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 4px; font-size: 11px; font-weight: 600; transition: color 0.15s; }
         @media print { .no-print { display: none !important; } }
     </style>
@@ -27,14 +27,10 @@
 
             {{-- Logo --}}
             <a href="{{ route('portal.dashboard') }}" class="flex items-center gap-2.5 shrink-0">
-                <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: rgba(255,255,255,0.15);">
-                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
-                    </svg>
-                </div>
+                <img src="{{ asset('images/branding/mosrac_logo.png') }}" alt="MoSRAC Emblem" class="w-10 h-10 object-contain shrink-0" onerror="this.onerror=null; this.src='{{ asset('images/branding/lionfalcon.png') }}';">
                 <div class="hidden sm:block">
-                    <div class="text-white font-bold text-xs leading-none">MOSRAC</div>
-                    <div class="text-xs leading-none mt-0.5" style="color: #90caf9; font-size: 10px;">Student Portal</div>
+                    <div class="text-white font-bold text-xs leading-none">MoSRAC</div>
+                    <div class="text-xs leading-none mt-0.5" style="color: #FBBF24; font-size: 10px;">Student Portal</div>
                 </div>
             </a>
 
@@ -48,7 +44,7 @@
                 ] as [$route, $label, $icon])
                     <a href="{{ route($route) }}"
                        class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all
-                               {{ request()->routeIs($route) ? 'bg-white/20 text-white' : 'text-white/65 hover:text-white hover:bg-white/10' }}">
+                                {{ request()->routeIs($route) ? 'bg-white/20 text-white' : 'text-white/65 hover:text-white hover:bg-white/10' }}">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $icon }}"/>
                         </svg>
@@ -73,7 +69,7 @@
                 @php $s = Auth::user()->student; @endphp
                 <div class="hidden lg:block text-right border-l border-white/20 pl-3">
                     <div class="text-white text-xs font-semibold leading-none">{{ Auth::user()->name }}</div>
-                    <div class="font-mono mt-0.5" style="font-size: 10px; color: #90caf9;">{{ $s?->student_number }}</div>
+                    <div class="font-mono mt-0.5" style="font-size: 10px; color: #FBBF24;">{{ $s?->student_number }}</div>
                 </div>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -111,7 +107,7 @@
         ] as [$route, $label, $icon])
             @php $active = request()->routeIs($route); @endphp
             <a href="{{ route($route) }}" class="bottom-nav-item"
-               style="color: {{ $active ? '#011C3E' : '#94a3b8' }};">
+               style="color: {{ $active ? '#005A2B' : '#94a3b8' }};">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="{{ $active ? '2.5' : '1.8' }}" d="{{ $icon }}"/>
                 </svg>

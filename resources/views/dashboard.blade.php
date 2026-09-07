@@ -11,7 +11,7 @@
                 <h1 class="text-3xl font-black text-slate-900">My Internship Applications</h1>
                 <p class="text-slate-600 text-xs mt-0.5">Ministry of Sport, Recreation, Arts & Culture — Government of Zimbabwe</p>
             </div>
-            <a href="{{ route('internships.index') }}" class="px-6 py-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs uppercase tracking-wider transition shadow-md inline-flex items-center gap-2">
+            <a href="{{ route('internships.index') }}" class="px-6 py-3 rounded-xl bg-[#005A2B] hover:bg-[#00421F] text-white font-extrabold text-xs uppercase tracking-wider transition shadow-md inline-flex items-center gap-2">
                 <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
                 <span>New Internship Application</span>
             </a>
@@ -225,7 +225,7 @@
                         <p class="text-xs text-slate-500 font-medium">Preferred Department: {{ $draft->preference->preferredDepartment->name ?? 'Not selected' }}</p>
                     </div>
                     <div class="flex gap-3">
-                        <a href="{{ route('application.personal') }}" class="px-6 py-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm">
+                        <a href="{{ route('application.personal') }}" class="px-6 py-3 rounded-xl bg-[#005A2B] hover:bg-[#00421F] text-white font-bold text-xs uppercase tracking-wider transition shadow-sm">
                             Continue Application &rarr;
                         </a>
                         <button onclick="openDeleteModal()" class="px-4 py-3 rounded-xl border border-rose-300 text-rose-600 font-bold text-xs uppercase hover:bg-rose-50 transition">
@@ -236,7 +236,7 @@
 
                 <div class="space-y-1">
                     <div class="w-full bg-slate-200 rounded-full h-2">
-                        <div class="bg-emerald-700 h-2 rounded-full transition-all duration-500" style="width: {{ $draft->completion_percentage }}%"></div>
+                        <div class="bg-[#005A2B] h-2 rounded-full transition-all duration-500" style="width: {{ $draft->completion_percentage }}%"></div>
                     </div>
                     <p class="text-xs text-slate-500 text-right font-medium">{{ $draft->completion_percentage }}% Completed</p>
                 </div>
@@ -250,7 +250,7 @@
             @if($applications->isEmpty() && !$draft)
                 <div class="text-center py-10 space-y-3">
                     <p class="text-sm text-slate-500 font-medium">You have no active or submitted internship applications.</p>
-                    <a href="{{ route('application.selectType') }}" class="inline-block px-6 py-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs uppercase tracking-wider transition shadow">
+                    <a href="{{ route('application.selectType') }}" class="inline-block px-6 py-3 rounded-xl bg-[#005A2B] hover:bg-[#00421F] text-white font-bold text-xs uppercase tracking-wider transition shadow">
                         Submit General Internship Application
                     </a>
                 </div>
@@ -277,7 +277,7 @@
                                     </td>
                                     <td class="py-4 px-4">{{ optional($app->submitted_at)->format('d M Y') }}</td>
                                     <td class="py-4 px-4 text-right">
-                                        <a href="{{ route('application.show', $app->id) }}" class="font-bold text-emerald-700 hover:text-emerald-900 underline">
+                                        <a href="{{ route('application.show', $app->id) }}" class="font-bold text-[#005A2B] hover:text-[#00421F] underline">
                                             View Details &rarr;
                                         </a>
                                     </td>

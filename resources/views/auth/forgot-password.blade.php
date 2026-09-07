@@ -1,31 +1,29 @@
 <x-guest-layout>
-    <div class="mb-8">
-        <h2 class="text-2xl font-bold mb-1" style="color: #011C3E; font-family: 'Georgia', serif;">Forgot Password?</h2>
-        <p class="text-sm text-gray-500">No problem. Enter your email and we'll send you a reset link.</p>
+    <div class="mb-6">
+        <h2 class="text-2xl font-black text-slate-900 mb-1">Forgot Password?</h2>
+        <p class="text-xs text-slate-500 font-medium">No problem. Enter your registered email address and we'll send you a password reset link.</p>
     </div>
 
     @if(session('status'))
-        <div class="mb-6 p-4 rounded-lg bg-green-50 border border-green-200 flex items-center gap-3">
-            <svg class="w-5 h-5 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <p class="text-sm text-green-700 font-medium">{{ session('status') }}</p>
+        <div class="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center gap-3">
+            <svg class="w-5 h-5 text-[#005A2B] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <p class="text-xs text-[#005A2B] font-medium">{{ session('status') }}</p>
         </div>
     @endif
 
-    <form method="POST" action="{{ route('password.email') }}" class="space-y-5">
+    <form method="POST" action="{{ route('password.email') }}" class="space-y-4">
         @csrf
 
         <div>
-            <label for="email" class="block text-sm font-semibold mb-2" style="color: #011C3E;">Email Address</label>
+            <label for="email" class="block text-xs font-bold text-slate-800 mb-1.5">Email Address</label>
             <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                 </div>
                 <input id="email" type="email" name="email" value="{{ old('email') }}"
                        required autofocus
-                       placeholder="your@email.com"
-                       class="w-full pl-10 pr-4 py-3 border rounded-lg text-sm bg-white transition-all duration-200 focus:outline-none @error('email') border-red-400 @else border-gray-300 @enderror"
-                       onfocus="this.style.borderColor='#611818'; this.style.boxShadow='0 0 0 3px rgba(0,119,182,0.1)';"
-                       onblur="this.style.borderColor='{{ $errors->has('email') ? '#f87171' : '#d1dae6' }}'; this.style.boxShadow='none';">
+                       placeholder="yourname@domain.com"
+                       class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-xl text-xs bg-white transition focus:outline-none focus:border-[#005A2B] focus:ring-2 focus:ring-[#005A2B]/20">
             </div>
             @error('email')
             <p class="text-red-500 text-xs mt-1.5">{{ $message }}</p>
@@ -33,14 +31,14 @@
         </div>
 
         <button type="submit" id="btn-forgot"
-                class="w-full py-3 rounded-lg text-sm font-bold text-white transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
-                style="background: linear-gradient(135deg, #011C3E 0%, #611818 100%);">
-            Send Reset Link
+                class="w-full py-3.5 px-4 font-bold text-xs uppercase tracking-wider text-white bg-[#005A2B] hover:bg-[#00421F] rounded-xl shadow-md transition-all flex items-center justify-center gap-2 mt-2">
+            <span>Email Password Reset Link</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </button>
 
-        <p class="text-center text-sm text-gray-500">
+        <p class="text-center text-xs text-slate-500 pt-3 border-t border-slate-100">
             Remember your password?
-            <a href="{{ route('login') }}" class="font-semibold hover:underline" style="color: #611818;">Back to Login</a>
+            <a href="{{ route('login') }}" class="font-bold text-[#005A2B] hover:text-[#00421F] transition">Back to Login &rarr;</a>
         </p>
     </form>
     <style>

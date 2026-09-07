@@ -4,7 +4,7 @@
             <tr>
                 <td align="center">
                     <p>© {{ date('Y') }} National Internship Portal of Armenia</p>
-                    <p>This email was sent by the MOSRAC Admissions Portal. Please do not reply to this email.</p>
+                    <p>This email was sent by the MoSRAC Internship Portal. Please do not reply to this email.</p>
                 </td>
             </tr>
         </table>

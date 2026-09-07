@@ -22,7 +22,7 @@
 <div id="mosrac-loader" style="
     position: fixed; top: 0; left: 0; right: 0;
     height: 3px; z-index: 9999;
-    background: linear-gradient(90deg, #15803d, #f59e0b, #dc2626);
+    background: linear-gradient(90deg, #005A2B, #f59e0b, #dc2626);
     background-size: 200% 100%;
     transform: scaleX(0);
     transform-origin: left;
@@ -50,22 +50,34 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-slate-950 text-slate-400 py-12 border-t-4 border-emerald-700 mt-20">
+    <footer class="bg-[#0B120C] text-slate-400 py-14 border-t-4 border-[#005A2B] mt-20 relative">
+        {{-- Zimbabwean Flag Top Thin Accent Line --}}
+        <div class="absolute top-0 left-0 right-0 h-1 flex">
+            <div class="h-full w-1/5 bg-[#005A2B]"></div>
+            <div class="h-full w-1/5 bg-[#F59E0B]"></div>
+            <div class="h-full w-1/5 bg-[#DC2626]"></div>
+            <div class="h-full w-1/5 bg-black"></div>
+            <div class="h-full w-1/5 bg-white"></div>
+        </div>
+
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
             <div class="md:col-span-2 space-y-4">
                 <div class="flex items-center gap-3">
-                    <img src="{{ asset('images/branding/mosrac_logo.png') }}" alt="MoSRAC Emblem" class="w-12 h-12 object-contain rounded-full border border-amber-300 bg-white p-0.5 shrink-0" onerror="this.onerror=null; this.src='{{ asset('images/branding/lionfalcon.png') }}';">
+                    <img src="{{ asset('images/branding/mosrac_logo.png') }}" alt="MoSRAC Emblem" class="w-16 h-16 object-contain shrink-0" onerror="this.onerror=null; this.src='{{ asset('images/branding/lionfalcon.png') }}';">
                     <div>
                         <h4 class="text-white font-extrabold text-base">Ministry of Sport, Recreation, Arts & Culture</h4>
-                        <p class="text-xs text-amber-300 font-semibold">MoSRAC Internship Application Portal</p>
+                        <p class="text-xs text-amber-400 font-bold uppercase tracking-wider">MoSRAC Internship Application Portal</p>
                     </div>
                 </div>
-                <p class="text-xs text-slate-400 max-w-md leading-relaxed">
+                <p class="text-xs text-slate-300 max-w-md leading-relaxed">
                     Official Government portal for structured national internship attachments and placements across Ministry departments in all 10 provinces of Zimbabwe.
                 </p>
             </div>
             <div>
-                <h5 class="text-white font-bold text-xs uppercase tracking-wider mb-3">Portal Navigation</h5>
+                <h5 class="text-white font-bold text-xs uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                    Portal Navigation
+                </h5>
                 <ul class="space-y-2 text-xs">
                     <li><a href="{{ url('/') }}" class="hover:text-amber-300 transition">Home</a></li>
                     <li><a href="{{ route('about') }}" class="hover:text-amber-300 transition">About MoSRAC</a></li>
@@ -75,17 +87,20 @@
                 </ul>
             </div>
             <div>
-                <h5 class="text-white font-bold text-xs uppercase tracking-wider mb-3">Ministry Headquarters</h5>
-                <p class="text-xs text-slate-300 font-semibold">Chinengundu Mashayamombe Building</p>
-                <p class="text-xs text-slate-400">95 Cnr N. Mandela & S. V. Muzenda Street</p>
-                <p class="text-xs text-slate-400">Harare, Zimbabwe</p>
-                <p class="text-xs text-slate-400 mt-2">Email: minofsportandarts@gmail.com</p>
-                <p class="text-xs text-slate-400">Phone: +263242708345</p>
+                <h5 class="text-white font-bold text-xs uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                    Ministry Headquarters
+                </h5>
+                <p class="text-xs text-slate-200 font-semibold">Chinengundu Mashayamombe Building</p>
+                <p class="text-xs text-slate-300">95 Cnr N. Mandela & S. V. Muzenda Street</p>
+                <p class="text-xs text-slate-300">Harare, Zimbabwe</p>
+                <p class="text-xs text-slate-300 mt-2">Email: minofsportandarts@gmail.com</p>
+                <p class="text-xs text-slate-300">Phone: +263242708345</p>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto px-6 mt-8 pt-8 border-t border-slate-800/80 text-[11px] text-slate-500 flex flex-col md:flex-row justify-between items-center gap-3">
+        <div class="max-w-7xl mx-auto px-6 mt-10 pt-6 border-t border-slate-800 text-[11px] text-slate-400 flex flex-col md:flex-row justify-between items-center gap-3">
             <p>&copy; {{ date('Y') }} Ministry of Sport, Recreation, Arts & Culture. All rights reserved.</p>
-            <p class="text-slate-400">Government of Zimbabwe Official Portal</p>
+            <p class="text-amber-400 font-bold">Government of Zimbabwe Official Portal</p>
         </div>
     </footer>
 </div>

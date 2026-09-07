@@ -22,7 +22,7 @@
                     </div>
                     <input id="first_name" type="text" name="first_name" value="{{ old('first_name') }}"
                            required autofocus
-                           class="w-full pl-10 pr-3 py-2.5 border border-slate-300 rounded-xl text-xs transition bg-white focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20"
+                           class="w-full pl-10 pr-3 py-2.5 border border-slate-300 rounded-xl text-xs transition bg-white focus:outline-none focus:border-[#005A2B] focus:ring-2 focus:ring-[#005A2B]/20"
                            placeholder="First Name">
                 </div>
                 @error('first_name')<p class="text-red-500 text-[11px] mt-1">{{ $message }}</p>@enderror
@@ -31,7 +31,7 @@
                 <label for="last_name" class="block text-xs font-bold text-slate-800 mb-1">Last Name</label>
                 <input id="last_name" type="text" name="last_name" value="{{ old('last_name') }}"
                        required
-                       class="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-xs transition bg-white focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20"
+                       class="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-xs transition bg-white focus:outline-none focus:border-[#005A2B] focus:ring-2 focus:ring-[#005A2B]/20"
                        placeholder="Surname">
                 @error('last_name')<p class="text-red-500 text-[11px] mt-1">{{ $message }}</p>@enderror
             </div>
@@ -48,7 +48,7 @@
                 </div>
                 <input id="email" type="email" name="email" value="{{ old('email') }}"
                        required autocomplete="username"
-                       class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-xl text-xs transition bg-white focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20"
+                       class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-xl text-xs transition bg-white focus:outline-none focus:border-[#005A2B] focus:ring-2 focus:ring-[#005A2B]/20"
                        placeholder="yourname@domain.com">
             </div>
             <x-input-error :messages="$errors->get('email')" class="mt-1.5" />
@@ -65,7 +65,7 @@
                 </div>
                 <input id="password" type="password" name="password"
                        required autocomplete="new-password"
-                       class="w-full pl-10 pr-10 py-2.5 border border-slate-300 rounded-xl text-xs transition bg-white focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20"
+                       class="w-full pl-10 pr-10 py-2.5 border border-slate-300 rounded-xl text-xs transition bg-white focus:outline-none focus:border-[#005A2B] focus:ring-2 focus:ring-[#005A2B]/20"
                        placeholder="Min. 8 characters">
                 <button type="button" onclick="togglePassword('password')"
                         class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600">
@@ -89,7 +89,7 @@
                 </div>
                 <input id="password_confirmation" type="password" name="password_confirmation"
                        required autocomplete="new-password"
-                       class="w-full pl-10 pr-10 py-2.5 border border-slate-300 rounded-xl text-xs transition bg-white focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20"
+                       class="w-full pl-10 pr-10 py-2.5 border border-slate-300 rounded-xl text-xs transition bg-white focus:outline-none focus:border-[#005A2B] focus:ring-2 focus:ring-[#005A2B]/20"
                        placeholder="Repeat your password">
                 <button type="button" onclick="togglePassword('password_confirmation')"
                         class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600">
@@ -103,7 +103,7 @@
         </div>
 
         {{-- Submit --}}
-        <button type="submit" id="btn-register" class="w-full py-3.5 px-4 font-bold text-xs uppercase tracking-wider text-white bg-emerald-700 hover:bg-emerald-800 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 mt-3">
+        <button type="submit" id="btn-register" class="w-full py-3.5 px-4 font-bold text-xs uppercase tracking-wider text-white bg-[#005A2B] hover:bg-[#00421F] rounded-xl shadow-md transition-all flex items-center justify-center gap-2 mt-3">
             <span>Create Applicant Account</span>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </button>
@@ -111,7 +111,7 @@
         {{-- Login link --}}
         <p class="text-center text-xs text-slate-500 pt-3 border-t border-slate-100">
             Already have an account?
-            <a href="{{ route('login') }}" class="font-bold text-emerald-700 hover:text-emerald-900 transition">
+            <a href="{{ route('login') }}" class="font-bold text-[#005A2B] hover:text-[#00421F] transition">
                 Sign in &rarr;
             </a>
         </p>

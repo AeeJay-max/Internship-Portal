@@ -23,15 +23,15 @@ class ApplicationUnderReview extends Notification
         $program = $this->application->program;
 
         return (new MailMessage)
-            ->subject('Your MOSRAC Application Is Now Under Review')
+            ->subject('Your MoSRAC Application Is Now Under Review')
             ->greeting('Dear ' . $notifiable->name . ',')
-            ->line('We are pleased to inform you that your application to the National Internship Portal of Armenia is now being actively reviewed by our admissions team.')
+            ->line('We are pleased to inform you that your application to the MoSRAC Internship Portal is now being actively reviewed by our team.')
             ->line('**Program:** ' . ($program?->name ?? 'N/A'))
             ->line('**Degree Level:** ' . ucfirst($program?->degree_level ?? 'N/A'))
             ->action('View Your Application', url('/application/' . $this->application->id))
             ->line('You will receive another email once a final decision has been made. In the meantime, you can log in to the portal to check your application status at any time.')
             ->line('Thank you for your patience.')
-            ->salutation('MOSRAC Admissions Team');
+            ->salutation('MoSRAC Portal Team');
     }
 
     public function toDatabase(object $notifiable): array

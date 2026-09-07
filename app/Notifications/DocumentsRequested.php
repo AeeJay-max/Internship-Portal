@@ -44,7 +44,7 @@ class DocumentsRequested extends Notification
             ->action('Upload Documents Now', url('/application/' . $this->application->id))
             ->line('Please log in to the portal and upload the correct versions of the requested documents as soon as possible to avoid delays in processing your application.')
             ->line('Once you have re-uploaded your documents, our team will continue reviewing your application.')
-            ->salutation('MOSRAC Admissions Team');
+            ->salutation('MoSRAC Portal Team');
     }
 
     public function toDatabase(object $notifiable): array

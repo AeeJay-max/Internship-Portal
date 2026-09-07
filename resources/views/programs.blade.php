@@ -313,7 +313,7 @@
     <div class="py-16" style="background:#011C3E;">
         <div class="max-w-3xl mx-auto px-6 text-center">
             <h2 class="text-3xl font-bold text-white mb-4" style="font-family:'Georgia',serif;">Ready to Apply?</h2>
-            <p class="mb-2" style="color:rgba(255,255,255,0.75);">Join students who chose MOSRAC for their academic journey.</p>
+            <p class="mb-2" style="color:rgba(255,255,255,0.75);">Join students who chose MoSRAC for their academic journey.</p>
             <p class="text-sm mb-8" style="color:rgba(255,255,255,0.5);">Applications are reviewed on a rolling basis. Apply early to secure your place.</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="{{ route('apply.start') }}" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-lg text-sm font-bold transition-all hover:shadow-lg hover:-translate-y-0.5" style="background:white;color:#011C3E;">
@@ -321,7 +321,7 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </a>
                 <a href="{{ route('about') }}" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-lg text-sm font-bold border border-white/30 text-white hover:bg-white/10 transition-all">
-                    Learn More About MOSRAC
+                    Learn More About MoSRAC
                 </a>
             </div>
         </div>

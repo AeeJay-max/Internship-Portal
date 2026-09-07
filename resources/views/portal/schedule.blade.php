@@ -127,9 +127,9 @@
     {{-- ── DESKTOP WEEKLY CALENDAR GRID ────────── --}}
     <div class="hidden md:block">
 
-        {{-- MOSRAC hours reference --}}
+        {{-- MoSRAC hours reference --}}
         <div class="card p-4 mb-4">
-            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">MOSRAC Class Hours</p>
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">MoSRAC Class Hours</p>
             <div class="grid grid-cols-4 gap-3">
                 @foreach($classHours as $h)
                     <div class="text-center p-2.5 rounded-xl" style="background:#f0f4f8;">

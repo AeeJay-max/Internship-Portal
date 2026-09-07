@@ -25,8 +25,8 @@
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
 
         {{-- Sidebar Brand Header --}}
-        <div class="p-4 bg-emerald-900 text-white flex items-center gap-3 border-b border-emerald-800">
-            <img src="{{ asset('images/branding/mosrac_logo.png') }}" alt="MoSRAC Official Emblem" class="w-10 h-10 object-contain rounded-full bg-white p-0.5 border border-amber-300 shrink-0 shadow" onerror="this.onerror=null; this.src='{{ asset('images/branding/lionfalcon.png') }}';">
+        <div class="p-4 bg-[#00421F] text-white flex items-center gap-3 border-b border-[#005A2B]">
+            <img src="{{ asset('images/branding/mosrac_logo.png') }}" alt="MoSRAC Official Emblem" class="w-14 h-14 object-contain shrink-0 drop-shadow" onerror="this.onerror=null; this.src='{{ asset('images/branding/lionfalcon.png') }}';">
             <div>
                 <p class="text-xs font-extrabold leading-tight text-white">MoSRAC Admin</p>
                 <p class="text-[10px] text-amber-300 font-semibold">Government Portal</p>

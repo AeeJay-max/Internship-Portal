@@ -169,7 +169,7 @@
         {{-- Footer --}}
         <div class="px-10 py-5 border-t border-gray-100 text-center" style="background: #f8fafc;">
             <p class="text-xs text-gray-400">
-                This transcript is an unofficial document generated from the MOSRAC Student Portal for reference purposes only.
+                This transcript is an unofficial document generated from the MoSRAC Student Portal for reference purposes only.
             </p>
             <p class="text-xs text-gray-400 mt-1">
                 For official certified transcripts, please contact the Registrar's Office at the National Internship Portal of Armenia.
