@@ -260,22 +260,53 @@
                         @endif
                     </div>
 
-                    {{-- Documents --}}
-                    <div class="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-100">
-                        <h3 class="font-semibold text-slate-900 text-base mb-4 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                            Uploaded Verification Documents
-                        </h3>
-                        @forelse($application->documents as $doc)
-                            <div class="flex items-center justify-between py-2.5 border-b border-gray-100 last:border-0 text-xs">
-                                <span class="text-gray-800 font-medium">📄 {{ $doc->cert_name ? $doc->cert_name . ' Certificate' : ($doc->documentType?->name ?? 'Document') }}</span>
-                                <a href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" class="text-emerald-700 font-medium hover:underline flex items-center gap-1">
-                                    View Document →
-                                </a>
+                    {{-- Documents (Single Combined PDF) --}}
+                    <div class="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-100 space-y-4">
+                        <div class="flex items-center justify-between flex-wrap gap-3 border-b border-slate-100 pb-4">
+                            <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+                                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                                Internal Combined Application PDF Viewer (5-in-1 Attachment)
+                            </h3>
+                            @php $doc = $application->documents()->latest()->first(); @endphp
+                            @if($doc)
+                                <div class="flex items-center gap-2">
+                                    <a href="{{ route('admin.applications.documents.view', [$application->id, $doc->id]) }}" target="_blank" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-bold text-xs transition inline-flex items-center gap-1.5 shadow-sm">
+                                        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                        Fullscreen View
+                                    </a>
+                                    <a href="{{ route('admin.applications.documents.download', [$application->id, $doc->id]) }}" class="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg font-bold text-xs transition inline-flex items-center gap-1.5 shadow-sm">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                        Download Copy
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
+
+                        @if($doc)
+                            <div class="text-xs text-slate-500 flex items-center justify-between bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
+                                <span>📄 <strong>{{ $doc->file_name ?? 'Combined_Application_Documents.pdf' }}</strong> ({{ round(($doc->file_size ?? 0) / 1024, 1) }} KB)</span>
+                                <span class="text-emerald-700 font-semibold">✓ Includes ID, Academic Results, Current Results, CV & University Letter</span>
                             </div>
-                        @empty
-                            <p class="text-amber-600 text-xs">No documents uploaded.</p>
-                        @endforelse
+
+                            {{-- Embedded Internal PDF Viewer --}}
+                            <div class="rounded-xl overflow-hidden border border-slate-300 bg-white shadow-inner">
+                                <object data="{{ route('admin.applications.documents.view', [$application->id, $doc->id]) }}" type="application/pdf" class="w-full h-[650px]">
+                                    <iframe src="{{ route('admin.applications.documents.view', [$application->id, $doc->id]) }}" class="w-full h-[650px] border-0">
+                                        <div class="p-6 text-center text-slate-500 bg-slate-50">
+                                            <p class="text-xs font-bold mb-3">Unable to embed PDF viewer directly in browser.</p>
+                                            <a href="{{ route('admin.applications.documents.view', [$application->id, $doc->id]) }}" target="_blank" class="px-3.5 py-2 bg-slate-800 text-white rounded-lg font-bold text-xs inline-flex items-center gap-1.5 mr-2">
+                                                Open PDF in New Tab
+                                            </a>
+                                            <a href="{{ route('admin.applications.documents.download', [$application->id, $doc->id]) }}" class="px-3.5 py-2 bg-emerald-700 text-white rounded-lg font-bold text-xs inline-flex items-center gap-1.5">
+                                                Download PDF
+                                            </a>
+                                        </div>
+                                    </iframe>
+                                </object>
+                            </div>
+                        @else
+                            <p class="text-amber-600 text-xs font-semibold">⚠️ No supporting PDF document uploaded by applicant.</p>
+                        @endif
                     </div>
 
                     {{-- Timeline / Audit Log --}}
@@ -335,14 +366,58 @@
 
             {{-- Approve Modal --}}
             <div id="approveModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
-                <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 mx-4">
-                    <h2 class="text-lg font-bold text-slate-900 mb-2">Approve Application</h2>
-                    <p class="text-gray-600 text-xs mb-4">Approving this application moves it to <strong>Placement Pending</strong> status. Placement officers can then assign a department, station, and supervisor.</p>
+                <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 mx-4 max-h-[90vh] overflow-y-auto">
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-lg font-bold text-slate-900">Approve & Specify Onboarding Documents</h2>
+                        <button type="button" onclick="closeApproveModal()" class="text-gray-400 hover:text-gray-600">✕</button>
+                    </div>
+                    <p class="text-gray-600 text-xs mb-4">Approving this application moves it to <strong>Placement Pending</strong> status. Specify the documents the applicant must bring and attach for onboarding.</p>
+                    
                     <form method="POST" action="{{ route('admin.applications.approve', $application->id) }}">
                         @csrf
-                        <div class="flex justify-end gap-2">
+                        
+                        <div class="mb-4">
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Required Onboarding Documents (Applicant Must Bring / Attach):</label>
+                            <div class="space-y-2 bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs">
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-blue-900">
+                                    <input type="checkbox" name="required_docs[]" value="Original National ID / Passport & Copies" checked class="rounded text-emerald-600">
+                                    <span>Original National ID / Passport & Copies</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-blue-900">
+                                    <input type="checkbox" name="required_docs[]" value="Official University Recommendation / Introduction Letter" checked class="rounded text-emerald-600">
+                                    <span>Official University Recommendation / Introduction Letter</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-blue-900">
+                                    <input type="checkbox" name="required_docs[]" value="Certified Academic Transcripts & Certificates" checked class="rounded text-emerald-600">
+                                    <span>Certified Academic Transcripts & Certificates</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-blue-900">
+                                    <input type="checkbox" name="required_docs[]" value="Certified Birth Certificate & O/A Level Results" checked class="rounded text-emerald-600">
+                                    <span>Certified Birth Certificate & O/A Level Results</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-blue-900">
+                                    <input type="checkbox" name="required_docs[]" value="Medical Fitness / Health Clearance Certificate" class="rounded text-emerald-600">
+                                    <span>Medical Fitness / Health Clearance Certificate</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-blue-900">
+                                    <input type="checkbox" name="required_docs[]" value="Police Clearance Certificate" class="rounded text-emerald-600">
+                                    <span>Police Clearance Certificate</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:text-blue-900">
+                                    <input type="checkbox" name="required_docs[]" value="Bank Details / Account Confirmation Statement" class="rounded text-emerald-600">
+                                    <span>Bank Details / Account Confirmation Statement</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1">Additional Acceptor Instructions / Notes:</label>
+                            <textarea name="review_notes" rows="3" placeholder="Specify any additional instructions, reporting location, or document guidelines..." class="w-full border border-gray-300 rounded-lg p-2.5 text-xs focus:ring-emerald-500 focus:border-emerald-500"></textarea>
+                        </div>
+
+                        <div class="flex justify-end gap-2 pt-2 border-t border-gray-100">
                             <button type="button" onclick="closeApproveModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-xs font-medium text-gray-700 hover:bg-gray-50">Cancel</button>
-                            <button type="submit" id="btn-approve" class="px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-medium hover:bg-emerald-700">Approve & Pending Placement</button>
+                            <button type="submit" id="btn-approve" class="px-5 py-2 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 shadow">Approve & Send Requirements</button>
                         </div>
                     </form>
                 </div>

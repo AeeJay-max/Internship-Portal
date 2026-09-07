@@ -12,6 +12,10 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
+        if ($user && $user->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
+
         $draft = Application::where('user_id', $user->id)
             ->where('status', Application::STATUS_DRAFT)
             ->with(['preference.preferredDepartment'])

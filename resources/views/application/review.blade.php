@@ -2,9 +2,14 @@
 
 @section('step-content')
 <div class="space-y-8">
-    <div class="border-b border-slate-200 pb-4">
-        <h2 class="text-2xl font-extrabold text-slate-900">Step 6 — Review & Submit Application</h2>
-        <p class="text-xs text-slate-500">Review all information carefully before final submission to the Ministry.</p>
+    <div class="border-b border-emerald-100 pb-4">
+        <div class="flex items-center gap-2">
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-700 text-white font-bold text-sm">6</span>
+            <div>
+                <h2 class="text-2xl font-black text-slate-900">Step 6 — Review & Submit Application</h2>
+                <p class="text-xs text-slate-600">Review all details carefully before final submission to the Ministry of Sports, Recreation, Arts and Culture.</p>
+            </div>
+        </div>
     </div>
 
     @if(!$application->isDraft())
@@ -35,7 +40,7 @@
         <div class="flex items-center justify-between border-b border-slate-200 pb-3">
             <h3 class="font-bold text-slate-900 text-base">Personal Details</h3>
             @if($application->isDraft())
-                <a href="{{ route('application.personal') }}" class="text-xs font-bold text-blue-700 hover:underline">Edit</a>
+                <a href="{{ route('application.personal') }}" class="text-xs font-bold text-emerald-700 hover:underline">Edit</a>
             @endif
         </div>
         @if($p = $application->personalInfo)
@@ -59,7 +64,7 @@
         <div class="flex items-center justify-between border-b border-slate-200 pb-3">
             <h3 class="font-bold text-slate-900 text-base">Academic Information</h3>
             @if($application->isDraft())
-                <a href="{{ route('application.academic') }}" class="text-xs font-bold text-blue-700 hover:underline">Edit</a>
+                <a href="{{ route('application.academic') }}" class="text-xs font-bold text-emerald-700 hover:underline">Edit</a>
             @endif
         </div>
         @if($a = $application->academicInfo)
@@ -79,12 +84,12 @@
         <div class="flex items-center justify-between border-b border-slate-200 pb-3">
             <h3 class="font-bold text-slate-900 text-base">Internship Preferences</h3>
             @if($application->isDraft())
-                <a href="{{ route('application.preferences') }}" class="text-xs font-bold text-blue-700 hover:underline">Edit</a>
+                <a href="{{ route('application.preferences') }}" class="text-xs font-bold text-emerald-700 hover:underline">Edit</a>
             @endif
         </div>
         @if($pref = $application->preference)
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-700">
-                <p><strong>Preferred Department:</strong> <span class="font-bold text-blue-900">{{ $pref->preferredDepartment->name ?? 'None' }}</span></p>
+                <p><strong>Preferred Department:</strong> <span class="font-bold text-emerald-900">{{ $pref->preferredDepartment->name ?? 'None' }}</span></p>
                 <p><strong>Second Preference:</strong> {{ $pref->secondPreferredDepartment->name ?? 'None' }}</p>
                 <p><strong>Preferred Dates:</strong> {{ optional($pref->preferred_start_date)->format('d M Y') }} to {{ optional($pref->preferred_end_date)->format('d M Y') }}</p>
                 <p><strong>Required Duration:</strong> {{ $pref->required_duration ?? 'Not specified' }}</p>
@@ -99,7 +104,7 @@
         <div class="flex items-center justify-between border-b border-slate-200 pb-3">
             <h3 class="font-bold text-slate-900 text-base">Motivation Statement</h3>
             @if($application->isDraft())
-                <a href="{{ route('application.motivation') }}" class="text-xs font-bold text-blue-700 hover:underline">Edit</a>
+                <a href="{{ route('application.motivation') }}" class="text-xs font-bold text-emerald-700 hover:underline">Edit</a>
             @endif
         </div>
         @if($pref = $application->preference)
@@ -121,39 +126,71 @@
     {{-- Section 5: Documents --}}
     <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
         <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-            <h3 class="font-bold text-slate-900 text-base">Uploaded Supporting Documents</h3>
+            <h3 class="font-bold text-slate-900 text-base">Uploaded Supporting Documents (5-in-1 PDF)</h3>
             @if($application->isDraft())
-                <a href="{{ route('application.documents') }}" class="text-xs font-bold text-blue-700 hover:underline">Edit</a>
+                <a href="{{ route('application.documents') }}" class="text-xs font-bold text-emerald-700 hover:underline">Edit Document</a>
             @endif
         </div>
-        <div class="space-y-2">
-            @forelse($application->documents as $doc)
-                <div class="flex justify-between items-center py-2 px-3 bg-white rounded-lg border border-slate-200 text-xs">
-                    <span class="font-semibold text-slate-800 flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                        {{ $doc->documentType->name ?? 'Document' }}
-                    </span>
-                    <a href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" class="font-bold text-blue-700 underline">
-                        View Document &rarr;
-                    </a>
+        <div class="space-y-3">
+            @php $doc = $application->documents()->latest()->first(); @endphp
+            @if($doc)
+                <div class="flex justify-between items-center py-3 px-4 bg-white rounded-xl border border-slate-200 text-xs flex-wrap gap-3">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-lg bg-emerald-700 text-white font-bold text-[10px] flex items-center justify-center">PDF</span>
+                        <div>
+                            <span class="font-bold text-slate-800 flex items-center gap-2">
+                                Combined 5-in-1 Supporting Documents
+                                <span class="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-bold">Uploaded ✓</span>
+                            </span>
+                            <span class="text-[11px] text-slate-500">{{ $doc->file_name ?? 'Combined_Documents.pdf' }} ({{ round(($doc->file_size ?? 0) / 1024, 1) }} KB)</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <a href="{{ route('application.documents.view', $doc->id) }}" target="_blank" class="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-bold text-xs transition inline-flex items-center gap-1.5 shadow-sm">
+                            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            Fullscreen View
+                        </a>
+                        <a href="{{ route('application.documents.download', $doc->id) }}" class="px-3.5 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg font-bold text-xs transition inline-flex items-center gap-1.5 shadow-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            Download Copy
+                        </a>
+                    </div>
                 </div>
-            @empty
-                <p class="text-xs text-rose-600">No documents uploaded.</p>
-            @endforelse
+
+                {{-- Internal PDF Viewer --}}
+                <div class="rounded-xl overflow-hidden border border-slate-300 bg-white shadow-inner">
+                    <object data="{{ route('application.documents.view', $doc->id) }}" type="application/pdf" class="w-full h-[550px]">
+                        <iframe src="{{ route('application.documents.view', $doc->id) }}" class="w-full h-[550px] border-0">
+                            <div class="p-6 text-center text-slate-500 bg-slate-50">
+                                <p class="text-xs font-bold mb-3">Unable to embed PDF viewer directly in browser.</p>
+                                <a href="{{ route('application.documents.view', $doc->id) }}" target="_blank" class="px-3.5 py-2 bg-slate-800 text-white rounded-lg font-bold text-xs inline-flex items-center gap-1.5 mr-2">
+                                    Open PDF in New Tab
+                                </a>
+                                <a href="{{ route('application.documents.download', $doc->id) }}" class="px-3.5 py-2 bg-emerald-700 text-white rounded-lg font-bold text-xs inline-flex items-center gap-1.5">
+                                    Download PDF
+                                </a>
+                            </div>
+                        </iframe>
+                    </object>
+                </div>
+            @else
+                <p class="text-xs text-rose-600 font-bold">⚠️ No single combined PDF uploaded. You cannot submit without uploading your combined PDF file.</p>
+            @endif
         </div>
     </div>
 
     {{-- Submit Button --}}
     <div class="pt-6 border-t border-slate-200 flex justify-between items-center">
-        <a href="{{ route('application.documents') }}" class="px-6 py-3 rounded-xl border border-slate-300 text-slate-700 font-semibold text-xs uppercase tracking-wider hover:bg-slate-50">
+        <a href="{{ route('application.documents') }}" class="px-6 py-3 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-slate-50 transition">
             &larr; Back to Documents
         </a>
 
         @if($application->isDraft() && $canSubmit)
             <form method="POST" action="{{ route('application.submit') }}">
                 @csrf
-                <button type="submit" class="px-10 py-4 rounded-xl bg-emerald-700 text-white font-extrabold text-sm uppercase tracking-wider hover:bg-emerald-800 transition shadow-lg">
-                    Submit Internship Application
+                <button type="submit" class="px-10 py-4 rounded-xl bg-emerald-700 text-white font-extrabold text-sm uppercase tracking-wider hover:bg-emerald-800 transition shadow-lg inline-flex items-center gap-2">
+                    <svg class="w-5 h-5 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    <span>Submit Internship Application</span>
                 </button>
             </form>
         @elseif($application->isDraft())
@@ -164,3 +201,4 @@
     </div>
 </div>
 @endsection
+

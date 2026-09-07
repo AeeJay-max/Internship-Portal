@@ -50,6 +50,6 @@ class RegisteredUserController extends Controller
 
         session(['show_verify_banner' => true]);
 
-        return redirect(route('home', absolute: false));
+        return redirect(route('dashboard', absolute: false));
     }
 }

@@ -1,0 +1,46 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500' width='500' height='500'>
+  <defs>
+    <path id='textArcTop' d='M 65,250 A 185,185 0 1,1 435,250' />
+    <path id='textArcBottom' d='M 435,250 A 185,185 0 0,1 65,250' />
+  </defs>
+
+  <!-- Outer Dark Green Ring -->
+  <circle cx='250' cy='250' r='240' fill='#166534' stroke='#0f5127' stroke-width='4'/>
+  <circle cx='250' cy='250' r='190' fill='#ffffff' stroke='#166534' stroke-width='3'/>
+
+  <!-- Outer Ring Circular Text -->
+  <text fill='#ffffff' font-family='Arial, sans-serif' font-weight='900' font-size='19' letter-spacing='1.5'>
+    <textPath href='#textArcTop' startOffset='50%' text-anchor='middle'>
+      MINISTRY OF SPORT, RECREATION, ARTS AND CULTURE
+    </textPath>
+  </text>
+  
+  <text fill='#ffffff' font-family='Arial, sans-serif' font-weight='900' font-size='22' letter-spacing='3'>
+    <textPath href='#textArcBottom' startOffset='50%' text-anchor='middle'>
+      • ZIMBABWE •
+    </textPath>
+  </text>
+
+  <!-- Center Shield Base -->
+  <g transform='translate(250, 240) scale(1.1)'>
+    <!-- Zimbabwe Bird atop Red Star -->
+    <polygon points='0,-105 18,-60 65,-60 27,-30 42,15 0,-15 -42,15 -27,-30 -65,-60 -18,-60' fill='#dc2626'/>
+    <!-- Bird Icon -->
+    <path d='M-10,-95 Q0,-120 10,-95 Q15,-80 5,-70 L-5,-70 Z' fill='#eab308' stroke='#854d0e' stroke-width='1.5'/>
+    
+    <!-- Kudus Supporters (Left & Right) -->
+    <path d='M-70,-30 C-90,-10 -95,40 -60,60 C-40,70 -30,50 -40,10 Z' fill='#9a3412' opacity='0.85'/>
+    <path d='M70,-30 C90,-10 95,40 60,60 C40,70 30,50 40,10 Z' fill='#9a3412' opacity='0.85'/>
+    
+    <!-- Center Shield -->
+    <path d='M-40,-40 Q0,-50 40,-40 Q45,30 0,70 Q-45,30 -40,-40 Z' fill='#15803d' stroke='#0f5127' stroke-width='3'/>
+    <!-- Shield Waves -->
+    <path d='M-35,-20 Q0,-30 35,-20 M-38,0 Q0,-10 38,0 M-35,20 Q0,10 35,20' stroke='#ffffff' stroke-width='3' fill='none'/>
+    <!-- Great Zimbabwe Ruin Cone -->
+    <path d='M-12,50 L0,15 L12,50 Z' fill='#94a3b8' stroke='#475569' stroke-width='2'/>
+    
+    <!-- Banner Scroll -->
+    <path d='M-70,80 Q0,95 70,80 L65,95 Q0,110 -65,95 Z' fill='#ef4444' stroke='#b91c1c' stroke-width='1.5'/>
+    <text x='0' y='93' text-anchor='middle' fill='#ffffff' font-family='Arial, sans-serif' font-weight='bold' font-size='10' letter-spacing='1'>UNITY • FREEDOM • WORK</text>
+  </g>
+</svg>

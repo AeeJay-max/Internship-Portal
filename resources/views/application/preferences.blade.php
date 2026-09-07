@@ -89,4 +89,41 @@
         </button>
     </div>
 </form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const startDateInput = document.querySelector('input[name="preferred_start_date"]');
+    const endDateInput = document.querySelector('input[name="preferred_end_date"]');
+    const durationSelect = document.querySelector('select[name="required_duration"]');
+
+    function autoCalculateEndDate() {
+        if (!startDateInput.value || !durationSelect.value) return;
+
+        const match = durationSelect.value.match(/(\d+)/);
+        if (!match) return;
+
+        const monthsToAdd = parseInt(match[1], 10);
+        const parts = startDateInput.value.split('-');
+        if (parts.length !== 3) return;
+
+        let year = parseInt(parts[0], 10);
+        let month = parseInt(parts[1], 10) - 1;
+        let day = parseInt(parts[2], 10);
+
+        let dateObj = new Date(year, month, day);
+        dateObj.setMonth(dateObj.getMonth() + monthsToAdd);
+
+        const yyyy = dateObj.getFullYear();
+        const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const dd = String(dateObj.getDate()).padStart(2, '0');
+
+        endDateInput.value = `${yyyy}-${mm}-${dd}`;
+    }
+
+    if (startDateInput && endDateInput && durationSelect) {
+        startDateInput.addEventListener('change', autoCalculateEndDate);
+        durationSelect.addEventListener('change', autoCalculateEndDate);
+    }
+});
+</script>
 @endsection

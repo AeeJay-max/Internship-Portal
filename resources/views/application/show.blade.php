@@ -25,6 +25,65 @@
             </div>
         </div>
 
+        {{-- ACCEPTANCE & ONBOARDING CARD --}}
+        @if(in_array($application->status, ['placement_pending', 'approved', 'placed']))
+            <div class="bg-gradient-to-br from-emerald-900 via-slate-900 to-emerald-950 text-white rounded-2xl p-6 md:p-8 shadow-xl space-y-6 border border-emerald-700/40">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-emerald-700/50 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-2xl bg-emerald-500 flex items-center justify-center font-bold text-xl text-white shadow">
+                            ✓
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-extrabold text-white">Application Approved</h3>
+                            <p class="text-xs text-emerald-200">Ministry of Sport, Recreation, Arts & Culture</p>
+                        </div>
+                    </div>
+                    <span class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 self-start md:self-auto">
+                        Status: {{ $application->isPlaced() ? 'Official Placement Assigned' : 'Placement Pending' }}
+                    </span>
+                </div>
+
+                @if($application->review_notes)
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-300">Acceptor Instructions & Required Documents to Bring:</h4>
+                        <div class="p-4 rounded-xl bg-emerald-950/80 border border-emerald-700/50 text-xs text-emerald-100 whitespace-pre-line leading-relaxed">
+                            {{ $application->review_notes }}
+                        </div>
+                    </div>
+                @endif
+
+                {{-- ATTACH ONBOARDING DOCUMENTS FORM --}}
+                <div class="bg-emerald-950/60 rounded-xl p-5 border border-emerald-700/40 space-y-4">
+                    <div>
+                        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
+                            Attach / Upload Requested Onboarding Documents
+                        </h4>
+                        <p class="text-xs text-emerald-200 mt-0.5">Upload any requested documents (e.g. University Recommendation Letter, Certified Transcripts, Medical Clearance, Bank Details) to attach to your application file.</p>
+                    </div>
+
+                    <form method="POST" action="{{ route('application.uploadOnboardingDocument', $application->id) }}" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">
+                        @csrf
+                        <div>
+                            <label class="block text-[11px] font-semibold text-emerald-200 uppercase mb-1">Document Description / Title</label>
+                            <input type="text" name="document_name" required placeholder="e.g. University Recommendation Letter" class="w-full bg-slate-900/90 border border-emerald-700/60 rounded-lg px-3 py-2 text-xs text-white placeholder-emerald-400/50 focus:outline-none focus:border-emerald-400">
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-semibold text-emerald-200 uppercase mb-1">Select File (PDF / Image / Doc)</label>
+                            <input type="file" name="document_file" required accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" class="w-full text-xs text-emerald-200 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-700 file:text-white hover:file:bg-emerald-600">
+                        </div>
+
+                        <div>
+                            <button type="submit" class="w-full py-2 px-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs rounded-lg transition shadow">
+                                Upload Document &rarr;
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        @endif
+
         {{-- PLACEMENT DETAILS CARD (Visible when Placed) --}}
         @if($application->isPlaced() && $application->placement)
             @php $pl = $application->placement; @endphp
@@ -123,17 +182,43 @@
 
         {{-- Documents --}}
         <div class="bg-white rounded-2xl p-6 border border-slate-200 space-y-4">
-            <h3 class="font-bold text-slate-900 text-base border-b border-slate-100 pb-2">Submitted Supporting Documents</h3>
-            <div class="space-y-2">
-                @forelse($application->documents as $doc)
-                    <div class="flex justify-between items-center py-2 px-3 bg-slate-50 rounded-lg border border-slate-200 text-xs">
-                        <span class="font-semibold text-slate-800">{{ $doc->documentType->name ?? 'Document' }}</span>
-                        <a href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" class="font-bold text-blue-900 underline">View File &rarr;</a>
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2 flex-wrap gap-2">
+                <h3 class="font-bold text-slate-900 text-base">Submitted Supporting Documents (5-in-1 PDF)</h3>
+                @php $doc = $application->documents()->latest()->first(); @endphp
+                @if($doc)
+                    <div class="flex items-center gap-2">
+                        <a href="{{ route('application.documents.view', $doc->id) }}" target="_blank" class="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-bold text-xs transition inline-flex items-center gap-1.5 shadow-sm">
+                            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            Fullscreen View
+                        </a>
+                        <a href="{{ route('application.documents.download', $doc->id) }}" class="px-3.5 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg font-bold text-xs transition inline-flex items-center gap-1.5 shadow-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            Download Copy
+                        </a>
                     </div>
-                @empty
-                    <p class="text-xs text-slate-400">No documents uploaded.</p>
-                @endforelse
+                @endif
             </div>
+
+            @if($doc)
+                {{-- Internal PDF Viewer --}}
+                <div class="rounded-xl overflow-hidden border border-slate-300 bg-white shadow-inner">
+                    <object data="{{ route('application.documents.view', $doc->id) }}" type="application/pdf" class="w-full h-[550px]">
+                        <iframe src="{{ route('application.documents.view', $doc->id) }}" class="w-full h-[550px] border-0">
+                            <div class="p-6 text-center text-slate-500 bg-slate-50">
+                                <p class="text-xs font-bold mb-3">Unable to embed PDF viewer directly in browser.</p>
+                                <a href="{{ route('application.documents.view', $doc->id) }}" target="_blank" class="px-3.5 py-2 bg-slate-800 text-white rounded-lg font-bold text-xs inline-flex items-center gap-1.5 mr-2">
+                                    Open PDF in New Tab
+                                </a>
+                                <a href="{{ route('application.documents.download', $doc->id) }}" class="px-3.5 py-2 bg-emerald-700 text-white rounded-lg font-bold text-xs inline-flex items-center gap-1.5">
+                                    Download PDF
+                                </a>
+                            </div>
+                        </iframe>
+                    </object>
+                </div>
+            @else
+                <p class="text-xs text-amber-600 font-semibold">⚠️ No documents uploaded.</p>
+            @endif
         </div>
 
         {{-- Application Logs --}}

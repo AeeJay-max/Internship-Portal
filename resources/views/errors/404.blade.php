@@ -3,28 +3,30 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>404 — Page Not Found | MOSRAC</title>
+    <title>404 — Page Not Found | MoSRAC</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet"/>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Figtree', sans-serif;
-            background: linear-gradient(135deg, #011f4b 0%, #011C3E 60%, #611818 100%);
+            background: linear-gradient(135deg, #064e3b 0%, #15803d 60%, #0f172a 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            color: white;
         }
         nav {
             padding: 1rem 2rem;
             display: flex;
             align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            gap: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            background: rgba(0,0,0,0.2);
         }
-        nav img { width: 38px; height: 38px; object-fit: contain; }
-        nav strong { color: white; font-size: 0.95rem; font-weight: 700; }
-        nav span { color: #90caf9; font-size: 0.68rem; display: block; font-weight: 400; }
+        nav img { width: 36px; height: 36px; object-fit: contain; }
+        nav strong { color: white; font-size: 0.95rem; font-weight: 800; }
+        nav span { color: #fde047; font-size: 0.7rem; display: block; font-weight: 600; }
         .container {
             flex: 1;
             display: flex;
@@ -34,83 +36,88 @@
         }
         .card {
             text-align: center;
-            max-width: 460px;
+            max-width: 480px;
             width: 100%;
         }
         .error-code {
-            font-size: 5.5rem;
-            font-weight: 800;
+            font-size: 6rem;
+            font-weight: 900;
             line-height: 1;
-            color: rgba(255,255,255,0.1);
-            letter-spacing: -0.03em;
+            color: rgba(255,255,255,0.15);
+            letter-spacing: -0.04em;
             margin-bottom: -0.5rem;
         }
         .logo-wrap {
-            width: 80px;
-            height: 80px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 22px;
+            width: 84px;
+            height: 84px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 1.25rem;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
         }
-        .logo-wrap img { width: 52px; height: 52px; object-fit: contain; }
+        .logo-wrap img { width: 56px; height: 56px; object-fit: contain; }
         .divider {
-            width: 36px; height: 3px;
-            background: rgba(255,255,255,0.25);
+            width: 40px; height: 4px;
+            background: #fde047;
             border-radius: 2px;
             margin: 0 auto 1.25rem;
         }
-        h1 { font-size: 1.6rem; font-weight: 700; color: white; margin-bottom: 0.6rem; }
+        h1 { font-size: 1.75rem; font-weight: 800; color: white; margin-bottom: 0.6rem; }
         p {
-            color: rgba(255,255,255,0.6);
-            font-size: 0.9rem;
-            line-height: 1.65;
+            color: rgba(255,255,255,0.75);
+            font-size: 0.88rem;
+            line-height: 1.6;
             margin-bottom: 2rem;
-            max-width: 340px;
+            max-width: 360px;
             margin-left: auto;
             margin-right: auto;
+            font-weight: 500;
         }
-        .actions { display: flex; gap: 0.65rem; justify-content: center; flex-wrap: wrap; }
+        .actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
         .btn {
-            display: inline-flex; align-items: center; gap: 7px;
-            padding: 0.7rem 1.4rem; border-radius: 12px;
-            text-decoration: none; font-weight: 600; font-size: 0.85rem;
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 0.75rem 1.5rem; border-radius: 12px;
+            text-decoration: none; font-weight: 700; font-size: 0.85rem;
             transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
-        .btn-primary { background: white; color: #011C3E; }
-        .btn-primary:hover { opacity: 0.92; transform: translateY(-1px); }
+        .btn-primary { background: white; color: #064e3b; }
+        .btn-primary:hover { opacity: 0.95; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
         .btn-ghost {
-            background: rgba(255,255,255,0.12); color: white;
-            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.15); color: white;
+            border: 1px solid rgba(255,255,255,0.25);
         }
-        .btn-ghost:hover { background: rgba(255,255,255,0.2); transform: translateY(-1px); }
+        .btn-ghost:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px); }
     </style>
 </head>
 <body>
 <nav>
-    <img src="/images/branding/MOSRAC.svg" alt="MOSRAC Logo">
+    <img src="/images/branding/lionfalcon.png" alt="Zimbabwe Emblem">
     <div>
-        <strong>MOSRAC</strong>
-        <span>National Internship Portal of Armenia</span>
+        <strong>MoSRAC Internship Portal</strong>
+        <span>Ministry of Sport, Recreation, Arts & Culture — Government of Zimbabwe</span>
     </div>
 </nav>
 <div class="container">
     <div class="card">
         <div class="error-code">404</div>
         <div class="logo-wrap">
-            <img src="/images/branding/MOSRAC.svg" alt="MOSRAC">
+            <img src="/images/branding/lionfalcon.png" alt="MoSRAC Emblem">
         </div>
         <div class="divider"></div>
         <h1>Page Not Found</h1>
-        <p>The page you're looking for doesn't exist or may have been moved. Check the URL or head back.</p>
+        <p>The requested portal page could not be located. Check the URL or return to the main portal homepage.</p>
         <div class="actions">
-            <a href="javascript:history.back()" class="btn btn-primary">← Go Back</a>
-            <a href="/" class="btn btn-ghost">Home</a>
+            <a href="javascript:history.back()" class="btn btn-primary">&larr; Return Back</a>
+            <a href="/" class="btn btn-ghost">Portal Home</a>
         </div>
     </div>
 </div>
 </body>
 </html>
+

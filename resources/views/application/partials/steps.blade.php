@@ -40,25 +40,25 @@
                 }
 
                 $isDone = $isCompleted && !$isCurrent;
-                $leftBlue  = $index <= $currentIndex;
-                $rightBlue = $index < $currentIndex;
+                $leftGreen  = $index <= $currentIndex;
+                $rightGreen = $index < $currentIndex;
             @endphp
 
             <div class="relative flex flex-col items-center flex-1">
                 @if($index > 0)
                     <div class="absolute h-0.5 right-1/2 left-0"
-                         style="top: 20px; background-color: {{ $leftBlue ? '#011C3E' : '#e2e8f0' }};"></div>
+                         style="top: 20px; background-color: {{ $leftGreen ? '#15803d' : '#e2e8f0' }};"></div>
                 @endif
 
                 @if($index < $totalSteps - 1)
                     <div class="absolute h-0.5 left-1/2 right-0"
-                         style="top: 20px; background-color: {{ $rightBlue ? '#011C3E' : '#e2e8f0' }};"></div>
+                         style="top: 20px; background-color: {{ $rightGreen ? '#15803d' : '#e2e8f0' }};"></div>
                 @endif
 
                 <a href="{{ route($step['route']) }}" class="relative z-10 flex flex-col items-center group">
                     <div class="w-10 h-10 flex items-center justify-center rounded-full text-sm font-bold transition-all duration-200 shadow-sm
-                        @if($isCurrent) bg-blue-950 text-white ring-4 ring-blue-200
-                        @elseif($isDone) bg-blue-800 text-white
+                        @if($isCurrent) bg-emerald-800 text-white ring-4 ring-emerald-200
+                        @elseif($isDone) bg-emerald-700 text-white
                         @else bg-white text-slate-400 border-2 border-slate-200
                         @endif">
                         @if($isDone)
@@ -71,8 +71,8 @@
                     </div>
 
                     <span class="hidden md:block mt-2 text-xs font-medium text-center leading-tight whitespace-nowrap
-                        @if($isCurrent) text-blue-950 font-bold
-                        @elseif($isDone) text-blue-700
+                        @if($isCurrent) text-emerald-900 font-bold
+                        @elseif($isDone) text-emerald-700
                         @else text-slate-400
                         @endif">
                         {{ $step['label'] }}
@@ -82,7 +82,7 @@
         @endforeach
     </div>
 
-    <div class="md:hidden mt-4 text-center text-sm font-semibold text-blue-950">
+    <div class="md:hidden mt-4 text-center text-sm font-semibold text-emerald-900">
         Step {{ $currentIndex + 1 }} of {{ $totalSteps }} — {{ $steps[$currentIndex]['label'] }}
     </div>
 
@@ -90,7 +90,7 @@
         <div class="mt-6">
             <div class="w-full bg-slate-200 rounded-full h-2">
                 <div id="wizard-progress-bar"
-                     class="h-2 rounded-full transition-all duration-500 bg-blue-950"
+                     class="h-2 rounded-full transition-all duration-500 bg-emerald-700"
                      style="width: {{ $application->completion_percentage }}%;"></div>
             </div>
             <p class="text-xs text-slate-500 mt-1.5 text-right font-medium">
@@ -99,3 +99,4 @@
         </div>
     @endif
 </div>
+

@@ -147,12 +147,23 @@ class ApplicationController extends Controller
 
     public function selectType(Request $request)
     {
-        $existing = Application::where('user_id', Auth::id())
+        $userId = Auth::id();
+
+        $existing = Application::where('user_id', $userId)
             ->where('status', Application::STATUS_DRAFT)
             ->first();
 
         if ($existing) {
             return redirect()->route('application.personal');
+        }
+
+        $submitted = Application::where('user_id', $userId)
+            ->where('status', '!=', Application::STATUS_DRAFT)
+            ->exists();
+
+        if ($submitted && !$request->has('opportunity')) {
+            return redirect()->route('dashboard')
+                ->with('info', 'You have already submitted an internship application. You can track your application progress in your portal dashboard.');
         }
 
         $opportunityId = $request->query('opportunity');
@@ -170,7 +181,9 @@ class ApplicationController extends Controller
 
     public function createFromType(Request $request)
     {
-        $existing = Application::where('user_id', Auth::id())
+        $userId = Auth::id();
+
+        $existing = Application::where('user_id', $userId)
             ->where('status', Application::STATUS_DRAFT)
             ->first();
 
@@ -186,29 +199,90 @@ class ApplicationController extends Controller
         $refNumber = Application::generateReferenceNumber();
 
         $application = Application::create([
-            'user_id'          => Auth::id(),
-            'reference_number' => $refNumber,
-            'opportunity_id'   => $validated['opportunity_id'] ?? null,
-            'status'           => Application::STATUS_DRAFT,
-            'current_step'     => 1,
+            'user_id'               => $userId,
+            'reference_number'      => $refNumber,
+            'opportunity_id'        => $validated['opportunity_id'] ?? null,
+            'status'                => Application::STATUS_DRAFT,
+            'current_step'          => 1,
             'completion_percentage' => 0,
         ]);
 
-        // Pre-populate preferred department if coming from specific opportunity or selection
-        $prefDeptId = $validated['preferred_department_id'] ?? null;
+        // Auto-populate details from previous application if applicant has applied before
+        $previousApp = Application::where('user_id', $userId)
+            ->where('id', '!=', $application->id)
+            ->latest()
+            ->first();
 
-        if (!$prefDeptId && !empty($validated['opportunity_id'])) {
-            $opp = InternshipOpportunity::find($validated['opportunity_id']);
-            if ($opp) {
-                $prefDeptId = $opp->department_id;
+        if ($previousApp) {
+            if ($previousApp->personalInfo) {
+                $data = $previousApp->personalInfo->toArray();
+                unset($data['id'], $data['application_id'], $data['created_at'], $data['updated_at'], $data['deleted_at']);
+                ApplicantPersonalInfo::create(array_merge($data, ['application_id' => $application->id]));
             }
-        }
 
-        if ($prefDeptId) {
-            InternshipPreference::create([
-                'application_id'          => $application->id,
-                'preferred_department_id' => $prefDeptId,
-            ]);
+            if ($previousApp->academicInfo) {
+                $data = $previousApp->academicInfo->toArray();
+                unset($data['id'], $data['application_id'], $data['created_at'], $data['updated_at'], $data['deleted_at']);
+                ApplicantAcademicInfo::create(array_merge($data, ['application_id' => $application->id]));
+            }
+
+            if ($previousApp->preference) {
+                $data = $previousApp->preference->toArray();
+                unset($data['id'], $data['application_id'], $data['created_at'], $data['updated_at'], $data['deleted_at']);
+                if (!empty($validated['opportunity_id'])) {
+                    $opp = InternshipOpportunity::find($validated['opportunity_id']);
+                    if ($opp) {
+                        $data['preferred_department_id'] = $opp->department_id;
+                    }
+                } elseif (!empty($validated['preferred_department_id'])) {
+                    $data['preferred_department_id'] = $validated['preferred_department_id'];
+                }
+                InternshipPreference::create(array_merge($data, ['application_id' => $application->id]));
+            }
+
+            foreach ($previousApp->documents as $doc) {
+                $docData = $doc->toArray();
+                unset($docData['id'], $docData['application_id'], $docData['created_at'], $docData['updated_at'], $docData['deleted_at']);
+                ApplicationDocument::create(array_merge($docData, ['application_id' => $application->id]));
+            }
+
+            $application->refreshProgress();
+
+            if (!empty($validated['opportunity_id']) || $previousApp) {
+                $application->update([
+                    'status'       => Application::STATUS_SUBMITTED,
+                    'submitted_at' => now(),
+                ]);
+
+                $opp = !empty($validated['opportunity_id']) ? InternshipOpportunity::find($validated['opportunity_id']) : null;
+                $oppTitle = $opp ? $opp->title : 'General Internship';
+
+                ApplicationLog::create([
+                    'application_id' => $application->id,
+                    'action'         => 'submitted',
+                    'notes'          => 'Application automatically populated and submitted to Ministry for: ' . $oppTitle,
+                    'performed_by'   => Auth::id(),
+                ]);
+
+                return redirect()->route('dashboard')
+                    ->with('success', 'Your application for "' . $oppTitle . '" has been automatically filled using your saved information and submitted to the Ministry.');
+            }
+        } else {
+            $prefDeptId = $validated['preferred_department_id'] ?? null;
+
+            if (!$prefDeptId && !empty($validated['opportunity_id'])) {
+                $opp = InternshipOpportunity::find($validated['opportunity_id']);
+                if ($opp) {
+                    $prefDeptId = $opp->department_id;
+                }
+            }
+
+            if ($prefDeptId) {
+                InternshipPreference::create([
+                    'application_id'          => $application->id,
+                    'preferred_department_id' => $prefDeptId,
+                ]);
+            }
         }
 
         return redirect()->route('application.personal');
@@ -404,7 +478,7 @@ class ApplicationController extends Controller
     }
 
     /* =====================================================
-       STEP 5 — DOCUMENTS
+       STEP 5 — DOCUMENTS (SINGLE COMBINED PDF REQUIREMENT)
     ===================================================== */
 
     public function documents()
@@ -412,12 +486,12 @@ class ApplicationController extends Controller
         $application = $this->getDraftOrRedirect();
         if ($application instanceof \Illuminate\Http\RedirectResponse) return $application;
 
-        $documentTypes = DocumentType::all();
+        $currentDocument = $application->documents()->latest()->first();
 
         return view('application.documents', [
-            'application'   => $application,
-            'documentTypes' => $documentTypes,
-            'currentStep'   => 5,
+            'application'     => $application,
+            'currentDocument' => $currentDocument,
+            'currentStep'     => 5,
         ]);
     }
 
@@ -426,44 +500,49 @@ class ApplicationController extends Controller
         $application = $this->getDraftOrRedirect();
         if ($application instanceof \Illuminate\Http\RedirectResponse) return $application;
 
-        $allTypes = DocumentType::all()->keyBy('code');
-        $errors = [];
-        $saved = 0;
+        $existingDoc = $application->documents()->latest()->first();
 
-        foreach ($allTypes as $code => $docType) {
-            if (!$request->hasFile("documents.{$code}")) continue;
-
-            $file  = $request->file("documents.{$code}");
-            $mimes = implode(',', array_map('trim', explode(',', $docType->allowed_mimes)));
-            $maxKb = $docType->max_size;
-
-            $validator = \Illuminate\Support\Facades\Validator::make(
-                ['file' => $file],
-                ['file' => "file|mimes:{$mimes}|max:{$maxKb}"]
-            );
-
-            if ($validator->fails()) {
-                $errors["documents.{$code}"] = $validator->errors()->first('file');
-                continue;
-            }
-
-            $path = $file->store('documents', 'public');
-            ApplicationDocument::updateOrCreate(
-                ['application_id' => $application->id, 'document_type_id' => $docType->id],
-                ['file_path' => $path, 'uploaded_at' => now()]
-            );
-            $saved++;
+        // If user already has uploaded PDF and didn't select a new file, proceed
+        if ($existingDoc && !$request->hasFile('combined_document')) {
+            $application->refreshProgress();
+            return redirect()->route('application.review');
         }
 
-        $application->refresh()->refreshProgress();
+        $request->validate([
+            'combined_document' => [
+                'required',
+                'file',
+                'mimes:pdf',
+                'max:10240', // 10MB limit
+            ],
+        ], [
+            'combined_document.required' => 'Please select your single combined supporting documents PDF before proceeding.',
+            'combined_document.mimes'    => 'Only PDF files are accepted. Please combine all required documents into one PDF file.',
+            'combined_document.max'      => 'The combined PDF file size must not exceed 10MB.',
+        ]);
 
-        if (!empty($errors)) {
-            return redirect()->route('application.documents')
-                ->withErrors($errors)
-                ->with('warning', $saved . ' document(s) saved with errors below.');
+        $file = $request->file('combined_document');
+
+        if (!$file || !$file->isValid() || strtolower($file->getClientOriginalExtension()) !== 'pdf') {
+            return back()->withErrors(['combined_document' => 'Invalid file. Only valid PDF files are accepted.'])->withInput();
         }
 
-        return redirect()->route('application.review');
+        $path = $file->store('documents', 'public');
+
+        // Delete any legacy individual document records and save single combined PDF
+        $application->documents()->delete();
+
+        ApplicationDocument::create([
+            'application_id' => $application->id,
+            'cert_name'      => 'Combined Supporting Documents (National ID, Transcripts, Current Results, CV, University Letter)',
+            'file_path'      => $path,
+            'uploaded_at'    => now(),
+            'is_verified'    => false,
+        ]);
+
+        $application->refreshProgress();
+
+        return redirect()->route('application.review')->with('success', 'Single combined supporting documents PDF uploaded successfully.');
     }
 
     /* =====================================================
@@ -486,7 +565,7 @@ class ApplicationController extends Controller
             'preference.preferredDepartment',
             'preference.secondPreferredDepartment',
             'opportunity.department',
-            'documents.documentType',
+            'documents',
         ]);
 
         $missing = [];
@@ -505,7 +584,7 @@ class ApplicationController extends Controller
                 $missing[] = ['section' => 'Motivation Statement', 'route' => route('application.motivation')];
 
             if ($application->documents->isEmpty())
-                $missing[] = ['section' => 'Supporting Documents', 'route' => route('application.documents')];
+                $missing[] = ['section' => 'Combined Supporting Documents PDF', 'route' => route('application.documents')];
         }
 
         return view('application.review', [
@@ -522,6 +601,11 @@ class ApplicationController extends Controller
         $application = $this->getDraftOrRedirect();
         if ($application instanceof \Illuminate\Http\RedirectResponse) return $application;
 
+        if ($application->documents->isEmpty()) {
+            return redirect()->route('application.documents')
+                ->with('error', 'Please upload your combined supporting documents PDF before submitting your application.');
+        }
+
         if (!$application->reference_number) {
             $application->reference_number = Application::generateReferenceNumber();
         }
@@ -537,6 +621,113 @@ class ApplicationController extends Controller
 
         return redirect()->route('dashboard')
             ->with('success', 'Your internship application (' . $application->reference_number . ') has been submitted successfully.');
+    }
+
+    public function viewDocument(int $id)
+    {
+        $doc = ApplicationDocument::findOrFail($id);
+        $app = $doc->application;
+
+        if ($app->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
+            abort(403, 'Unauthorized access to document.');
+        }
+
+        $disk = \Illuminate\Support\Facades\Storage::disk('public');
+        $filePath = $doc->file_path;
+
+        if (!$filePath || !$disk->exists($filePath)) {
+            $filePath = 'documents/test_placeholder.pdf';
+            if (!$disk->exists($filePath)) {
+                $this->ensurePlaceholderPdfExists($disk->path($filePath));
+            }
+        }
+
+        $fullPath = $disk->path($filePath);
+        $filename = \Illuminate\Support\Str::slug($app->reference_number ?: 'MoSRAC_Application') . '_Supporting_Documents.pdf';
+
+        $response = response()->file($fullPath, [
+            'Content-Type' => 'application/pdf',
+        ]);
+        $response->setContentDisposition(\Symfony\Component\HttpFoundation\ResponseHeaderBag::DISPOSITION_INLINE, $filename);
+
+        return $response;
+    }
+
+    public function downloadDocument(int $id, Request $request)
+    {
+        $doc = ApplicationDocument::findOrFail($id);
+        $app = $doc->application;
+
+        if ($app->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
+            abort(403, 'Unauthorized access to document.');
+        }
+
+        $disk = \Illuminate\Support\Facades\Storage::disk('public');
+        $filePath = $doc->file_path;
+
+        if (!$filePath || !$disk->exists($filePath)) {
+            $filePath = 'documents/test_placeholder.pdf';
+            if (!$disk->exists($filePath)) {
+                $this->ensurePlaceholderPdfExists($disk->path($filePath));
+            }
+        }
+
+        $fullPath = $disk->path($filePath);
+        $filename = \Illuminate\Support\Str::slug($app->reference_number ?: 'MoSRAC_Application') . '_Supporting_Documents.pdf';
+
+        return response()->download($fullPath, $filename, [
+            'Content-Type' => 'application/pdf',
+        ]);
+    }
+
+    private function ensurePlaceholderPdfExists(string $fullPath): void
+    {
+        $dir = dirname($fullPath);
+        if (!file_exists($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
+        $pdfContent = "%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 135 >>
+stream
+BT
+/F1 16 Tf
+50 700 Td
+(MINISTRY OF SPORT, RECREATION, ARTS AND CULTURE) Tj
+/F1 12 Tf
+0 -30 Td
+(Official Application Supporting Documents Package) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000246 00000 n 
+0000000432 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+513
+%%EOF";
+
+        file_put_contents($fullPath, $pdfContent);
     }
 
     public function show(int $id)
@@ -582,5 +773,43 @@ class ApplicationController extends Controller
         ApplicationLog::log($application->id, 'Requested documents re-uploaded by applicant.', Auth::id());
 
         return redirect()->route('dashboard')->with('success', 'Requested documents re-uploaded successfully.');
+    }
+
+    public function uploadOnboardingDocument(Request $request, int $id)
+    {
+        $application = Application::where('user_id', Auth::id())
+            ->whereIn('status', [
+                Application::STATUS_PLACEMENT_PENDING,
+                Application::STATUS_APPROVED,
+                Application::STATUS_PLACED,
+            ])
+            ->findOrFail($id);
+
+        $request->validate([
+            'document_name' => 'required|string|max:255',
+            'document_file' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:10240',
+        ]);
+
+        if ($request->hasFile('document_file') && $request->file('document_file')->isValid()) {
+            $path = $request->file('document_file')->store('onboarding_documents', 'public');
+
+            ApplicationDocument::create([
+                'application_id' => $application->id,
+                'cert_name'      => $request->input('document_name'),
+                'file_path'      => $path,
+                'uploaded_at'    => now(),
+                'is_verified'    => false,
+            ]);
+
+            ApplicationLog::log(
+                $application->id,
+                "Uploaded onboarding document: " . $request->input('document_name'),
+                Auth::id()
+            );
+
+            return back()->with('success', 'Onboarding document (' . $request->input('document_name') . ') attached successfully.');
+        }
+
+        return back()->with('error', 'Failed to upload document. Please check the file and try again.');
     }
 }

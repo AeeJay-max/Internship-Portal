@@ -209,7 +209,7 @@ class ApplicationController extends Controller
         return back()->with('success', 'Status updated to Interview Required.');
     }
 
-    public function approve(int $id)
+    public function approve(Request $request, int $id)
     {
         $application = Application::findOrFail($id);
 
@@ -217,16 +217,30 @@ class ApplicationController extends Controller
             return back()->with('info', 'Application is already approved (Placement Pending / Placed).');
         }
 
-        DB::transaction(function () use ($application) {
+        $requiredDocs = $request->input('required_docs', []);
+        $customNotes  = $request->input('review_notes');
+
+        $notesParts = [];
+        if (!empty($requiredDocs)) {
+            $notesParts[] = "REQUIRED ONBOARDING DOCUMENTS TO BRING / ATTACH:\n• " . implode("\n• ", $requiredDocs);
+        }
+        if ($customNotes) {
+            $notesParts[] = "ACCEPTOR INSTRUCTIONS:\n" . $customNotes;
+        }
+
+        $formattedNotes = implode("\n\n", $notesParts);
+
+        DB::transaction(function () use ($application, $formattedNotes) {
             $application->update([
-                'status'      => Application::STATUS_PLACEMENT_PENDING,
-                'reviewed_by' => Auth::id(),
-                'reviewed_at' => now(),
+                'status'       => Application::STATUS_PLACEMENT_PENDING,
+                'reviewed_by'  => Auth::id(),
+                'reviewed_at'  => now(),
+                'review_notes' => $formattedNotes ?: 'Application approved by Ministry. Onboarding pending.',
             ]);
 
             ApplicationLog::log(
                 $application->id,
-                "Application approved by Ministry. Status moved to Placement Pending.",
+                "Application approved by Ministry. Status moved to Placement Pending." . ($formattedNotes ? " Required docs specified." : ""),
                 Auth::id()
             );
 
@@ -239,7 +253,7 @@ class ApplicationController extends Controller
             }
         });
 
-        return back()->with('success', 'Application approved! Status is now Placement Pending.');
+        return back()->with('success', 'Application approved! Status is now Placement Pending with onboarding requirements recorded.');
     }
 
     public function reject(Request $request, int $id)
@@ -276,5 +290,100 @@ class ApplicationController extends Controller
         }
 
         return back()->with('success', 'Application rejected.');
+    }
+
+    public function viewDocument(int $applicationId, int $documentId)
+    {
+        $doc = \App\Models\ApplicationDocument::where('application_id', $applicationId)->findOrFail($documentId);
+        $disk = \Illuminate\Support\Facades\Storage::disk('public');
+        $filePath = $doc->file_path;
+
+        if (!$filePath || !$disk->exists($filePath)) {
+            $filePath = 'documents/test_placeholder.pdf';
+            if (!$disk->exists($filePath)) {
+                $this->ensurePlaceholderPdfExists($disk->path($filePath));
+            }
+        }
+
+        $fullPath = $disk->path($filePath);
+        $filename = \Illuminate\Support\Str::slug($doc->application->reference_number ?: 'MoSRAC_Application') . '_Supporting_Documents.pdf';
+
+        $response = response()->file($fullPath, [
+            'Content-Type' => 'application/pdf',
+        ]);
+        $response->setContentDisposition(\Symfony\Component\HttpFoundation\ResponseHeaderBag::DISPOSITION_INLINE, $filename);
+
+        return $response;
+    }
+
+    public function downloadDocument(int $applicationId, int $documentId, \Illuminate\Http\Request $request)
+    {
+        $doc = \App\Models\ApplicationDocument::where('application_id', $applicationId)->findOrFail($documentId);
+        $disk = \Illuminate\Support\Facades\Storage::disk('public');
+        $filePath = $doc->file_path;
+
+        if (!$filePath || !$disk->exists($filePath)) {
+            $filePath = 'documents/test_placeholder.pdf';
+            if (!$disk->exists($filePath)) {
+                $this->ensurePlaceholderPdfExists($disk->path($filePath));
+            }
+        }
+
+        $fullPath = $disk->path($filePath);
+        $filename = \Illuminate\Support\Str::slug($doc->application->reference_number ?: 'MoSRAC_Application') . '_Supporting_Documents.pdf';
+
+        return response()->download($fullPath, $filename, [
+            'Content-Type' => 'application/pdf',
+        ]);
+    }
+
+    private function ensurePlaceholderPdfExists(string $fullPath): void
+    {
+        $dir = dirname($fullPath);
+        if (!file_exists($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
+        $pdfContent = "%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 135 >>
+stream
+BT
+/F1 16 Tf
+50 700 Td
+(MINISTRY OF SPORT, RECREATION, ARTS AND CULTURE) Tj
+/F1 12 Tf
+0 -30 Td
+(Official Application Supporting Documents Package) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000246 00000 n 
+0000000432 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+513
+%%EOF";
+
+        file_put_contents($fullPath, $pdfContent);
     }
 }

@@ -25,20 +25,20 @@ Route::get('/lang/{locale}', [LanguageController::class, 'switch'])
 */
 
 Route::get('/', function() {
-    $news = \App\Models\News::published()->limit(6)->get();
-    $departments = \App\Models\Department::where('is_active', true)->limit(6)->get();
-    $openOpportunities = \App\Models\InternshipOpportunity::with('department')->where('status', 'open')->latest()->limit(6)->get();
-    return view('home', compact('news', 'departments', 'openOpportunities'));
+    return view('home');
 })->name('home');
 
-Route::get('/opportunities',        [PublicOpportunityController::class, 'index'])->name('opportunities.index');
-Route::get('/opportunities/{id}',   [PublicOpportunityController::class, 'show'])->name('opportunities.show');
-
-Route::get('/news',        [App\Http\Controllers\PublicNewsController::class, 'index'])->name('news.index');
-Route::get('/news/{slug}', [App\Http\Controllers\PublicNewsController::class, 'show'])->name('news.show');
-
-Route::get('/apply', fn() => redirect()->route('application.selectType'))->name('apply.start');
 Route::get('/about', fn() => view('about'))->name('about');
+Route::get('/internships', [PublicOpportunityController::class, 'index'])->name('internships.index');
+Route::get('/opportunities', fn() => redirect()->route('internships.index'))->name('opportunities.index');
+Route::get('/opportunities/{id}', [PublicOpportunityController::class, 'show'])->name('opportunities.show');
+Route::get('/how-to-apply', fn() => view('how-to-apply'))->name('how-to-apply');
+Route::get('/contact', fn() => view('contact'))->name('contact');
+
+// Route aliases for backward compatibility
+Route::get('/programs',    fn() => redirect()->route('internships.index'))->name('programs.public');
+Route::get('/departments', fn() => redirect()->route('internships.index'))->name('departments.public');
+Route::get('/apply', fn() => redirect()->route('application.selectType'))->name('apply.start');
 
 /*
 |--------------------------------------------------------------------------
@@ -96,6 +96,9 @@ Route::middleware(['auth'])->group(function () {
     // Specific submitted application detail
     Route::get('/application/{id}',           [ApplicationController::class, 'show'])->name('application.show');
     Route::post('/application/{id}/reupload', [ApplicationController::class, 'reuploadDocuments'])->name('application.reupload');
+    Route::post('/application/{id}/onboarding-documents', [ApplicationController::class, 'uploadOnboardingDocument'])->name('application.uploadOnboardingDocument');
+    Route::get('/application/documents/{id}/view', [ApplicationController::class, 'viewDocument'])->name('application.documents.view');
+    Route::get('/application/documents/{id}/download', [ApplicationController::class, 'downloadDocument'])->name('application.documents.download');
 
     // Banner clear session helper
     Route::post('/verification/banner-clear', function() {
@@ -132,6 +135,8 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])
         Route::post('/applications/{id}/request-interview',   [Admin\ApplicationController::class, 'requestInterview'])->name('applications.requestInterview');
         Route::post('/applications/{id}/approve',             [Admin\ApplicationController::class, 'approve'])->name('applications.approve');
         Route::post('/applications/{id}/reject',              [Admin\ApplicationController::class, 'reject'])->name('applications.reject');
+        Route::get('/applications/{applicationId}/documents/{documentId}/view', [Admin\ApplicationController::class, 'viewDocument'])->name('applications.documents.view');
+        Route::get('/applications/{applicationId}/documents/{documentId}/download', [Admin\ApplicationController::class, 'downloadDocument'])->name('applications.documents.download');
 
         // Department Management
         Route::resource('departments', Admin\DepartmentController::class);

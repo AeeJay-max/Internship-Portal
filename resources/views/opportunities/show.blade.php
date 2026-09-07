@@ -29,10 +29,13 @@
             <div>
                 <p class="text-xs text-slate-400">Department Contact: {{ $opportunity->department->contact_email ?? 'internships@mosrac.gov.zw' }}</p>
             </div>
-            <a href="{{ route('application.selectType', ['opportunity' => $opportunity->id]) }}"
-               class="px-8 py-3.5 rounded-xl bg-blue-900 text-white font-bold text-sm hover:bg-blue-800 shadow transition">
-                Apply for this Opportunity
-            </a>
+            <form method="POST" action="{{ route('application.createFromType') }}">
+                @csrf
+                <input type="hidden" name="opportunity_id" value="{{ $opportunity->id }}">
+                <button type="submit" class="px-8 py-3.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-extrabold text-xs uppercase tracking-wider shadow transition">
+                    Apply for this Opportunity &rarr;
+                </button>
+            </form>
         </div>
     </div>
 </div>

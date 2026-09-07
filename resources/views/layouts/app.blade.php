@@ -11,7 +11,8 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
 
-    <!-- Scripts -->
+    <!-- Scripts & Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 </head>
@@ -21,7 +22,7 @@
 <div id="mosrac-loader" style="
     position: fixed; top: 0; left: 0; right: 0;
     height: 3px; z-index: 9999;
-    background: linear-gradient(90deg, #011C3E, #0284c7, #16a34a);
+    background: linear-gradient(90deg, #15803d, #f59e0b, #dc2626);
     background-size: 200% 100%;
     transform: scaleX(0);
     transform-origin: left;
@@ -49,42 +50,42 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 mt-20">
+    <footer class="bg-slate-950 text-slate-400 py-12 border-t-4 border-emerald-700 mt-20">
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
             <div class="md:col-span-2 space-y-4">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-white bg-blue-600">
-                        M
-                    </div>
+                    <img src="{{ asset('images/branding/mosrac_logo.png') }}" alt="MoSRAC Emblem" class="w-12 h-12 object-contain rounded-full border border-amber-300 bg-white p-0.5 shrink-0" onerror="this.onerror=null; this.src='{{ asset('images/branding/lionfalcon.png') }}';">
                     <div>
-                        <h4 class="text-white font-bold text-base">Ministry of Sport, Recreation, Arts & Culture</h4>
-                        <p class="text-xs text-slate-400">National Internship Application & Placement Portal</p>
+                        <h4 class="text-white font-extrabold text-base">Ministry of Sport, Recreation, Arts & Culture</h4>
+                        <p class="text-xs text-amber-300 font-semibold">MoSRAC Internship Application Portal</p>
                     </div>
                 </div>
-                <p class="text-sm text-slate-400 max-w-md">
-                    Empowering Zimbabwean youth and tertiary students through professional attachments across Ministry departments in sports, recreation, arts, culture, ICT, administration, and public services.
+                <p class="text-xs text-slate-400 max-w-md leading-relaxed">
+                    Official Government portal for structured national internship attachments and placements across Ministry departments in all 10 provinces of Zimbabwe.
                 </p>
             </div>
             <div>
-                <h5 class="text-white font-semibold text-sm mb-3 uppercase tracking-wider">Quick Links</h5>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="{{ route('apply.start') }}" class="hover:text-white transition">Apply for Internship</a></li>
-                    <li><a href="{{ route('opportunities.index') }}" class="hover:text-white transition">Advertised Vacancies</a></li>
-                    <li><a href="{{ route('dashboard') }}" class="hover:text-white transition">Applicant Dashboard</a></li>
-                    <li><a href="{{ route('news.index') }}" class="hover:text-white transition">Ministry Announcements</a></li>
+                <h5 class="text-white font-bold text-xs uppercase tracking-wider mb-3">Portal Navigation</h5>
+                <ul class="space-y-2 text-xs">
+                    <li><a href="{{ url('/') }}" class="hover:text-amber-300 transition">Home</a></li>
+                    <li><a href="{{ route('about') }}" class="hover:text-amber-300 transition">About MoSRAC</a></li>
+                    <li><a href="{{ route('internships.index') }}" class="hover:text-amber-300 transition">Internship Opportunities</a></li>
+                    <li><a href="{{ route('how-to-apply') }}" class="hover:text-amber-300 transition">How to Apply</a></li>
+                    <li><a href="{{ route('contact') }}" class="hover:text-amber-300 transition">Contact Ministry</a></li>
                 </ul>
             </div>
             <div>
-                <h5 class="text-white font-semibold text-sm mb-3 uppercase tracking-wider">Contact Ministry</h5>
-                <p class="text-sm text-slate-400">Headquarters Office</p>
-                <p class="text-sm text-slate-400">Harare, Zimbabwe</p>
-                <p class="text-sm text-slate-400 mt-2">Email: internships@mosrac.gov.zw</p>
-                <p class="text-sm text-slate-400">Phone: +263 242 700100</p>
+                <h5 class="text-white font-bold text-xs uppercase tracking-wider mb-3">Ministry Headquarters</h5>
+                <p class="text-xs text-slate-300 font-semibold">Chinengundu Mashayamombe Building</p>
+                <p class="text-xs text-slate-400">95 Cnr N. Mandela & S. V. Muzenda Street</p>
+                <p class="text-xs text-slate-400">Harare, Zimbabwe</p>
+                <p class="text-xs text-slate-400 mt-2">Email: minofsportandarts@gmail.com</p>
+                <p class="text-xs text-slate-400">Phone: +263242708345</p>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto px-6 mt-8 pt-8 border-t border-slate-800 text-xs text-slate-500 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="max-w-7xl mx-auto px-6 mt-8 pt-8 border-t border-slate-800/80 text-[11px] text-slate-500 flex flex-col md:flex-row justify-between items-center gap-3">
             <p>&copy; {{ date('Y') }} Ministry of Sport, Recreation, Arts & Culture. All rights reserved.</p>
-            <p>Official Government Internship Portal</p>
+            <p class="text-slate-400">Government of Zimbabwe Official Portal</p>
         </div>
     </footer>
 </div>

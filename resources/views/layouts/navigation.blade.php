@@ -1,79 +1,102 @@
+@php
+    $isAdmin = Auth::check() && Auth::user()->isAdmin();
+    $hasApplied = Auth::check() && !Auth::user()->isAdmin() && Auth::user()->applications()->exists();
+@endphp
+
 <nav x-data="{ open: false, scrolled: false }"
-     x-init="window.addEventListener('scroll', () => { scrolled = window.scrollY > 40 })"
-     :class="scrolled ? 'shadow-lg' : ''"
+     x-init="window.addEventListener('scroll', () => { scrolled = window.scrollY > 30 })"
+     :class="scrolled ? 'shadow-xl' : ''"
      class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-     style="background: #011C3E;">
+     style="background: #15803d; border-bottom: 3px solid #f59e0b;">
 
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="flex items-center justify-between h-20 md:h-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="flex items-center justify-between h-20">
 
-            {{-- Logo --}}
+            {{-- Brand Logo --}}
             <a href="{{ url('/') }}" class="flex items-center gap-3 group">
-                <div class="w-12 h-12 rounded-xl flex items-center justify-center font-black text-xl text-white shadow-inner" style="background: linear-gradient(135deg, #1e3a8a, #0284c7);">
-                    M
-                </div>
+                <img src="{{ asset('images/branding/mosrac_logo.png') }}" alt="MoSRAC Official Emblem" class="w-12 h-12 object-contain rounded-full shadow-md bg-white p-0.5 border border-amber-300 shrink-0" onerror="this.onerror=null; this.src='{{ asset('images/branding/lionfalcon.png') }}';">
                 <div>
-                    <div class="text-white font-bold text-base leading-tight tracking-wide">Ministry of Sport, Recreation, Arts & Culture</div>
-                    <div class="text-xs leading-tight tracking-wider font-medium text-blue-300">National Internship Portal</div>
+                    <div class="text-white font-black text-lg sm:text-xl leading-tight tracking-wider uppercase">
+                        MoSRAC
+                    </div>
+                    <div class="text-[11px] leading-tight tracking-wider font-bold text-amber-300">
+                        Internship Portal
+                    </div>
                 </div>
             </a>
 
-            {{-- Desktop Nav --}}
-            <div class="hidden md:flex items-center gap-6">
+            {{-- Desktop Navigation Links --}}
+            <div class="hidden lg:flex items-center gap-6">
                 <a href="{{ url('/') }}"
-                   class="text-sm font-semibold tracking-wide transition-colors duration-200 pb-0.5 border-b-2 {{ request()->is('/') ? 'text-white border-white' : 'text-white/85 hover:text-white border-transparent hover:border-white/50' }}">
+                   class="text-xs uppercase font-extrabold tracking-wider transition-colors duration-200 py-1 border-b-2 {{ request()->is('/') ? 'text-amber-300 border-amber-300' : 'text-white/90 hover:text-white border-transparent hover:border-white/50' }}">
                     Home
                 </a>
-                <a href="{{ route('opportunities.index') }}"
-                   class="text-sm font-semibold tracking-wide transition-colors duration-200 pb-0.5 border-b-2 hover:border-white/50 text-white/85 hover:text-white {{ request()->routeIs('opportunities.*') ? 'border-white text-white' : 'border-transparent' }}">
-                    Internship Opportunities
-                </a>
-                <a href="{{ route('news.index') }}"
-                   class="text-sm font-semibold tracking-wide transition-colors duration-200 pb-0.5 border-b-2 hover:border-white/50 text-white/85 hover:text-white {{ request()->routeIs('news.*') ? 'border-white text-white' : 'border-transparent' }}">
-                    Ministry News
-                </a>
                 <a href="{{ route('about') }}"
-                   class="text-sm font-semibold tracking-wide transition-colors duration-200 pb-0.5 border-b-2 hover:border-white/50 text-white/85 hover:text-white {{ request()->routeIs('about') ? 'border-white' : 'border-transparent' }}">
-                    About Ministry
+                   class="text-xs uppercase font-extrabold tracking-wider transition-colors duration-200 py-1 border-b-2 {{ request()->routeIs('about') ? 'text-amber-300 border-amber-300' : 'text-white/90 hover:text-white border-transparent hover:border-white/50' }}">
+                    About
                 </a>
 
+                @if(!$isAdmin && !$hasApplied)
+                    <a href="{{ route('internships.index') }}"
+                       class="text-xs uppercase font-extrabold tracking-wider transition-colors duration-200 py-1 border-b-2 {{ request()->routeIs('internships.*') || request()->routeIs('opportunities.*') ? 'text-amber-300 border-amber-300' : 'text-white/90 hover:text-white border-transparent hover:border-white/50' }}">
+                        Internship Opportunities
+                    </a>
+                    <a href="{{ route('how-to-apply') }}"
+                       class="text-xs uppercase font-extrabold tracking-wider transition-colors duration-200 py-1 border-b-2 {{ request()->routeIs('how-to-apply') ? 'text-amber-300 border-amber-300' : 'text-white/90 hover:text-white border-transparent hover:border-white/50' }}">
+                        How to Apply
+                    </a>
+                @endif
+
+                @if(!$isAdmin)
+                    <a href="{{ route('contact') }}"
+                       class="text-xs uppercase font-extrabold tracking-wider transition-colors duration-200 py-1 border-b-2 {{ request()->routeIs('contact') ? 'text-amber-300 border-amber-300' : 'text-white/90 hover:text-white border-transparent hover:border-white/50' }}">
+                        Contact
+                    </a>
+                @endif
+
                 @auth
-                    @if(Auth::user()->isAdmin())
+                    @if($isAdmin)
                         <a href="{{ route('admin.dashboard') }}"
-                           class="text-sm font-semibold tracking-wide text-amber-300 hover:text-amber-200 transition-colors duration-200 bg-amber-900/40 px-3 py-1.5 rounded-lg border border-amber-500/30">
+                           class="text-xs uppercase font-extrabold tracking-wide text-emerald-950 bg-amber-400 hover:bg-amber-300 px-3.5 py-1.5 rounded-lg shadow transition">
                             Admin Dashboard
                         </a>
                     @else
                         <a href="{{ route('dashboard') }}"
-                           class="text-sm font-semibold tracking-wide transition-colors duration-200 pb-0.5 border-b-2 hover:border-white/50 text-white/85 hover:text-white {{ request()->routeIs('dashboard') ? 'border-white text-white' : 'border-transparent' }}">
-                            My Internship Portal
+                           class="text-xs uppercase font-extrabold tracking-wider text-white border-b-2 {{ request()->routeIs('dashboard') ? 'border-amber-300 text-amber-300' : 'border-transparent hover:border-white/50' }}">
+                            My Portal
                         </a>
                     @endif
                 @endauth
             </div>
 
             {{-- Right Actions --}}
-            <div class="hidden md:flex items-center gap-4">
+            <div class="hidden lg:flex items-center gap-3">
                 @auth
+                    @if(!$isAdmin && !$hasApplied)
+                        <a href="{{ route('apply.start') }}"
+                           class="text-xs uppercase font-extrabold tracking-wider px-4 py-2 rounded-lg bg-amber-400 text-emerald-950 hover:bg-amber-300 transition-all duration-200 shadow-md">
+                            Apply Now
+                        </a>
+                    @endif
+
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button class="flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors duration-200 rounded-lg text-white bg-white/10 hover:bg-white/20">
-                                <div class="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-xs font-bold shrink-0 bg-blue-800 text-white">
+                            <button class="flex items-center gap-2 px-3.5 py-2 text-xs font-bold transition-colors rounded-lg text-white bg-emerald-800/80 hover:bg-emerald-800 border border-emerald-600/60">
+                                <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-black shrink-0 bg-amber-400 text-emerald-950">
                                     {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                                 </div>
                                 <span>{{ explode(' ', Auth::user()->name)[0] }}</span>
-                                @if(Auth::user()->isAdmin())
-                                    <span class="text-xs px-2 py-0.5 rounded font-semibold bg-amber-400/20 text-amber-300">
-                                        Admin
-                                    </span>
-                                @endif
-                                <svg class="w-4 h-4 opacity-50" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="w-3.5 h-3.5 text-amber-300 opacity-80" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
                                 </svg>
                             </button>
                         </x-slot>
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('dashboard')">My Internship Portal</x-dropdown-link>
+                            @if($isAdmin)
+                                <x-dropdown-link :href="route('admin.dashboard')">Admin Control Panel</x-dropdown-link>
+                            @else
+                                <x-dropdown-link :href="route('dashboard')">My Internship Portal</x-dropdown-link>
+                            @endif
                             <x-dropdown-link :href="route('profile.edit')">Profile Settings</x-dropdown-link>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -86,18 +109,18 @@
                 @endauth
 
                 @guest
-                    <a href="{{ route('login') }}" class="text-sm font-medium text-white/80 hover:text-white transition-colors">
-                        Applicant Login
+                    <a href="{{ route('login') }}" class="text-xs uppercase font-extrabold tracking-wider px-4 py-2 text-white hover:text-amber-300 transition-colors">
+                        Login
                     </a>
                     <a href="{{ route('apply.start') }}"
-                       class="text-sm font-bold px-5 py-2.5 rounded-lg tracking-wide uppercase transition-all duration-200 hover:bg-blue-50 bg-white text-slate-900 shadow-md">
-                        Apply for Internship
+                       class="text-xs uppercase font-extrabold tracking-wider px-5 py-2.5 rounded-lg bg-amber-400 text-emerald-950 hover:bg-amber-300 transition-all duration-200 shadow-md">
+                        Apply Now
                     </a>
                 @endguest
             </div>
 
             {{-- Mobile hamburger --}}
-            <button @click="open = !open" class="md:hidden flex flex-col gap-1.5 p-2">
+            <button @click="open = !open" class="lg:hidden flex flex-col gap-1.5 p-2 text-white focus:outline-none">
                 <span class="block w-6 h-0.5 bg-white transition-all duration-200" :class="open ? 'rotate-45 translate-y-2' : ''"></span>
                 <span class="block w-6 h-0.5 bg-white transition-all duration-200" :class="open ? 'opacity-0' : ''"></span>
                 <span class="block w-6 h-0.5 bg-white transition-all duration-200" :class="open ? '-rotate-45 -translate-y-2' : ''"></span>
@@ -106,34 +129,41 @@
         </div>
     </div>
 
-    {{-- Mobile menu --}}
-    <div x-show="open" class="md:hidden border-t bg-[#011C3E] border-white/10">
+    {{-- Mobile dropdown menu --}}
+    <div x-show="open" x-cloak class="lg:hidden border-t border-emerald-700 bg-emerald-900">
         <div class="px-6 py-4 space-y-3">
-            <a href="{{ url('/') }}" class="block text-sm font-medium py-2 text-white/90">Home</a>
-            <a href="{{ route('opportunities.index') }}" class="block text-sm font-medium py-2 text-white/90">Opportunities</a>
-            <a href="{{ route('news.index') }}" class="block text-sm font-medium py-2 text-white/90">News</a>
-            <a href="{{ route('about') }}" class="block text-sm font-medium py-2 text-white/90">About Ministry</a>
+            <a href="{{ url('/') }}" class="block text-xs uppercase font-extrabold tracking-wider py-2 text-white">Home</a>
+            <a href="{{ route('about') }}" class="block text-xs uppercase font-extrabold tracking-wider py-2 text-white">About</a>
+
+            @if(!$isAdmin && !$hasApplied)
+                <a href="{{ route('internships.index') }}" class="block text-xs uppercase font-extrabold tracking-wider py-2 text-white">Internship Opportunities</a>
+                <a href="{{ route('how-to-apply') }}" class="block text-xs uppercase font-extrabold tracking-wider py-2 text-white">How to Apply</a>
+            @endif
+
+            @if(!$isAdmin)
+                <a href="{{ route('contact') }}" class="block text-xs uppercase font-extrabold tracking-wider py-2 text-white">Contact</a>
+            @endif
 
             @auth
-                @if(Auth::user()->isAdmin())
-                    <a href="{{ route('admin.dashboard') }}" class="block text-sm font-semibold py-2 text-amber-300">Admin Dashboard</a>
+                @if($isAdmin)
+                    <a href="{{ route('admin.dashboard') }}" class="block text-xs uppercase font-extrabold tracking-wider py-2 text-amber-300">Admin Dashboard</a>
                 @else
-                    <a href="{{ route('dashboard') }}" class="block text-sm font-medium py-2 text-white/90">My Internship Portal</a>
+                    <a href="{{ route('dashboard') }}" class="block text-xs uppercase font-extrabold tracking-wider py-2 text-white">My Portal</a>
                 @endif
-                <div class="pt-3 border-t border-white/10">
-                    <div class="text-sm font-medium text-white">{{ Auth::user()->name }}</div>
-                    <a href="{{ route('profile.edit') }}" class="block text-xs text-white/60 py-1">Profile</a>
+                <div class="pt-3 border-t border-emerald-700">
+                    <div class="text-xs font-bold text-white mb-1">{{ Auth::user()->name }}</div>
+                    <a href="{{ route('profile.edit') }}" class="block text-xs text-emerald-200 py-1">Profile Settings</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="block text-xs text-red-300 py-1">Logout</button>
+                        <button type="submit" class="block text-xs text-rose-300 font-bold py-1">Logout</button>
                     </form>
                 </div>
             @endauth
 
             @guest
-                <div class="pt-3 border-t border-white/10 flex flex-col gap-2">
-                    <a href="{{ route('login') }}" class="text-sm font-medium text-center py-2.5 border border-white/30 text-white rounded-lg">Applicant Login</a>
-                    <a href="{{ route('apply.start') }}" class="text-sm font-bold text-center py-2.5 bg-white text-slate-900 rounded-lg uppercase">Apply for Internship</a>
+                <div class="pt-3 border-t border-emerald-700 flex flex-col gap-2">
+                    <a href="{{ route('login') }}" class="text-xs font-extrabold uppercase text-center py-2.5 border border-white/40 text-white rounded-lg">Login</a>
+                    <a href="{{ route('apply.start') }}" class="text-xs font-extrabold uppercase text-center py-2.5 bg-amber-400 text-emerald-950 rounded-lg shadow">Apply Now</a>
                 </div>
             @endguest
         </div>
@@ -141,4 +171,4 @@
 
 </nav>
 
-<div class="h-20 md:h-24"></div>
+<div class="h-20"></div>

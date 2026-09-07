@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class InternshipPlacement extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'application_id',
@@ -53,5 +54,24 @@ class InternshipPlacement extends Model
     public function getPlacementCodeAttribute()
     {
         return sprintf('MoSRAC-PLC-%06d', $this->id);
+    }
+
+    public function getDaysRemainingAttribute(): int
+    {
+        if (!$this->end_date) return 999;
+        return (int) ceil(now()->diffInDays($this->end_date, false));
+    }
+
+    public function isExpiringSoon(): bool
+    {
+        if (!$this->end_date) return false;
+        $days = $this->days_remaining;
+        return $days >= 0 && $days <= 30;
+    }
+
+    public function isExpired(): bool
+    {
+        if (!$this->end_date) return false;
+        return $this->days_remaining < 0;
     }
 }

@@ -46,6 +46,11 @@
                                         @if($app->placement)
                                             <span class="font-bold text-emerald-800">{{ $app->placement->department->name ?? 'Placed' }}</span>
                                             <p class="text-[10px] text-slate-400">Supervisor: {{ $app->placement->supervisor_name }}</p>
+                                            @if($app->placement->isExpiringSoon())
+                                                <span class="inline-block px-2 py-0.5 rounded bg-red-600 text-white font-extrabold text-[10px] mt-1 shadow-sm">
+                                                    ⏳ {{ $app->placement->days_remaining }} Days Remaining (Final Date: {{ $app->placement->end_date ? $app->placement->end_date->format('d M Y') : '' }})
+                                                </span>
+                                            @endif
                                         @else
                                             <span class="text-amber-800 font-semibold italic">Pending Assignment</span>
                                         @endif

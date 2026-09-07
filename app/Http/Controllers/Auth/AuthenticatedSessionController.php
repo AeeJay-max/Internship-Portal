@@ -28,11 +28,17 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        if (!Auth::user()->hasVerifiedEmail()) {
+        $user = Auth::user();
+
+        if (!$user->hasVerifiedEmail()) {
             session(['show_verify_banner' => true]);
         }
 
-        return redirect()->intended(route('home', absolute: false));
+        if ($user->isAdmin()) {
+            return redirect()->intended(route('admin.dashboard', absolute: false));
+        }
+
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     /**

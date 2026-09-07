@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ApplicantPersonalInfo extends Model
 {
+    use SoftDeletes;
 
     protected $table = 'applicant_personal_info';
 
