@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="bg-slate-900 py-12 text-white">
+<div class="py-12 text-white" style="background: linear-gradient(135deg, #00421F 0%, #005A2B 100%); border-bottom: 4px solid #f59e0b;">
     <div class="max-w-4xl mx-auto px-6 space-y-3">
-        <span class="text-xs font-bold px-3 py-1 rounded bg-blue-500/20 text-blue-300 border border-blue-400/30 uppercase">
+        <span class="text-xs font-extrabold px-3 py-1 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 uppercase tracking-widest">
             {{ $opportunity->department->name ?? 'Ministry' }}
         </span>
-        <h1 class="text-3xl font-extrabold">{{ $opportunity->title }}</h1>
-        <p class="text-slate-300 text-sm">Duration: {{ $opportunity->duration_months }} Months | Positions: {{ $opportunity->positions_count }}</p>
+        <h1 class="text-3xl font-extrabold text-white">{{ $opportunity->title }}</h1>
+        <p class="text-slate-100 text-sm font-medium">Duration: {{ $opportunity->duration_months }} Months | Positions: {{ $opportunity->positions_count }}</p>
     </div>
 </div>
 

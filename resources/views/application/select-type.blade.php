@@ -26,9 +26,9 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         {{-- Option 1: General Application --}}
-        <div class="bg-white p-8 rounded-2xl border-2 border-blue-600 shadow-md flex flex-col justify-between">
+        <div class="bg-white p-8 rounded-2xl border-2 border-[#005A2B] shadow-md flex flex-col justify-between">
             <div class="space-y-4">
-                <span class="inline-block px-3 py-1 rounded-full bg-blue-100 text-blue-800 font-bold text-xs uppercase tracking-wider">
+                <span class="inline-block px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs uppercase tracking-wider">
                     Option 1 — General Application
                 </span>
                 <h2 class="text-xl font-bold text-slate-900">General Internship Application</h2>
@@ -49,7 +49,7 @@
                         @csrf
                         <div class="mb-4">
                             <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Select Preferred Department</label>
-                            <select name="preferred_department_id" class="w-full rounded-xl border-slate-300 text-sm focus:ring-blue-500 focus:border-blue-500" required>
+                            <select name="preferred_department_id" class="w-full rounded-xl border-slate-300 text-sm focus:ring-emerald-600 focus:border-emerald-600" required>
                                 <option value="">-- Select Preferred Department --</option>
                                 @foreach($departments as $dept)
                                     <option value="{{ $dept->id }}" {{ (isset($opportunity) && $opportunity->department_id == $dept->id) ? 'selected' : '' }}>
@@ -59,7 +59,7 @@
                             </select>
                         </div>
 
-                        <button type="submit" class="w-full py-3.5 rounded-xl bg-blue-900 text-white font-bold text-sm uppercase tracking-wider hover:bg-blue-800 transition shadow">
+                        <button type="submit" class="w-full py-3.5 rounded-xl bg-[#005A2B] text-white font-bold text-sm uppercase tracking-wider hover:bg-[#00421F] transition shadow">
                             Start General Application &rarr;
                         </button>
                     </form>
@@ -95,7 +95,7 @@
                         @csrf
                         <div class="mb-4">
                             <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Select Vacancy</label>
-                            <select name="opportunity_id" class="w-full rounded-xl border-slate-300 text-sm focus:ring-blue-500 focus:border-blue-500" required>
+                            <select name="opportunity_id" class="w-full rounded-xl border-slate-300 text-sm focus:ring-emerald-600 focus:border-emerald-600" required>
                                 <option value="">-- Select Advertised Vacancy --</option>
                                 @foreach($opportunities as $opp)
                                     <option value="{{ $opp->id }}" {{ (isset($opportunity) && $opportunity->id == $opp->id) ? 'selected' : '' }}>
@@ -105,7 +105,7 @@
                             </select>
                         </div>
 
-                        <button type="submit" class="w-full py-3.5 rounded-xl bg-slate-900 text-white font-bold text-sm uppercase tracking-wider hover:bg-slate-800 transition shadow">
+                        <button type="submit" class="w-full py-3.5 rounded-xl bg-[#005A2B] text-white font-bold text-sm uppercase tracking-wider hover:bg-[#00421F] transition shadow">
                             Apply to Vacancy &rarr;
                         </button>
                     </form>

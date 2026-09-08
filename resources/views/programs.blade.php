@@ -3,15 +3,15 @@
 @section('content')
 
     {{-- Hero --}}
-    <div class="py-20" style="background: linear-gradient(135deg, #011627 0%, #011C3E 100%);">
+    <div class="py-20" style="background: linear-gradient(135deg, #00421F 0%, #005A2B 100%); border-bottom: 4px solid #f59e0b;">
         <div class="max-w-7xl mx-auto px-6 text-center">
-            <p class="text-xs font-bold tracking-widest uppercase mb-3 text-amber-400">
+            <p class="text-xs font-bold tracking-widest uppercase mb-3 text-amber-300">
                 Ministry of Sport, Recreation, Arts & Culture — Government of Zimbabwe
             </p>
             <h1 class="text-5xl font-bold text-white mb-4" style="font-family: 'Georgia', serif;">
                 Academic Programs
             </h1>
-            <p class="text-lg max-w-2xl mx-auto mb-8" style="color: rgba(255,255,255,0.75);">
+            <p class="text-lg max-w-2xl mx-auto mb-8 text-slate-100 font-medium">
                 Explore our full range of Bachelor's, Master's, and PhD programs designed to prepare you for global careers in engineering, technology, and sciences.
             </p>
 
@@ -33,7 +33,7 @@
                     <button onclick="setLevel('{{ $val }}')"
                             id="tab-{{ $val }}"
                             class="level-tab px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200
-                                   {{ $val === 'all' ? 'bg-white text-MOSRAC-navy' : 'text-white border border-white/30 hover:bg-white/10' }}">
+                                   {{ $val === 'all' ? 'bg-white text-[#005A2B]' : 'text-white border border-white/30 hover:bg-white/10' }}">
                         {{ $label }}
                     </button>
                 @endforeach
@@ -42,34 +42,34 @@
     </div>
 
     {{-- Stats Bar --}}
-    <div style="background: #011C3E;">
+    <div style="background: #0B120C;" class="border-b border-emerald-900/50">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="grid grid-cols-3 divide-x divide-white/20">
+            <div class="grid grid-cols-3 divide-x divide-emerald-800/40">
                 <div class="py-5 text-center">
-                    <p class="text-2xl font-bold text-white">{{ $stats['total_programs'] }}</p>
-                    <p class="text-xs mt-0.5" style="color: rgba(255,255,255,0.65);">Academic Programs</p>
+                    <p class="text-2xl font-bold text-amber-400">{{ $stats['total_programs'] }}</p>
+                    <p class="text-xs mt-0.5 text-slate-300">Academic Programs</p>
                 </div>
                 <div class="py-5 text-center">
                     <p class="text-2xl font-bold text-white">{{ $stats['years_excellence'] }}+</p>
-                    <p class="text-xs mt-0.5" style="color: rgba(255,255,255,0.65);">Years of Excellence</p>
+                    <p class="text-xs mt-0.5 text-slate-300">Years of Excellence</p>
                 </div>
                 <div class="py-5 text-center">
-                    <p class="text-2xl font-bold text-white">{{ $stats['open_cycles'] }}</p>
-                    <p class="text-xs mt-0.5" style="color: rgba(255,255,255,0.65);">Open Intakes</p>
+                    <p class="text-2xl font-bold text-amber-400">{{ $stats['open_cycles'] }}</p>
+                    <p class="text-xs mt-0.5 text-slate-300">Open Intakes</p>
                 </div>
             </div>
         </div>
     </div>
 
     {{-- Programs Grid --}}
-    <div class="py-16" style="background: #f0f4f8;">
+    <div class="py-16 bg-slate-50">
         <div class="max-w-7xl mx-auto px-6">
 
             @php
                 $levelConfig = [
-                    'bachelor' => ['label' => "Bachelor's Programs", 'sublabel' => '4-year undergraduate degrees',  'duration' => '4 Years',   'badge_bg' => '#eff6ff', 'badge_color' => '#1d4ed8', 'badge' => 'BSc', 'icon_bg' => '#dbeafe', 'icon_color' => '#1e40af'],
-                    'master'   => ['label' => "Master's Programs",   'sublabel' => '2-year postgraduate degrees',  'duration' => '2 Years',   'badge_bg' => '#f5f3ff', 'badge_color' => '#7c3aed', 'badge' => 'MSc', 'icon_bg' => '#ede9fe', 'icon_color' => '#6d28d9'],
-                    'phd'      => ['label' => 'PhD Programs',        'sublabel' => 'Doctoral research degrees',    'duration' => '3–5 Years', 'badge_bg' => '#fef3c7', 'badge_color' => '#b45309', 'badge' => 'PhD', 'icon_bg' => '#fde68a', 'icon_color' => '#92400e'],
+                    'bachelor' => ['label' => "Bachelor's Programs", 'sublabel' => '4-year undergraduate degrees',  'duration' => '4 Years',   'badge_bg' => '#ecfdf5', 'badge_color' => '#005A2B', 'badge' => 'BSc', 'icon_bg' => '#d1fae5', 'icon_color' => '#005A2B'],
+                    'master'   => ['label' => "Master's Programs",   'sublabel' => '2-year postgraduate degrees',  'duration' => '2 Years',   'badge_bg' => '#fef3c7', 'badge_color' => '#b45309', 'badge' => 'MSc', 'icon_bg' => '#fde68a', 'icon_color' => '#92400e'],
+                    'phd'      => ['label' => 'PhD Programs',        'sublabel' => 'Doctoral research degrees',    'duration' => '3–5 Years', 'badge_bg' => '#ecfdf5', 'badge_color' => '#005A2B', 'badge' => 'PhD', 'icon_bg' => '#d1fae5', 'icon_color' => '#005A2B'],
                 ];
 
                 // Flatten all programs for JS-driven filtering
@@ -87,7 +87,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
                 <p class="text-gray-400 text-lg font-medium">No programs match your search.</p>
-                <button onclick="clearFilters()" class="mt-3 text-sm font-semibold" style="color:#611818;">Clear filters</button>
+                <button onclick="clearFilters()" class="mt-3 text-sm font-semibold text-amber-600">Clear filters</button>
             </div>
 
             {{-- Level sections --}}
@@ -109,7 +109,7 @@
                                 @endif
                             </div>
                             <div>
-                                <h2 class="text-2xl font-bold" style="color:#011C3E; font-family:'Georgia',serif;">{{ $cfg['label'] }}</h2>
+                                <h2 class="text-2xl font-bold text-[#005A2B]" style="font-family:'Georgia',serif;">{{ $cfg['label'] }}</h2>
                                 <p class="text-sm text-gray-500">{{ $cfg['sublabel'] }}</p>
                             </div>
                             <div class="ml-auto">
@@ -145,7 +145,7 @@
                                     ];
                                 @endphp
 
-                                <div class="program-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-100 flex flex-col"
+                                <div class="program-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-slate-200 flex flex-col"
                                      data-level="{{ $level }}"
                                      data-name="{{ strtolower($program->name) }}"
                                      data-faculty="{{ strtolower($program->faculty ?? '') }}">
@@ -154,31 +154,31 @@
                                     <div class="relative h-44 overflow-hidden cursor-pointer" onclick='openModal({{ json_encode($details) }})'>
                                         @if($img)
                                             <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 hover:scale-110" style="background-image:url('{{ $img }}');"></div>
-                                            <div class="absolute inset-0" style="background:rgba(2,62,138,0.35);"></div>
+                                            <div class="absolute inset-0" style="background:rgba(0,90,43,0.35);"></div>
                                         @else
-                                            <div class="absolute inset-0" style="background:linear-gradient(135deg,#011C3E 0%,#611818 100%);"></div>
+                                            <div class="absolute inset-0" style="background:linear-gradient(135deg,#005A2B 0%,#00421F 100%);"></div>
                                         @endif
                                         <div class="absolute top-3 left-3">
                                             <span class="text-xs font-bold px-2.5 py-1 rounded-full" style="background:{{ $cfg['badge_bg'] }};color:{{ $cfg['badge_color'] }}">{{ $cfg['badge'] }}</span>
                                         </div>
                                         @if($openCycles->isNotEmpty())
                                             <div class="absolute top-3 right-3">
-                                                <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-green-500 text-white flex items-center gap-1">
+                                                <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-600 text-white flex items-center gap-1">
                                                     <span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>Open
                                                 </span>
                                             </div>
                                         @endif
                                         <div class="absolute bottom-3 right-3">
-                                            <span class="text-xs font-medium px-2 py-1 rounded bg-black/40 text-white">{{ $cfg['duration'] }}</span>
+                                            <span class="text-xs font-medium px-2 py-1 rounded bg-black/50 text-white">{{ $cfg['duration'] }}</span>
                                         </div>
                                     </div>
 
                                     {{-- Content --}}
                                     <div class="p-6 flex flex-col flex-1">
                                         <div class="flex-1">
-                                            <h3 class="text-lg font-bold mb-1" style="color:#011C3E;font-family:'Georgia',serif;">{{ $program->name }}</h3>
+                                            <h3 class="text-lg font-bold mb-1 text-[#005A2B]" style="font-family:'Georgia',serif;">{{ $program->name }}</h3>
                                             @if($program->faculty)
-                                                <p class="text-xs font-medium mb-3" style="color:#611818;">{{ $program->faculty }}</p>
+                                                <p class="text-xs font-extrabold mb-3 text-amber-600">{{ $program->faculty }}</p>
                                             @endif
                                             <p class="text-sm text-gray-600 leading-relaxed line-clamp-3">
                                                 {{ $program->description ?: 'A comprehensive program designed to equip students with advanced knowledge and practical skills for careers in their field.' }}
@@ -186,7 +186,7 @@
                                         </div>
 
                                         @if($nextDeadline)
-                                            <div class="mt-4 flex items-center gap-2 text-xs text-orange-600 font-medium bg-orange-50 px-3 py-2 rounded-lg">
+                                            <div class="mt-4 flex items-center gap-2 text-xs text-amber-700 font-medium bg-amber-50 px-3 py-2 rounded-lg border border-amber-200">
                                                 <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                                                 Deadline: {{ \Carbon\Carbon::parse($nextDeadline->deadline_at)->format('M d, Y') }}
                                             </div>
@@ -194,14 +194,13 @@
 
                                         <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between gap-2">
                                             <button onclick='openModal({{ json_encode($details) }})'
-                                                    class="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-200" style="color:#611818;">
+                                                    class="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-200 text-[#005A2B] hover:text-[#00421F]">
                                                 Learn More
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                                             </button>
                                             @if($openCycles->isNotEmpty())
                                                 <a href="{{ route('apply.start') }}"
-                                                   class="inline-flex items-center gap-1.5 text-sm font-semibold text-white px-4 py-2 rounded-lg transition-all hover:shadow-md"
-                                                   style="background:#011C3E;">
+                                                   class="inline-flex items-center gap-1.5 text-sm font-semibold text-white px-4 py-2 rounded-lg transition-all hover:shadow-md bg-[#005A2B] hover:bg-[#00421F]">
                                                     Apply Now
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                                                 </a>
@@ -230,21 +229,21 @@
     {{-- Program Detail Modal --}}
     <div id="program-modal"
          class="fixed inset-0 z-50 hidden items-center justify-center p-4"
-         style="background:rgba(1,22,39,0.75); backdrop-filter:blur(4px);"
+         style="background:rgba(11,18,12,0.8); backdrop-filter:blur(4px);"
          onclick="if(event.target===this) closeModal()">
 
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
 
             {{-- Modal image header --}}
             <div class="relative h-52 overflow-hidden rounded-t-2xl" id="modal-image-area">
-                <div id="modal-img" class="absolute inset-0 bg-cover bg-center" style="background:linear-gradient(135deg,#011C3E 0%,#611818 100%);"></div>
-                <div class="absolute inset-0" style="background:rgba(1,28,62,0.45);"></div>
+                <div id="modal-img" class="absolute inset-0 bg-cover bg-center" style="background:linear-gradient(135deg,#005A2B 0%,#00421F 100%);"></div>
+                <div class="absolute inset-0" style="background:rgba(0,90,43,0.45);"></div>
                 <button onclick="closeModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/20 hover:bg-white/40 flex items-center justify-center transition-all">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
                 <div class="absolute bottom-4 left-6 flex items-center gap-3">
                     <span id="modal-badge" class="text-xs font-bold px-3 py-1 rounded-full">BSc</span>
-                    <span id="modal-open-badge" class="hidden text-xs font-semibold px-2.5 py-1 rounded-full bg-green-500 text-white flex items-center gap-1">
+                    <span id="modal-open-badge" class="hidden text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-600 text-white flex items-center gap-1">
                         <span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>Applications Open
                     </span>
                 </div>
@@ -254,12 +253,12 @@
             <div class="p-8">
                 <div class="flex items-start justify-between mb-2">
                     <div>
-                        <h2 id="modal-name" class="text-2xl font-bold" style="color:#011C3E;font-family:'Georgia',serif;"></h2>
-                        <p id="modal-faculty" class="text-sm font-medium mt-1" style="color:#611818;"></p>
+                        <h2 id="modal-name" class="text-2xl font-bold text-[#005A2B]" style="font-family:'Georgia',serif;"></h2>
+                        <p id="modal-faculty" class="text-sm font-semibold mt-1 text-amber-600"></p>
                     </div>
                     <div class="flex flex-col items-end gap-1 shrink-0 ml-4">
-                        <span id="modal-level" class="text-xs font-semibold px-3 py-1 rounded-full bg-gray-100 text-gray-600"></span>
-                        <span id="modal-duration" class="text-xs text-gray-400"></span>
+                        <span id="modal-level" class="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-700"></span>
+                        <span id="modal-duration" class="text-xs text-slate-500"></span>
                     </div>
                 </div>
 
@@ -273,35 +272,33 @@
 
                 {{-- Key info grid --}}
                 <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="bg-gray-50 rounded-xl p-4">
-                        <p class="text-xs font-bold uppercase tracking-wide text-gray-400 mb-1">Duration</p>
-                        <p id="modal-duration-2" class="font-semibold text-sm" style="color:#011C3E;"></p>
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                        <p class="text-xs font-bold uppercase tracking-wide text-slate-400 mb-1">Duration</p>
+                        <p id="modal-duration-2" class="font-bold text-sm text-[#005A2B]"></p>
                     </div>
-                    <div class="bg-gray-50 rounded-xl p-4">
-                        <p class="text-xs font-bold uppercase tracking-wide text-gray-400 mb-1">Degree</p>
-                        <p id="modal-level-2" class="font-semibold text-sm" style="color:#011C3E;"></p>
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                        <p class="text-xs font-bold uppercase tracking-wide text-slate-400 mb-1">Degree</p>
+                        <p id="modal-level-2" class="font-bold text-sm text-[#005A2B]"></p>
                     </div>
-                    <div class="bg-gray-50 rounded-xl p-4">
-                        <p class="text-xs font-bold uppercase tracking-wide text-gray-400 mb-1">Faculty</p>
-                        <p id="modal-faculty-2" class="font-semibold text-sm" style="color:#011C3E;"></p>
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                        <p class="text-xs font-bold uppercase tracking-wide text-slate-400 mb-1">Faculty</p>
+                        <p id="modal-faculty-2" class="font-bold text-sm text-[#005A2B]"></p>
                     </div>
-                    <div class="bg-gray-50 rounded-xl p-4" id="modal-deadline-box">
-                        <p class="text-xs font-bold uppercase tracking-wide text-gray-400 mb-1">Application Deadline</p>
-                        <p id="modal-deadline" class="font-semibold text-sm text-orange-600"></p>
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200" id="modal-deadline-box">
+                        <p class="text-xs font-bold uppercase tracking-wide text-slate-400 mb-1">Application Deadline</p>
+                        <p id="modal-deadline" class="font-bold text-sm text-amber-600"></p>
                     </div>
                 </div>
 
                 {{-- Actions --}}
                 <div class="flex gap-3">
                     <a href="{{ route('apply.start') }}" id="modal-apply-btn"
-                       class="flex-1 inline-flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold text-white transition-all hover:shadow-lg"
-                       style="background:#011C3E;">
+                       class="flex-1 inline-flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold text-white transition-all hover:shadow-lg bg-[#005A2B] hover:bg-[#00421F]">
                         Apply Now
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                     </a>
                     <button onclick="closeModal()"
-                            class="px-6 py-3 rounded-xl text-sm font-semibold border-2 transition-all"
-                            style="border-color:#011C3E;color:#011C3E;">
+                            class="px-6 py-3 rounded-xl text-sm font-semibold border-2 transition-all border-[#005A2B] text-[#005A2B] hover:bg-slate-50">
                         Close
                     </button>
                 </div>
@@ -310,17 +307,17 @@
     </div>
 
     {{-- CTA --}}
-    <div class="py-16" style="background:#011C3E;">
+    <div class="py-16" style="background: linear-gradient(135deg, #00421F 0%, #005A2B 100%);">
         <div class="max-w-3xl mx-auto px-6 text-center">
             <h2 class="text-3xl font-bold text-white mb-4" style="font-family:'Georgia',serif;">Ready to Apply?</h2>
-            <p class="mb-2" style="color:rgba(255,255,255,0.75);">Join students who chose MoSRAC for their academic journey.</p>
-            <p class="text-sm mb-8" style="color:rgba(255,255,255,0.5);">Applications are reviewed on a rolling basis. Apply early to secure your place.</p>
+            <p class="mb-2 text-slate-100">Join students who chose MoSRAC for their academic journey.</p>
+            <p class="text-sm mb-8 text-slate-200">Applications are reviewed on a rolling basis. Apply early to secure your place.</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="{{ route('apply.start') }}" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-lg text-sm font-bold transition-all hover:shadow-lg hover:-translate-y-0.5" style="background:white;color:#011C3E;">
+                <a href="{{ route('apply.start') }}" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl text-sm font-extrabold transition-all hover:shadow-lg hover:-translate-y-0.5 bg-amber-400 text-emerald-950 hover:bg-amber-300">
                     Start Your Application
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </a>
-                <a href="{{ route('about') }}" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-lg text-sm font-bold border border-white/30 text-white hover:bg-white/10 transition-all">
+                <a href="{{ route('about') }}" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl text-sm font-extrabold border border-white/40 text-white hover:bg-white/10 transition-all">
                     Learn More About MoSRAC
                 </a>
             </div>
@@ -345,7 +342,7 @@
             const active = document.getElementById('tab-' + level);
             if (active) {
                 active.style.background = 'white';
-                active.style.color = '#011C3E';
+                active.style.color = '#005A2B';
             }
 
             filterPrograms();

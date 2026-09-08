@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-16 text-white" style="background: linear-gradient(135deg, #064e3b 0%, #0f172a 100%); border-bottom: 4px solid #f59e0b;">
+<div class="py-16 text-white" style="background: linear-gradient(135deg, #00421F 0%, #005A2B 100%); border-bottom: 4px solid #f59e0b;">
     <div class="max-w-7xl mx-auto px-6 text-center">
         <p class="text-xs font-extrabold uppercase tracking-widest text-amber-300 mb-2">MoSRAC Placements</p>
         <h1 class="text-4xl font-extrabold text-white">Internship Opportunities</h1>
