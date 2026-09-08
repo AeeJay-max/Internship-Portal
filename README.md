@@ -353,9 +353,9 @@ Make sure the following are installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/AeeJay-max/Internship-Portal.git
 
-cd university_enrollment-master
+cd Internship-Portal
 ```
 
 ### 2. Install Backend Dependencies
