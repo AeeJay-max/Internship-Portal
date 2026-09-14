@@ -2,95 +2,180 @@
 
 @section('content')
 
-    {{-- Government Portal Entry Hero Section with Heroes' Acre Background --}}
-    <div class="relative overflow-hidden text-white min-h-[85vh] flex items-center justify-center py-24 px-4 sm:px-6 bg-cover bg-center bg-no-repeat"
+    {{-- Government Portal Hero Section --}}
+    <div class="relative overflow-hidden text-white min-h-[65vh] lg:min-h-[72vh] flex items-center py-14 sm:py-18 lg:py-22 bg-cover bg-center bg-no-repeat"
          style="background-image: url('{{ asset('images/branding/heroes_acre.jpg') }}'); background-position: center 30%;">
         
-        {{-- Semi-Transparent MoSRAC Green Overlay (#005A2B at ~0.78-0.84 opacity) --}}
-        <div class="absolute inset-0 z-0" style="background: linear-gradient(135deg, rgba(0, 90, 43, 0.82) 0%, rgba(0, 66, 31, 0.84) 60%, rgba(11, 18, 12, 0.88) 100%);"></div>
+        {{-- Semi-Transparent MoSRAC Green Overlay (#02371B Gradient Preserved) --}}
+        <div class="absolute inset-0 z-0" style="background: linear-gradient(135deg, rgba(0, 80, 38, 0.90) 0%, rgba(0, 60, 28, 0.88) 55%, rgba(10, 18, 12, 0.92) 100%);"></div>
 
-        {{-- Subtle Zimbabwean Accent Ribbon & Geometry --}}
-        <div class="absolute inset-0 pointer-events-none overflow-hidden opacity-25 z-[1]">
-            <div class="absolute top-0 right-0 w-96 h-2.5 flex shadow-lg">
-                <div class="h-full w-1/5 bg-[#005A2B]"></div>
-                <div class="h-full w-1/5 bg-[#F59E0B]"></div>
-                <div class="h-full w-1/5 bg-[#DC2626]"></div>
-                <div class="h-full w-1/5 bg-black"></div>
-                <div class="h-full w-1/5 bg-white"></div>
-            </div>
-            <div class="absolute -bottom-24 -left-24 w-96 h-96 rounded-full border-[18px] border-amber-400/20 blur-sm"></div>
-        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                
+                {{-- LEFT SIDE: Text, Actions & Notice --}}
+                <div class="lg:col-span-7 text-left space-y-5 sm:space-y-6">
+                    
+                    {{-- Institutional Label --}}
+                    <div class="inline-flex items-center gap-2">
+                        <span class="w-1.5 h-4 bg-amber-400 rounded-full"></span>
+                        <p class="text-xs sm:text-sm font-bold tracking-widest text-amber-300 uppercase">
+                            MINISTRY OF SPORT, RECREATION, ARTS & CULTURE
+                        </p>
+                    </div>
 
-        <div class="max-w-4xl mx-auto text-center space-y-8 relative z-10">
-            
-            {{-- Government Official Emblem Badge --}}
-            <div class="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-slate-900/60 text-amber-300 border border-amber-400/40 text-xs font-black uppercase tracking-widest shadow-lg backdrop-blur-md">
-                <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
-                MoSRAC — Official Portal
-            </div>
+                    {{-- Main Heading --}}
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight tracking-tight drop-shadow-sm">
+                        Internship Application Portal
+                    </h1>
 
-            {{-- Main Heading --}}
-            <div class="space-y-4">
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight drop-shadow-md">
-                    Ministry of Sport, Recreation, Arts & Culture
-                </h1>
-                <div class="inline-block relative">
-                    <p class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-amber-300 uppercase tracking-wide">
-                        MoSRAC Internship Application Portal
+                    {{-- Supporting Text --}}
+                    <p class="text-base sm:text-lg text-slate-100 font-normal leading-relaxed max-w-xl">
+                        Apply for national internship opportunities and gain practical experience across the Ministry's departments in Zimbabwe.
                     </p>
-                    <div class="w-24 h-1 bg-amber-400 mx-auto mt-2 rounded-full"></div>
+
+                    @php
+                        $userHasApplied = Auth::check() && !Auth::user()->isAdmin() && Auth::user()->applications()->exists();
+                    @endphp
+
+                    {{-- Action Buttons --}}
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
+                        @if(!$userHasApplied && (!Auth::check() || !Auth::user()->isAdmin()))
+                            <a href="{{ route('apply.start') }}"
+                               class="px-7 py-3.5 rounded-lg font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 transition-all text-sm text-center shadow-md hover:shadow-lg">
+                                Apply for Internship
+                            </a>
+                        @endif
+
+                        @guest
+                            <a href="{{ route('login') }}"
+                               class="px-7 py-3.5 rounded-lg font-semibold text-white bg-slate-900/75 hover:bg-slate-900 border border-white/35 hover:border-amber-300/80 transition-all text-sm text-center shadow-md">
+                                Applicant Login
+                            </a>
+                        @else
+                            @if(Auth::user()->isAdmin())
+                                <a href="{{ route('admin.dashboard') }}"
+                                   class="px-7 py-3.5 rounded-lg font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 transition-all text-sm text-center shadow-md hover:shadow-lg">
+                                    Go to Admin Control Panel
+                                </a>
+                            @else
+                                <a href="{{ route('dashboard') }}"
+                                   class="px-7 py-3.5 rounded-lg font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 transition-all text-sm text-center shadow-md hover:shadow-lg">
+                                    Go to My Portal Dashboard
+                                </a>
+                            @endif
+                        @endguest
+                    </div>
+
+                    {{-- Official Notice Line (PURE WHITE TEXT) --}}
+                    <div class="pt-5 border-t border-white/20 text-xs text-white">
+                        <p class="leading-relaxed text-white">
+                            <strong class="text-white font-bold">Official Notice:</strong> General internship applications remain open continuously. You may submit an application to your preferred Ministry department at any time.
+                        </p>
+                    </div>
+
                 </div>
+
+                {{-- RIGHT SIDE: Large MOSRAC Ministry Logo (Flat on Green Overlay) --}}
+                <div class="lg:col-span-5 flex justify-center lg:justify-end items-center pt-8 lg:pt-0">
+                    <img src="{{ asset('images/branding/mosrac_logo.png') }}"
+                         alt="Ministry of Sport, Recreation, Arts & Culture Official Logo"
+                         class="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[420px] lg:h-[420px] max-w-full object-contain filter drop-shadow-lg"
+                         onerror="this.onerror=null; this.src='{{ asset('images/branding/lionfalcon.png') }}';">
+                </div>
+
             </div>
-
-            {{-- Short Description --}}
-            <p class="text-base sm:text-lg text-slate-200 max-w-2xl mx-auto leading-relaxed font-medium">
-                The official portal for tertiary students and graduates to apply for structured national internship attachments and placements across Ministry departments in Zimbabwe.
-            </p>
-
-            @php
-                $userHasApplied = Auth::check() && !Auth::user()->isAdmin() && Auth::user()->applications()->exists();
-            @endphp
-
-            {{-- Primary Action Buttons --}}
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-                @if(!$userHasApplied && (!Auth::check() || !Auth::user()->isAdmin()))
-                    <a href="{{ route('apply.start') }}"
-                       class="w-full sm:w-auto px-9 py-4 rounded-xl font-extrabold text-slate-950 bg-amber-400 hover:bg-amber-300 border-2 border-amber-300 shadow-2xl hover:scale-[1.02] transition-all duration-200 text-sm uppercase tracking-wider flex items-center justify-center gap-2">
-                        <span>Apply for Internship</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                        </svg>
-                    </a>
-                @endif
-
-                @guest
-                    <a href="{{ route('login') }}"
-                       class="w-full sm:w-auto px-9 py-4 rounded-xl font-extrabold text-white hover:text-amber-300 bg-slate-900/80 hover:bg-slate-900 border border-white/30 hover:border-amber-400 transition-all duration-200 text-sm uppercase tracking-wider text-center shadow-lg backdrop-blur-md">
-                        Applicant Login
-                    </a>
-                @else
-                    @if(Auth::user()->isAdmin())
-                        <a href="{{ route('admin.dashboard') }}"
-                           class="w-full sm:w-auto px-9 py-4 rounded-xl font-extrabold text-slate-950 bg-amber-400 hover:bg-amber-300 border-2 border-amber-300 transition-all duration-200 text-sm uppercase tracking-wider text-center shadow-2xl">
-                            Go to Admin Control Panel
-                        </a>
-                    @else
-                        <a href="{{ route('dashboard') }}"
-                           class="w-full sm:w-auto px-9 py-4 rounded-xl font-extrabold text-slate-950 bg-amber-400 hover:bg-amber-300 border-2 border-amber-300 transition-all duration-200 text-sm uppercase tracking-wider text-center shadow-2xl">
-                            Go to My Portal Dashboard
-                        </a>
-                    @endif
-                @endguest
-            </div>
-
-            {{-- Quick Portal Notice --}}
-            <div class="pt-8 border-t border-white/10 max-w-xl mx-auto">
-                <p class="text-xs text-slate-300 leading-normal">
-                    📌 <strong>Official Notice:</strong> General internship applications remain open continuously. You may submit an application to your preferred Ministry department at any time.
-                </p>
-            </div>
-
         </div>
     </div>
 
+    {{-- Information Section Below Hero --}}
+    <section class="py-12 lg:py-16 bg-slate-100/70 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            {{-- Section Header --}}
+            <div class="max-w-3xl mb-10">
+                <div class="inline-flex items-center gap-2 mb-2">
+                    <span class="w-2 h-2 rounded-full bg-[#005A2B]"></span>
+                    <span class="text-xs font-bold text-[#005A2B] uppercase tracking-wider">Ministry Portal Overview</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight mb-2">
+                    Internship Opportunities
+                </h2>
+                <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+                    Explore internship opportunities across departments within the Ministry of Sport, Recreation, Arts & Culture.
+                </p>
+            </div>
+
+            {{-- Structured Information Cards --}}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                
+                {{-- Available Departments --}}
+                <div class="bg-white border border-slate-200/90 rounded-lg p-6 sm:p-7 shadow-sm hover:shadow-md transition-shadow border-t-4 border-[#005A2B] flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-900 uppercase tracking-wide mb-1">
+                            AVAILABLE DEPARTMENTS
+                        </h3>
+                        <p class="text-xs font-semibold text-amber-700 mb-3">
+                            Explore internship opportunities across Ministry departments.
+                        </p>
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                            Structured attachments are offered across Ministry divisions including Sport Development, Arts & Culture Promotion, Recreation, and Administrative Services.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100">
+                        <a href="{{ route('internships.index') }}" class="text-xs font-bold text-[#005A2B] hover:text-[#00421F] uppercase tracking-wider inline-flex items-center gap-1.5 transition-colors">
+                            <span>View Departments</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Structured Placements --}}
+                <div class="bg-white border border-slate-200/90 rounded-lg p-6 sm:p-7 shadow-sm hover:shadow-md transition-shadow border-t-4 border-[#005A2B] flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-900 uppercase tracking-wide mb-1">
+                            STRUCTURED PLACEMENTS
+                        </h3>
+                        <p class="text-xs font-semibold text-amber-700 mb-3">
+                            Gain practical workplace experience within the Ministry.
+                        </p>
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                            Designed for tertiary students seeking required industrial attachment or recent graduates aiming to build practical public sector work experience in Zimbabwe.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100">
+                        <a href="{{ route('about') }}" class="text-xs font-bold text-[#005A2B] hover:text-[#00421F] uppercase tracking-wider inline-flex items-center gap-1.5 transition-colors">
+                            <span>Program Information</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Application Process --}}
+                <div class="bg-white border border-slate-200/90 rounded-lg p-6 sm:p-7 shadow-sm hover:shadow-md transition-shadow border-t-4 border-[#005A2B] flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-900 uppercase tracking-wide mb-1">
+                            APPLICATION PROCESS
+                        </h3>
+                        <p class="text-xs font-semibold text-amber-700 mb-3">
+                            Submit your application and supporting documents through the portal.
+                        </p>
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                            Submit your personal information, academic transcripts, and institutional recommendation letters online for review by Ministry selection officers.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100">
+                        <a href="{{ route('how-to-apply') }}" class="text-xs font-bold text-[#005A2B] hover:text-[#00421F] uppercase tracking-wider inline-flex items-center gap-1.5 transition-colors">
+                            <span>Application Guidelines</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
 @endsection
+
+
