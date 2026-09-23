@@ -48,7 +48,7 @@
 
                         @guest
                             <a href="{{ route('login') }}"
-                               class="px-7 py-3.5 rounded-lg font-semibold text-white bg-slate-900/75 hover:bg-slate-900 border border-white/35 hover:border-amber-300/80 transition-all text-sm text-center shadow-md">
+                               class="px-7 py-3.5 rounded-lg font-semibold text-white bg-green-800 hover:bg-green-700 border border-white/35 hover:border-amber-300/80 transition-all text-sm text-center shadow-md">
                                 Applicant Login
                             </a>
                         @else
