@@ -34,7 +34,7 @@
             </svg>
             <div class="text-xs text-amber-900 space-y-1">
                 <p class="font-bold text-sm">Mandatory Document Packaging Notice</p>
-                <p>The Ministry requires all 5 supporting documents to be merged into <strong>ONE single PDF document</strong> before uploading. Applications submitted with missing documents or in image formats (JPG/PNG) will be rejected.</p>
+                <p>The Ministry requires all 4 supporting documents to be merged into <strong>ONE single PDF document</strong> before uploading. Applications submitted with missing documents or in image formats (JPG/PNG) will be rejected.</p>
             </div>
         </div>
     </div>
@@ -43,7 +43,7 @@
     <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-3">
         <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wide flex items-center gap-2">
             <svg class="w-4 h-4 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Mandatory 5-in-1 Document Checklist
+            Mandatory 4-in-1 Document Checklist
         </h3>
         <p class="text-xs text-slate-600">Ensure your single PDF contains the following items in order:</p>
 
@@ -58,14 +58,10 @@
             </div>
             <div class="flex items-center gap-2 p-2.5 bg-white rounded-lg border border-slate-200 text-slate-700 font-medium">
                 <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-[10px]">3</span>
-                Current Semester / Term Results Statement
+                Comprehensive Curriculum Vitae (CV)
             </div>
             <div class="flex items-center gap-2 p-2.5 bg-white rounded-lg border border-slate-200 text-slate-700 font-medium">
                 <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-[10px]">4</span>
-                Comprehensive Curriculum Vitae (CV)
-            </div>
-            <div class="flex items-center gap-2 p-2.5 bg-white rounded-lg border border-slate-200 text-slate-700 font-medium md:col-span-2">
-                <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-[10px]">5</span>
                 Official University / College Attachment Clearance Letter
             </div>
         </div>

@@ -118,12 +118,12 @@
                             Explore internship opportunities across Ministry departments.
                         </p>
                         <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                            Structured attachments are offered across Ministry divisions including Sport Development, Arts & Culture Promotion, Recreation, and Administrative Services.
+                            Structured attachments are offered across all 13 Ministry departments, including Sports And Recreation, Arts and Culture Promotion development, Information Communication Technology, and Human Resources.
                         </p>
                     </div>
                     <div class="mt-6 pt-4 border-t border-slate-100">
                         <a href="{{ route('internships.index') }}" class="text-xs font-bold text-[#005A2B] hover:text-[#00421F] uppercase tracking-wider inline-flex items-center gap-1.5 transition-colors">
-                            <span>View Departments</span>
+                            <span>View Opportunities</span>
                             <span>&rarr;</span>
                         </a>
                     </div>

@@ -9,7 +9,7 @@
                 <h1 class="text-3xl font-extrabold text-slate-900">Application {{ $application->reference_number }}</h1>
                 <p class="text-xs text-slate-500">Ministry of Sport, Recreation, Arts & Culture</p>
             </div>
-            <a href="{{ route('dashboard') }}" class="text-blue-900 font-bold text-xs uppercase tracking-wider hover:underline">&larr; Back to Dashboard</a>
+            <a href="{{ route('dashboard') }}" class="text-[#005A2B] font-bold text-xs uppercase tracking-wider hover:underline">&larr; Back to Dashboard</a>
         </div>
 
         {{-- Status Badge Card --}}
@@ -27,26 +27,26 @@
 
         {{-- INTERVIEW SCHEDULED CARD --}}
         @if($application->status === 'interview_required')
-            <div class="bg-gradient-to-br from-blue-900 via-indigo-950 to-slate-950 text-white rounded-2xl p-6 md:p-8 shadow-xl space-y-6 border border-blue-600/40">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-blue-700/50 pb-4">
+            <div class="bg-gradient-to-br from-[#00421F] via-[#111A13] to-slate-950 text-white rounded-2xl p-6 md:p-8 shadow-xl space-y-6 border border-emerald-600/40">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-emerald-700/50 pb-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-2xl bg-blue-600 flex items-center justify-center font-extrabold text-xl text-white shadow">
+                        <div class="w-11 h-11 rounded-2xl bg-[#005A2B] flex items-center justify-center font-extrabold text-xl text-white shadow">
                             📅
                         </div>
                         <div>
                             <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-amber-400 text-slate-950">Action Required</span>
                             <h3 class="text-2xl font-extrabold text-white mt-1">Ministry Internship Interview Scheduled</h3>
-                            <p class="text-xs text-blue-200">Ministry of Sport, Recreation, Arts & Culture</p>
+                            <p class="text-xs text-emerald-200">Ministry of Sport, Recreation, Arts & Culture</p>
                         </div>
                     </div>
-                    <span class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30 self-start md:self-auto">
+                    <span class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30 self-start md:self-auto">
                         Status: Interview Scheduled
                     </span>
                 </div>
 
                 {{-- Scheduled Date, Time & Venue --}}
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="p-4 rounded-xl bg-blue-950/80 border border-blue-700/50">
+                    <div class="p-4 rounded-xl bg-black/50 border border-emerald-700/50">
                         <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-300 block mb-1">Interview Date</span>
                         <p class="text-base font-extrabold text-white flex items-center gap-2">
                             <span>📆</span>
@@ -54,7 +54,7 @@
                         </p>
                     </div>
 
-                    <div class="p-4 rounded-xl bg-blue-950/80 border border-blue-700/50">
+                    <div class="p-4 rounded-xl bg-black/50 border border-emerald-700/50">
                         <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-300 block mb-1">Interview Time</span>
                         <p class="text-base font-extrabold text-white flex items-center gap-2">
                             <span>⏰</span>
@@ -62,7 +62,7 @@
                         </p>
                     </div>
 
-                    <div class="p-4 rounded-xl bg-blue-950/80 border border-blue-700/50">
+                    <div class="p-4 rounded-xl bg-black/50 border border-emerald-700/50">
                         <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-300 block mb-1">Venue / Location</span>
                         <p class="text-xs font-bold text-white leading-snug flex items-start gap-1.5">
                             <span class="shrink-0 mt-0.5">📍</span>
@@ -74,7 +74,7 @@
                 @if($application->review_notes)
                     <div class="space-y-2">
                         <h4 class="text-xs font-bold uppercase tracking-wider text-amber-300">Ministry Interview Instructions:</h4>
-                        <div class="p-4 rounded-xl bg-slate-900/90 border border-blue-800/60 text-xs text-blue-100 whitespace-pre-line leading-relaxed">
+                        <div class="p-4 rounded-xl bg-slate-900/90 border border-emerald-800/60 text-xs text-emerald-100 whitespace-pre-line leading-relaxed">
                             {{ $application->review_notes }}
                         </div>
                     </div>
@@ -215,9 +215,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-slate-700">
                     <p><strong>Institution:</strong> {{ $a->school_name }} ({{ $a->institution_type }})</p>
                     <p><strong>Programme:</strong> {{ $a->program_of_study }}</p>
-                    <p><strong>Field:</strong> {{ $a->field_of_study }}</p>
+                    <p><strong>Faculty:</strong> {{ $a->field_of_study }}</p>
                     <p><strong>Level:</strong> {{ $a->current_year_level }}</p>
-                    <p><strong>Qualification:</strong> {{ $a->academic_qualification }}</p>
+                    @if(!empty($a->academic_qualification))
+                        <p><strong>Qualification:</strong> {{ $a->academic_qualification }}</p>
+                    @endif
                 </div>
             @endif
         </div>
@@ -240,7 +242,7 @@
         {{-- Documents --}}
         <div class="bg-white rounded-2xl p-6 border border-slate-200 space-y-4">
             <div class="flex items-center justify-between border-b border-slate-100 pb-2 flex-wrap gap-2">
-                <h3 class="font-bold text-slate-900 text-base">Submitted Supporting Documents (5-in-1 PDF)</h3>
+                <h3 class="font-bold text-slate-900 text-base">Submitted Supporting Documents (4-in-1 PDF)</h3>
                 @php $doc = $application->documents()->latest()->first(); @endphp
                 @if($doc)
                     <div class="flex items-center gap-2">
@@ -284,7 +286,7 @@
             <div class="space-y-3">
                 @forelse($application->logs as $log)
                     <div class="text-xs text-slate-600 flex items-start gap-2">
-                        <span class="w-1.5 h-1.5 rounded-full bg-blue-900 mt-1.5 shrink-0"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#005A2B] mt-1.5 shrink-0"></span>
                         <div>
                             <p class="font-semibold text-slate-800">{{ $log->action }}</p>
                             <p class="text-slate-400 text-[10px]">{{ $log->created_at->format('d M Y H:i') }}</p>

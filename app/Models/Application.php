@@ -76,11 +76,11 @@ class Application extends Model
     {
         return match ($this->status) {
             self::STATUS_DRAFT                => ['label' => 'Draft',                'class' => 'bg-yellow-100 text-yellow-800'],
-            self::STATUS_SUBMITTED            => ['label' => 'Submitted',            'class' => 'bg-blue-100 text-blue-800'],
-            self::STATUS_UNDER_REVIEW         => ['label' => 'Under Review',         'class' => 'bg-purple-100 text-purple-800'],
+            self::STATUS_SUBMITTED            => ['label' => 'Submitted',            'class' => 'bg-emerald-100 text-emerald-800'],
+            self::STATUS_UNDER_REVIEW         => ['label' => 'Under Review',         'class' => 'bg-emerald-50 text-emerald-900 border border-emerald-300'],
             self::STATUS_DOCUMENTS_REQUESTED  => ['label' => 'Documents Required',   'class' => 'bg-orange-100 text-orange-800'],
-            self::STATUS_SHORTLISTED          => ['label' => 'Shortlisted',          'class' => 'bg-teal-100 text-teal-800'],
-            self::STATUS_INTERVIEW_REQUIRED   => ['label' => 'Interview Required',   'class' => 'bg-indigo-100 text-indigo-800'],
+            self::STATUS_SHORTLISTED          => ['label' => 'Shortlisted',          'class' => 'bg-emerald-100 text-emerald-800'],
+            self::STATUS_INTERVIEW_REQUIRED   => ['label' => 'Interview Required',   'class' => 'bg-amber-100 text-amber-900 border border-amber-300'],
             self::STATUS_APPROVED             => ['label' => 'Approved',             'class' => 'bg-emerald-100 text-emerald-800'],
             self::STATUS_PLACEMENT_PENDING    => ['label' => 'Placement Pending',    'class' => 'bg-amber-100 text-amber-800'],
             self::STATUS_PLACED               => ['label' => 'Placed',               'class' => 'bg-green-100 text-green-800'],

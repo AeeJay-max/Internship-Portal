@@ -81,7 +81,7 @@
                                         <td class="py-3.5 px-4">
                                             <span class="px-2.5 py-1 rounded-full font-bold {{ $badge['class'] }}">{{ $badge['label'] }}</span>
                                             @if($app->status === 'interview_required' && $app->interview_date)
-                                                <div class="text-[10px] text-blue-800 font-extrabold mt-1 bg-blue-50 px-2 py-0.5 rounded border border-blue-200 inline-block">
+                                                <div class="text-[10px] text-amber-900 font-extrabold mt-1 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 inline-block">
                                                     📅 {{ $app->interview_date->format('d M Y') }} {{ $app->interview_time ? '@ ' . \Carbon\Carbon::parse($app->interview_time)->format('g:i A') : '' }}
                                                 </div>
                                             @endif

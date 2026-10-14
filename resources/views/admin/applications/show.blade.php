@@ -250,7 +250,7 @@
                             <div class="grid md:grid-cols-2 gap-4 text-xs text-gray-700">
                                 <p><strong>Tertiary Institution:</strong> {{ $application->academicInfo->school_name ?? '—' }}</p>
                                 <p><strong>Degree / Diploma:</strong> {{ $application->academicInfo->qualification_level ?? $application->academicInfo->degree_obtained ?? '—' }}</p>
-                                <p><strong>Field of Study / Major:</strong> {{ $application->academicInfo->field_of_study ?? $application->academicInfo->specialization ?? '—' }}</p>
+                                <p><strong>Faculty:</strong> {{ $application->academicInfo->field_of_study ?? $application->academicInfo->specialization ?? '—' }}</p>
                                 <p><strong>Current Academic Year:</strong> {{ $application->academicInfo->current_year ?? '—' }}</p>
                                 <p><strong>Expected Graduation:</strong> {{ $application->academicInfo->graduation_date ? \Carbon\Carbon::parse($application->academicInfo->graduation_date)->format('F Y') : '—' }}</p>
                                 <p><strong>GPA / Grade Average:</strong> {{ $application->academicInfo->gpa ?? 'N/A' }}</p>
@@ -265,7 +265,7 @@
                         <div class="flex items-center justify-between flex-wrap gap-3 border-b border-slate-100 pb-4">
                             <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
                                 <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                                Internal Combined Application PDF Viewer (5-in-1 Attachment)
+                                Internal Combined Application PDF Viewer (4-in-1 Attachment)
                             </h3>
                             @php $doc = $application->documents()->latest()->first(); @endphp
                             @if($doc)

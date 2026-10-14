@@ -11,8 +11,8 @@ class InternshipOpportunitySeeder extends Seeder
     public function run(): void
     {
         $ict = Department::where('code', 'ICT')->first();
-        $sport = Department::where('code', 'SPORT')->first();
-        $arts = Department::where('code', 'ARTS')->first();
+        $sport = Department::where('code', 'SR')->first() ?? Department::where('code', 'SPORT')->first();
+        $arts = Department::where('code', 'ACPD')->first() ?? Department::where('code', 'ARTS')->first();
         $hr = Department::where('code', 'HR')->first();
 
         if ($ict) {

@@ -262,7 +262,7 @@
         line-height: 1.4;
     }
 
-    .badge-navy    { @apply badge; background: #e0e8f0; color: var(--MOSRAC-navy); }
+    .badge-navy    { @apply badge; background: #DCFCE7; color: var(--MOSRAC-navy); }
     .badge-crimson { @apply badge; background: #f5e0e0; color: var(--MOSRAC-crimson); }
     .badge-success { @apply badge; background: var(--MOSRAC-success-bg); color: var(--MOSRAC-success); }
     .badge-warning { @apply badge; background: var(--MOSRAC-warning-bg); color: var(--MOSRAC-warning); }
@@ -288,7 +288,7 @@
     .alert-success { @apply alert; background: var(--MOSRAC-success-bg); color: #15803d; border-color: var(--MOSRAC-success); }
     .alert-warning { @apply alert; background: var(--MOSRAC-warning-bg); color: #92400e; border-color: var(--MOSRAC-warning); }
     .alert-danger  { @apply alert; background: var(--MOSRAC-danger-bg);  color: #991b1b; border-color: var(--MOSRAC-danger); }
-    .alert-info    { @apply alert; background: var(--MOSRAC-info-bg);    color: #1e40af; border-color: var(--MOSRAC-info); }
+    .alert-info    { @apply alert; background: var(--MOSRAC-info-bg);    color: #00421F; border-color: var(--MOSRAC-info); }
 
     /* ── Form Inputs ── */
     .MOSRAC-input {
@@ -302,7 +302,7 @@
     .MOSRAC-input:focus {
         outline: none;
         border-color: var(--MOSRAC-navy);
-        box-shadow: 0 0 0 3px rgba(1, 28, 62, 0.1);
+        box-shadow: 0 0 0 3px rgba(0, 90, 43, 0.15);
     }
     .MOSRAC-input::placeholder { color: var(--MOSRAC-text-muted); }
     .MOSRAC-input.has-error { border-color: var(--MOSRAC-danger); }

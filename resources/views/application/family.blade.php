@@ -2,7 +2,7 @@
 
 @section('step-content')
 
-    <h2 class="text-2xl font-semibold text-blue-900 mb-8">Family Information</h2>
+    <h2 class="text-2xl font-semibold text-emerald-900 mb-8">Family Information</h2>
 
     <form method="POST" action="{{ route('application.family.store') }}">
         @csrf
@@ -56,14 +56,11 @@
 
             <div class="flex items-center justify-between mb-4">
                 <div>
-                    <h3 class="text-lg font-semibold text-blue-900">Siblings</h3>
+                    <h3 class="text-lg font-semibold text-emerald-900">Siblings</h3>
                     <p class="text-xs text-gray-500 mt-0.5">Add each brother or sister</p>
                 </div>
                 <button type="button" @click="add()"
-                        class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white rounded-lg transition-all"
-                        style="background: #011C3E;"
-                        onmouseover="this.style.background='#611818';"
-                        onmouseout="this.style.background='#011C3E';">
+                        class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white rounded-lg transition-all bg-[#005A2B] hover:bg-[#00421F]">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                     </svg>
@@ -130,7 +127,7 @@
                 Back
             </a>
             <button type="submit"
-                    class="bg-blue-900 text-white px-6 py-3 rounded-lg hover:bg-blue-800">
+                    class="bg-[#005A2B] text-white px-6 py-3 rounded-lg hover:bg-[#00421F]">
                 Save & Continue
             </button>
         </div>

@@ -10,9 +10,9 @@
             '4' => ['label' => '4th Hour', 'start' => '14:20', 'end' => '15:40'],
         ];
         $typeColors = [
-            'lecture' => ['#dbeafe', '#1d4ed8'],
-            'lab'     => ['#ede9fe', '#7c3aed'],
-            'seminar' => ['#fef9c3', '#a16207'],
+            'lecture' => ['#dcfce7', '#005A2B'],
+            'lab'     => ['#fee2e2', '#dc2626'],
+            'seminar' => ['#fef3c7', '#d97706'],
         ];
         // Build calendar: day → hour → slot
         $calendarData = [];
@@ -34,10 +34,10 @@
     {{-- Header --}}
     <div class="flex items-center justify-between mb-5">
         <div>
-            <h1 class="text-xl font-bold" style="color: #011C3E;">My Schedule</h1>
+            <h1 class="text-xl font-bold" style="color: #005A2B;">My Schedule</h1>
             <p class="text-xs text-gray-400 mt-0.5">{{ $semester?->name }} &nbsp;·&nbsp; {{ $totalClasses }} classes/week</p>
         </div>
-        <div class="text-xs font-bold px-3 py-1.5 rounded-xl" style="background:#eff6ff;color:#011C3E;">
+        <div class="text-xs font-bold px-3 py-1.5 rounded-xl" style="background:#f0fdf4;color:#005A2B;">
             {{ now()->format('l') }}
         </div>
     </div>
@@ -56,7 +56,7 @@
             <div class="grid grid-cols-2 gap-2">
                 @foreach($classHours as $h)
                     <div class="flex items-center gap-2 text-xs">
-                        <span class="font-bold w-16" style="color:#011C3E;">{{ $h['start'] }}</span>
+                        <span class="font-bold w-16" style="color:#005A2B;">{{ $h['start'] }}</span>
                         <span class="text-gray-400">– {{ $h['end'] }}</span>
                         <span class="text-gray-300 ml-auto">{{ $h['label'] }}</span>
                     </div>
@@ -70,18 +70,18 @@
                 $isToday  = $day === $today;
             @endphp
 
-            <div class="card overflow-hidden {{ $isToday ? 'ring-2 ring-blue-400' : '' }}">
+            <div class="card overflow-hidden {{ $isToday ? 'ring-2 ring-emerald-500' : '' }}">
                 {{-- Day header --}}
                 <div class="px-4 py-3 flex items-center gap-3 border-b border-gray-100"
-                     style="{{ $isToday ? 'background: linear-gradient(135deg, #eff6ff, #dbeafe);' : 'background: #f8fafc;' }}">
+                     style="{{ $isToday ? 'background: linear-gradient(135deg, #f0fdf4, #dcfce7);' : 'background: #f8fafc;' }}">
                     <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs"
-                         style="{{ $isToday ? 'background:#011C3E;color:white;' : 'background:#e2e8f0;color:#64748b;' }}">
+                         style="{{ $isToday ? 'background:#005A2B;color:white;' : 'background:#e2e8f0;color:#64748b;' }}">
                         {{ substr($day, 0, 2) }}
                     </div>
                     <div class="flex items-center gap-2 flex-1">
-                        <span class="font-bold text-sm {{ $isToday ? 'text-blue-900' : 'text-gray-700' }}">{{ $day }}</span>
+                        <span class="font-bold text-sm {{ $isToday ? 'text-emerald-900' : 'text-gray-700' }}">{{ $day }}</span>
                         @if($isToday)
-                            <span class="text-xs font-bold px-2 py-0.5 rounded-full text-white" style="background:#011C3E;">Today</span>
+                            <span class="text-xs font-bold px-2 py-0.5 rounded-full text-white" style="background:#005A2B;">Today</span>
                         @endif
                     </div>
                     <span class="text-xs text-gray-400">{{ $daySlots->count() }} class{{ $daySlots->count() !== 1 ? 'es' : '' }}</span>
@@ -99,7 +99,7 @@
                             <div class="px-4 py-4 flex items-start gap-4">
                                 {{-- Time --}}
                                 <div class="shrink-0 text-center w-12">
-                                    <p class="text-sm font-bold" style="color:#011C3E;">{{ substr($slot['time_start'],0,5) }}</p>
+                                    <p class="text-sm font-bold" style="color:#005A2B;">{{ substr($slot['time_start'],0,5) }}</p>
                                     <p class="text-xs text-gray-400">{{ substr($slot['time_end'],0,5) }}</p>
                                 </div>
                                 {{-- Info --}}
@@ -112,7 +112,7 @@
                                     <p class="text-xs text-gray-500 mt-0.5">{{ $slot['lecturer'] }}</p>
                                     <div class="flex items-center gap-2 mt-1.5">
                                     <span class="font-mono text-xs font-bold px-2 py-0.5 rounded-lg"
-                                          style="background:#f0f4f8;color:#011C3E;">{{ $slot['room'] }}</span>
+                                          style="background:#f0f4f8;color:#005A2B;">{{ $slot['room'] }}</span>
                                         <span class="text-xs text-gray-400">{{ $slot['building'] }}</span>
                                     </div>
                                 </div>
@@ -134,7 +134,7 @@
                 @foreach($classHours as $h)
                     <div class="text-center p-2.5 rounded-xl" style="background:#f0f4f8;">
                         <p class="text-xs font-bold text-gray-600">{{ $h['label'] }}</p>
-                        <p class="text-sm font-bold mt-0.5" style="color:#011C3E;">{{ $h['start'] }}</p>
+                        <p class="text-sm font-bold mt-0.5" style="color:#005A2B;">{{ $h['start'] }}</p>
                         <p class="text-xs text-gray-400">– {{ $h['end'] }}</p>
                     </div>
                 @endforeach
@@ -143,7 +143,7 @@
 
         {{-- Legend --}}
         <div class="flex items-center gap-4 mb-4">
-            @foreach(['lecture'=>['#dbeafe','#1d4ed8'],'lab'=>['#ede9fe','#7c3aed'],'seminar'=>['#fef9c3','#a16207']] as $type=>[$tbg,$tc])
+            @foreach(['lecture'=>['#dcfce7','#005A2B'],'lab'=>['#fee2e2','#dc2626'],'seminar'=>['#fef3c7','#d97706']] as $type=>[$tbg,$tc])
                 <span class="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full"
                       style="background:{{ $tbg }};color:{{ $tc }};">
                 <span class="w-1.5 h-1.5 rounded-full" style="background:{{ $tc }};"></span>
@@ -163,9 +163,9 @@
                         @foreach($days as $day)
                             @php $isToday = $day === $today; @endphp
                             <th class="px-2 py-3 text-center text-xs font-bold uppercase border-b border-r border-gray-100 last:border-r-0"
-                                style="background:{{ $isToday ? '#eff6ff' : '#f8fafc' }};color:{{ $isToday ? '#011C3E' : '#9ca3af' }};min-width:120px;">
+                                style="background:{{ $isToday ? '#f0fdf4' : '#f8fafc' }};color:{{ $isToday ? '#005A2B' : '#9ca3af' }};min-width:120px;">
                                 {{ substr($day,0,3) }}
-                                @if($isToday)<span class="block text-xs font-bold" style="color:#011C3E;">Today</span>@endif
+                                @if($isToday)<span class="block text-xs font-bold" style="color:#005A2B;">Today</span>@endif
                             </th>
                         @endforeach
                     </tr>
@@ -196,7 +196,7 @@
                                             <p class="text-xs text-gray-400 mt-1 truncate leading-none">{{ explode(' ', $cell['lecturer'])[1] ?? $cell['lecturer'] }}</p>
                                             <div class="flex items-center gap-1 mt-1.5">
                                                 <span class="font-mono text-xs font-bold px-1.5 py-0.5 rounded"
-                                                      style="background:white;color:#011C3E;font-size:10px;">{{ $cell['room'] }}</span>
+                                                      style="background:white;color:#005A2B;font-size:10px;">{{ $cell['room'] }}</span>
                                                 <span class="text-xs px-1.5 py-0.5 rounded font-medium"
                                                       style="background:{{ $tc }}22;color:{{ $tc }};font-size:10px;">{{ ucfirst($cell['type']) }}</span>
                                             </div>

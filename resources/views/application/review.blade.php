@@ -71,9 +71,11 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs text-slate-700">
                 <p><strong>Institution:</strong> {{ $a->school_name }} ({{ $a->institution_type }})</p>
                 <p><strong>Programme:</strong> {{ $a->program_of_study }}</p>
-                <p><strong>Field of Study:</strong> {{ $a->field_of_study }}</p>
+                <p><strong>Faculty:</strong> {{ $a->field_of_study }}</p>
                 <p><strong>Current Level:</strong> {{ $a->current_year_level }}</p>
-                <p><strong>Qualification:</strong> {{ $a->academic_qualification }}</p>
+                @if(!empty($a->academic_qualification))
+                    <p><strong>Qualification:</strong> {{ $a->academic_qualification }}</p>
+                @endif
                 <p><strong>Expected Graduation:</strong> {{ optional($a->expected_graduation_date)->format('M Y') ?? '—' }}</p>
             </div>
         @endif
@@ -126,7 +128,7 @@
     {{-- Section 5: Documents --}}
     <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
         <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-            <h3 class="font-bold text-slate-900 text-base">Uploaded Supporting Documents (5-in-1 PDF)</h3>
+            <h3 class="font-bold text-slate-900 text-base">Uploaded Supporting Documents (4-in-1 PDF)</h3>
             @if($application->isDraft())
                 <a href="{{ route('application.documents') }}" class="text-xs font-bold text-emerald-700 hover:underline">Edit Document</a>
             @endif
@@ -139,7 +141,7 @@
                         <span class="w-8 h-8 rounded-lg bg-emerald-700 text-white font-bold text-[10px] flex items-center justify-center">PDF</span>
                         <div>
                             <span class="font-bold text-slate-800 flex items-center gap-2">
-                                Combined 5-in-1 Supporting Documents
+                                Combined 4-in-1 Supporting Documents
                                 <span class="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-bold">Uploaded ✓</span>
                             </span>
                             <span class="text-[11px] text-slate-500">{{ $doc->file_name ?? 'Combined_Documents.pdf' }} ({{ round(($doc->file_size ?? 0) / 1024, 1) }} KB)</span>

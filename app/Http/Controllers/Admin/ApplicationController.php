@@ -10,6 +10,7 @@ use App\Notifications\ApplicationApproved;
 use App\Notifications\ApplicationRejected;
 use App\Notifications\ApplicationUnderReview;
 use App\Notifications\DocumentsRequested;
+use App\Notifications\ApplicationStatusUpdatedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -121,7 +122,11 @@ class ApplicationController extends Controller
 
         if ($application->user) {
             try {
-                $application->user->notify(new ApplicationUnderReview($application));
+                $application->user->notify(new ApplicationStatusUpdatedNotification(
+                    $application,
+                    'Under Review',
+                    'Your application is now under active review by Ministry placement administrators.'
+                ));
             } catch (\Throwable $e) {
                 \Illuminate\Support\Facades\Log::warning('Failed sending Under Review notification: ' . $e->getMessage());
             }
@@ -161,7 +166,8 @@ class ApplicationController extends Controller
 
         if ($application->user) {
             try {
-                $application->user->notify(new DocumentsRequested($application));
+                $noteMsg = 'The Ministry has requested additional / re-uploaded documentation for: ' . $docNames . ($request->review_notes ? "\n\nInstructions: " . $request->review_notes : '');
+                $application->user->notify(new ApplicationStatusUpdatedNotification($application, 'Additional Documents Requested', $noteMsg));
             } catch (\Throwable $e) {
                 \Illuminate\Support\Facades\Log::warning('Failed sending Documents Requested notification: ' . $e->getMessage());
             }
@@ -185,6 +191,18 @@ class ApplicationController extends Controller
         ]);
 
         ApplicationLog::log($application->id, 'Applicant shortlisted for Ministry internship.', Auth::id());
+
+        if ($application->user) {
+            try {
+                $application->user->notify(new ApplicationStatusUpdatedNotification(
+                    $application,
+                    'Shortlisted for Placement',
+                    'Congratulations! Your application has been shortlisted for an internship placement with the Ministry of Sport, Recreation, Arts and Culture.'
+                ));
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('Failed sending Shortlisted notification: ' . $e->getMessage());
+            }
+        }
 
         return back()->with('success', 'Applicant shortlisted successfully.');
     }
@@ -235,6 +253,18 @@ class ApplicationController extends Controller
             Auth::id()
         );
 
+        if ($application->user) {
+            try {
+                $application->user->notify(new ApplicationStatusUpdatedNotification(
+                    $application,
+                    'Interview Scheduled',
+                    $formattedNotes
+                ));
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('Failed sending Interview notification: ' . $e->getMessage());
+            }
+        }
+
         return back()->with('success', "Interview successfully scheduled for {$dateStr} at {$timeStr}.");
     }
 
@@ -275,7 +305,11 @@ class ApplicationController extends Controller
 
             if ($application->user) {
                 try {
-                    $application->user->notify(new ApplicationApproved($application));
+                    $application->user->notify(new ApplicationStatusUpdatedNotification(
+                        $application,
+                        'Approved (Placement Pending)',
+                        $formattedNotes ?: 'Your application has been approved by the Ministry. Departmental placement is in progress.'
+                    ));
                 } catch (\Throwable $e) {
                     \Illuminate\Support\Facades\Log::warning('Failed sending Application Approved notification: ' . $e->getMessage());
                 }
@@ -312,7 +346,11 @@ class ApplicationController extends Controller
 
         if ($application->user) {
             try {
-                $application->user->notify(new ApplicationRejected($application));
+                $application->user->notify(new ApplicationStatusUpdatedNotification(
+                    $application,
+                    'Unsuccessful',
+                    $request->review_notes
+                ));
             } catch (\Throwable $e) {
                 \Illuminate\Support\Facades\Log::warning('Failed sending Application Rejected notification: ' . $e->getMessage());
             }

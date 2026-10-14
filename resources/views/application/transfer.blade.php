@@ -2,7 +2,7 @@
 
 @section('step-content')
 
-    <h2 class="text-2xl font-semibold text-blue-900 mb-8">
+    <h2 class="text-2xl font-semibold text-emerald-900 mb-8">
         Transfer Information
     </h2>
 
@@ -106,7 +106,7 @@
             </a>
 
             <button type="submit"
-                    class="bg-blue-900 text-white px-6 py-3 rounded-lg hover:bg-blue-800">
+                    class="bg-[#005A2B] text-white px-6 py-3 rounded-lg hover:bg-[#00421F]">
                 Save & Continue
             </button>
 

@@ -52,7 +52,7 @@
                             All required supporting documents MUST be combined into <strong>ONE single PDF file</strong> before uploading.
                         </p>
                         <p class="text-amber-800/90 leading-relaxed text-xs">
-                            Do not upload documents separately. The portal only accepts <strong>1 single PDF file</strong> (under 10MB) containing your National ID, Academic Transcripts, Current University Results, CV, and University Recommendation Letter.
+                            Do not upload documents separately. The portal only accepts <strong>1 single PDF file</strong> (under 10MB) containing your National ID, Academic Transcripts, CV, and University Recommendation Letter.
                         </p>
                     </div>
                 </div>
@@ -120,7 +120,7 @@
                         <div class="space-y-1">
                             <h3 class="text-base font-bold text-slate-900">Prepare Required Documents</h3>
                             <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                                Gather all 5 required supporting documents: National ID, Academic Results, Current University Results, CV, and University Internship Letter.
+                                Gather all 4 required supporting documents: National ID, Academic Results, CV, and University Internship Letter.
                             </p>
                         </div>
                     </div>
@@ -136,7 +136,7 @@
                                 <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-200 text-amber-900">Critical</span>
                             </div>
                             <p class="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
-                                Use a PDF merger tool or mobile scanner app to merge all 5 documents into <strong>a single PDF file</strong> (under 10MB).
+                                Use a PDF merger tool or mobile scanner app to merge all 4 documents into <strong>a single PDF file</strong> (under 10MB).
                             </p>
                         </div>
                     </div>
@@ -183,14 +183,14 @@
                 </div>
             </div>
 
-            {{-- Mandatory 5-in-1 PDF Document Checklist --}}
+            {{-- Mandatory 4-in-1 PDF Document Checklist --}}
             <div class="bg-white border border-slate-200/90 rounded-md p-6 sm:p-7 shadow-sm border-t-4 border-[#005A2B] space-y-4">
                 <div>
                     <h3 class="text-base sm:text-lg font-bold text-slate-900 uppercase tracking-wide mb-1">
-                        Mandatory 5-in-1 PDF Document Checklist
+                        Mandatory 4-in-1 PDF Document Checklist
                     </h3>
                     <p class="text-xs sm:text-sm text-slate-600">
-                        Ensure your single uploaded PDF file contains the following 5 documents in exact order:
+                        Ensure your single uploaded PDF file contains the following 4 documents in exact order:
                     </p>
                 </div>
                 
@@ -205,14 +205,10 @@
                     </div>
                     <div class="p-3.5 bg-slate-50 border border-slate-200 rounded flex items-center gap-3">
                         <span class="w-6 h-6 rounded bg-[#005A2B] text-white flex items-center justify-center font-bold text-xs shrink-0">3</span>
-                        <span>Current University Results</span>
+                        <span>Curriculum Vitae (CV)</span>
                     </div>
                     <div class="p-3.5 bg-slate-50 border border-slate-200 rounded flex items-center gap-3">
                         <span class="w-6 h-6 rounded bg-[#005A2B] text-white flex items-center justify-center font-bold text-xs shrink-0">4</span>
-                        <span>Curriculum Vitae (CV)</span>
-                    </div>
-                    <div class="p-3.5 bg-slate-50 border border-slate-200 rounded flex items-center gap-3 sm:col-span-2">
-                        <span class="w-6 h-6 rounded bg-[#005A2B] text-white flex items-center justify-center font-bold text-xs shrink-0">5</span>
                         <span>Official University Internship Letter / Recommendation</span>
                     </div>
                 </div>

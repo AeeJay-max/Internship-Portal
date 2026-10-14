@@ -10,7 +10,7 @@
                     Ministry Internship Application Wizard
                 </h1>
                 <p class="text-slate-600 text-sm mt-1">
-                    Ministry of Sport, Recreation, Arts & Culture — Reference: <strong class="text-blue-900">{{ $application->reference_number ?? 'Pending' }}</strong>
+                    Ministry of Sport, Recreation, Arts & Culture — Reference: <strong class="text-[#005A2B]">{{ $application->reference_number ?? 'Pending' }}</strong>
                 </p>
             </div>
 
@@ -72,7 +72,7 @@
             function createSaveIndicator() {
                 const el = document.createElement('span');
                 el.id = 'autosave-indicator';
-                el.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#011C3E;color:white;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;opacity:0;transition:opacity 0.3s;z-index:9999;';
+                el.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#005A2B;color:white;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;opacity:0;transition:opacity 0.3s;z-index:9999;';
                 el.textContent = '✓ Saved';
                 document.body.appendChild(el);
                 return el;
@@ -89,7 +89,7 @@
             function showSaving() {
                 if (!saveIndicator) saveIndicator = createSaveIndicator();
                 saveIndicator.textContent = '⟳ Saving draft...';
-                saveIndicator.style.background = '#011C3E';
+                saveIndicator.style.background = '#005A2B';
                 saveIndicator.style.opacity = '1';
             }
 

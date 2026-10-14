@@ -65,7 +65,7 @@
                 </div>
                 <div class="p-3 bg-white/5 border border-white/10 rounded-xl">
                     <p class="text-amber-300 font-bold text-xs">1 PDF File</p>
-                    <p class="text-white/70 text-[11px]">Merged 5-in-1 supporting documents</p>
+                    <p class="text-white/70 text-[11px]">Merged 4-in-1 supporting documents</p>
                 </div>
             </div>
         </div>

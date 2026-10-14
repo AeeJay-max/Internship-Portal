@@ -2,7 +2,7 @@
 
 @section('step-content')
 
-    <h2 class="text-2xl font-semibold text-blue-900 mb-8">
+    <h2 class="text-2xl font-semibold text-emerald-900 mb-8">
         Program Selection
     </h2>
 
@@ -20,7 +20,7 @@
                 <label class="block text-sm font-medium text-gray-600 mb-2">
                     Degree Level
                 </label>
-                <div class="text-lg font-semibold text-blue-900 capitalize">
+                <div class="text-lg font-semibold text-emerald-900 capitalize">
                     {{ $program->degree_level ?? '-' }}
                 </div>
             </div>
@@ -30,7 +30,7 @@
                 <label class="block text-sm font-medium text-gray-600 mb-2">
                     Program Name
                 </label>
-                <div class="text-lg font-semibold text-blue-900">
+                <div class="text-lg font-semibold text-emerald-900">
                     {{ $program->name ?? '-' }}
                 </div>
             </div>
@@ -96,7 +96,7 @@
         <form method="POST" action="{{ route('application.program.store') }}">
             @csrf
             <button type="submit"
-                    class="bg-blue-900 text-white px-6 py-3 rounded-lg">
+                    class="bg-[#005A2B] text-white px-6 py-3 rounded-lg hover:bg-[#00421F]">
                 Confirm & Continue
             </button>
         </form>

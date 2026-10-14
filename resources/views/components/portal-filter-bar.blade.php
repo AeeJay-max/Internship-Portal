@@ -16,7 +16,7 @@
         <div class="min-w-56">
             <label class="text-xs font-semibold text-gray-400 uppercase tracking-wide block mb-1.5">Semester</label>
             <select name="semester_id" onchange="this.form.submit()"
-                    class="w-full border border-gray-200 rounded-lg pl-3 pr-8 py-2 text-sm focus:outline-none focus:border-blue-400 transition appearance-none bg-white">
+                    class="w-full border border-gray-200 rounded-lg pl-3 pr-8 py-2 text-sm focus:outline-none focus:border-[#005A2B] transition appearance-none bg-white">
                 @foreach($semesters as $sem)
                     <option value="{{ $sem->id }}" @selected($sem->id == $semesterId)>
                         {{ $sem->name }} — {{ $sem->academic_year }}
@@ -30,7 +30,7 @@
         <div class="min-w-32">
             <label class="text-xs font-semibold text-gray-400 uppercase tracking-wide block mb-1.5">{{ $yearLabel }}</label>
             <select name="{{ $yearField }}" onchange="this.form.submit()"
-                    class="w-full border border-gray-200 rounded-lg pl-3 pr-8 py-2 text-sm focus:outline-none focus:border-blue-400 transition appearance-none bg-white">
+                    class="w-full border border-gray-200 rounded-lg pl-3 pr-8 py-2 text-sm focus:outline-none focus:border-[#005A2B] transition appearance-none bg-white">
                 <option value="">All Years</option>
                 @foreach([1,2,3,4,5] as $y)
                     <option value="{{ $y }}" @selected(request($yearField) == $y)>Year {{ $y }}</option>
@@ -58,7 +58,7 @@
                 </span>
             @endif
             @if($activeYear)
-                <span class="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full bg-blue-50 text-blue-700">
+                <span class="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800">
                     Year {{ $activeYear }}
                     <a href="{{ request()->fullUrlWithQuery([$yearField => '']) }}" class="opacity-60 hover:opacity-100">✕</a>
                 </span>

@@ -9,123 +9,141 @@ class DepartmentSeeder extends Seeder
 {
     public function run(): void
     {
+        // Migrate legacy department codes if present to maintain relational integrity
+        $legacyMappings = [
+            'REC'   => 'REC_OLD', // legacy Recreation
+            'SPORT' => 'SR',
+            'ARTS'  => 'ACPD',
+            'FIN'   => 'FA',
+            'PROC'  => 'PMU',
+            'CPR'   => 'CA',
+            'RME'   => 'ME',
+        ];
+
+        foreach ($legacyMappings as $oldCode => $newCode) {
+            $legacyDept = Department::where('code', $oldCode)->first();
+            if ($legacyDept) {
+                $legacyDept->update(['code' => $newCode]);
+            }
+        }
+
         $departments = [
             [
-                'name' => 'Information & Communication Technology',
-                'code' => 'ICT',
-                'description' => 'Manages digital infrastructure, portal systems, hardware maintenance, software development, and digital government services.',
-                'contact_email' => 'ict@mosrac.gov.zw',
+                'name' => 'Sports And Recreation',
+                'code' => 'SR',
+                'description' => 'Oversees national sports initiatives, recreation programs, athlete development, and community wellness.',
+                'contact_email' => 'sports@mosrac.gov.zw',
                 'contact_phone' => '+263 242 700101',
-                'capacity' => 10,
+                'capacity' => 12,
+            ],
+            [
+                'name' => 'Promotion And Development',
+                'code' => 'PD',
+                'description' => 'Leads youth, sports, and cultural promotion initiatives, community outreach, and institutional development programs.',
+                'contact_email' => 'promotion@mosrac.gov.zw',
+                'contact_phone' => '+263 242 700102',
+                'capacity' => 8,
             ],
             [
                 'name' => 'Human Resources',
                 'code' => 'HR',
                 'description' => 'Handles personnel recruitment, staff development, internship placement coordination, and organizational welfare.',
                 'contact_email' => 'hr@mosrac.gov.zw',
-                'contact_phone' => '+263 242 700102',
+                'contact_phone' => '+263 242 700103',
                 'capacity' => 8,
             ],
             [
-                'name' => 'Finance',
-                'code' => 'FIN',
-                'description' => 'Manages Ministry budgeting, financial reporting, accounting operations, and fiscal compliance.',
-                'contact_email' => 'finance@mosrac.gov.zw',
-                'contact_phone' => '+263 242 700103',
+                'name' => 'Communication and Advocacy',
+                'code' => 'CA',
+                'description' => 'Directs media relations, public advocacy, official communications, stakeholder engagement, and Ministry publications.',
+                'contact_email' => 'communication@mosrac.gov.zw',
+                'contact_phone' => '+263 242 700104',
                 'capacity' => 6,
             ],
             [
-                'name' => 'Procurement',
-                'code' => 'PROC',
-                'description' => 'Oversees Ministry supply chain management, tendering processes, vendor relations, and asset acquisition.',
-                'contact_email' => 'procurement@mosrac.gov.zw',
-                'contact_phone' => '+263 242 700104',
+                'name' => 'Information Communication Technology',
+                'code' => 'ICT',
+                'description' => 'Manages digital infrastructure, portal systems, hardware maintenance, software development, and digital government services.',
+                'contact_email' => 'ict@mosrac.gov.zw',
+                'contact_phone' => '+263 242 700105',
+                'capacity' => 10,
+            ],
+            [
+                'name' => 'Strategic Policy Planning',
+                'code' => 'SPP',
+                'description' => 'Formulates strategic plans, coordinates national policy frameworks, and drives long-term Ministry development goals.',
+                'contact_email' => 'planning@mosrac.gov.zw',
+                'contact_phone' => '+263 242 700106',
+                'capacity' => 6,
+            ],
+            [
+                'name' => 'Arts and Culture Promotion development',
+                'code' => 'ACPD',
+                'description' => 'Promotes visual and performing arts, preserves cultural heritage, supports creative industries, and coordinates cultural festivals.',
+                'contact_email' => 'artsculture@mosrac.gov.zw',
+                'contact_phone' => '+263 242 700107',
+                'capacity' => 10,
+            ],
+            [
+                'name' => 'Monitoring and Evaluation',
+                'code' => 'ME',
+                'description' => 'Assesses Ministry program performance, conducts impact evaluations, and delivers data-driven reporting.',
+                'contact_email' => 'monitoring@mosrac.gov.zw',
+                'contact_phone' => '+263 242 700108',
+                'capacity' => 6,
+            ],
+            [
+                'name' => 'Finance and Administration',
+                'code' => 'FA',
+                'description' => 'Directs budgeting, financial management, accounting, general administrative services, and facility operations.',
+                'contact_email' => 'finance@mosrac.gov.zw',
+                'contact_phone' => '+263 242 700109',
+                'capacity' => 8,
+            ],
+            [
+                'name' => 'Internal Audit',
+                'code' => 'IA',
+                'description' => 'Conducts independent financial and operational audits, risk assessments, and ensures governance compliance.',
+                'contact_email' => 'audit@mosrac.gov.zw',
+                'contact_phone' => '+263 242 700110',
                 'capacity' => 5,
             ],
             [
-                'name' => 'Administration',
-                'code' => 'ADMIN',
-                'description' => 'Directs general administrative operations, records management, logistics, and executive office support.',
-                'contact_email' => 'admin@mosrac.gov.zw',
-                'contact_phone' => '+263 242 700105',
-                'capacity' => 8,
-            ],
-            [
-                'name' => 'Legal Services',
-                'code' => 'LEGAL',
-                'description' => 'Provides legal counsel, policy drafting, contract drafting, and regulatory compliance for Ministry programs.',
-                'contact_email' => 'legal@mosrac.gov.zw',
-                'contact_phone' => '+263 242 700106',
-                'capacity' => 4,
-            ],
-            [
-                'name' => 'Sport Development',
-                'code' => 'SPORT',
-                'description' => 'Coordinates national sports initiatives, athlete development programs, sports federation oversight, and talent identification.',
-                'contact_email' => 'sport@mosrac.gov.zw',
-                'contact_phone' => '+263 242 700107',
-                'capacity' => 12,
-            ],
-            [
-                'name' => 'Recreation',
-                'code' => 'REC',
-                'description' => 'Promotes community wellness, recreational facilities access, physical activity programs, and youth outdoor initiatives.',
-                'contact_email' => 'recreation@mosrac.gov.zw',
-                'contact_phone' => '+263 242 700108',
-                'capacity' => 8,
-            ],
-            [
-                'name' => 'Arts',
-                'code' => 'ARTS',
-                'description' => 'Fosters visual and performing arts, national art galleries, creative industry development, and artist support programs.',
-                'contact_email' => 'arts@mosrac.gov.zw',
-                'contact_phone' => '+263 242 700109',
-                'capacity' => 10,
-            ],
-            [
-                'name' => 'Culture',
-                'code' => 'CULT',
-                'description' => 'Preserves national heritage, cultural monuments, traditional arts, language policies, and international cultural exchange.',
-                'contact_email' => 'culture@mosrac.gov.zw',
-                'contact_phone' => '+263 242 700110',
-                'capacity' => 10,
-            ],
-            [
-                'name' => 'Communications & Public Relations',
-                'code' => 'CPR',
-                'description' => 'Handles media relations, public statements, official announcements, social media, and Ministry publications.',
-                'contact_email' => 'communications@mosrac.gov.zw',
+                'name' => 'Procurement Management Unit',
+                'code' => 'PMU',
+                'description' => 'Oversees public procurement, supply chain integrity, tendering processes, and vendor compliance.',
+                'contact_email' => 'procurement@mosrac.gov.zw',
                 'contact_phone' => '+263 242 700111',
                 'capacity' => 6,
             ],
             [
-                'name' => 'Research, Monitoring & Evaluation',
-                'code' => 'RME',
-                'description' => 'Conducts policy research, program impact assessments, statistical analysis, and monitoring of national projects.',
-                'contact_email' => 'research@mosrac.gov.zw',
+                'name' => 'Gender Mainstreaming and Inclusivity',
+                'code' => 'GMI',
+                'description' => 'Promotes gender equality, disability inclusion, and mainstreaming in all Ministry policies and opportunities.',
+                'contact_email' => 'gender@mosrac.gov.zw',
                 'contact_phone' => '+263 242 700112',
                 'capacity' => 6,
             ],
             [
-                'name' => 'Events Management',
-                'code' => 'EVENTS',
-                'description' => 'Organizes national sport tournaments, cultural festivals, official government galas, and international sports meets.',
-                'contact_email' => 'events@mosrac.gov.zw',
+                'name' => 'Records',
+                'code' => 'REC',
+                'description' => 'Manages official registries, document archives, records management systems, and knowledge preservation.',
+                'contact_email' => 'records@mosrac.gov.zw',
                 'contact_phone' => '+263 242 700113',
-                'capacity' => 8,
-            ],
-            [
-                'name' => 'Facilities Management',
-                'code' => 'FAC',
-                'description' => 'Maintains national stadiums, sports complexes, cultural centers, theaters, and administrative properties.',
-                'contact_email' => 'facilities@mosrac.gov.zw',
-                'contact_phone' => '+263 242 700114',
-                'capacity' => 8,
+                'capacity' => 6,
             ],
         ];
 
+        // Deactivate old departments that are not in the new list of 13
+        $activeCodes = array_column($departments, 'code');
+        Department::whereNotIn('code', $activeCodes)->update(['is_active' => false]);
+
+        // Insert or update the 13 official departments
         foreach ($departments as $dept) {
-            Department::updateOrCreate(['code' => $dept['code']], $dept);
+            Department::updateOrCreate(
+                ['code' => $dept['code']],
+                array_merge($dept, ['is_active' => true])
+            );
         }
     }
 }

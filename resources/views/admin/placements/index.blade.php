@@ -112,8 +112,8 @@
                 </div>
 
                 <div>
-                    <label class="block font-bold text-slate-700 uppercase mb-1">Supervisor Email</label>
-                    <input type="email" name="supervisor_email" placeholder="supervisor@mosrac.gov.zw" class="w-full rounded-xl border-slate-300 text-xs">
+                    <label class="block font-bold text-slate-700 uppercase mb-1">Supervisor Email *</label>
+                    <input type="email" name="supervisor_email" required placeholder="supervisor@mosrac.gov.zw" class="w-full rounded-xl border-slate-300 text-xs">
                 </div>
 
                 <div>

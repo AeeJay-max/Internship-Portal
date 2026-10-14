@@ -68,6 +68,17 @@ class ApplicationController extends Controller
                     array_intersect_key($data, array_flip($allowed)),
                     fn($v) => $v !== null
                 );
+
+                if (!empty($filtered['date_of_birth'])) {
+                    try {
+                        if (\Carbon\Carbon::parse($filtered['date_of_birth'])->isAfter(now()->subYears(16))) {
+                            unset($filtered['date_of_birth']);
+                        }
+                    } catch (\Exception $e) {
+                        unset($filtered['date_of_birth']);
+                    }
+                }
+
                 if (!empty($filtered)) {
                     ApplicantPersonalInfo::updateOrCreate(
                         ['application_id' => $application->id],
@@ -376,11 +387,25 @@ class ApplicationController extends Controller
         $application = $this->getDraftOrRedirect();
         if ($application instanceof \Illuminate\Http\RedirectResponse) return $application;
 
+        $maxDob = now()->subYears(16)->format('Y-m-d');
+        $validProvinces = [
+            'Bulawayo',
+            'Harare',
+            'Manicaland',
+            'Mashonaland Central',
+            'Mashonaland East',
+            'Mashonaland West',
+            'Masvingo',
+            'Matabeleland North',
+            'Matabeleland South',
+            'Midlands',
+        ];
+
         $validated = $request->validate([
             'first_name'              => 'required|string|max:150',
             'middle_name'             => 'nullable|string|max:150',
             'last_name'               => 'required|string|max:150',
-            'date_of_birth'           => 'required|date|before:today',
+            'date_of_birth'           => 'required|date|before_or_equal:' . $maxDob,
             'gender'                  => 'required|in:male,female',
             'nationality'             => 'required|string|max:100',
             'passport_number'         => 'nullable|string|max:100',
@@ -388,9 +413,14 @@ class ApplicationController extends Controller
             'phone'                   => 'required|string|max:30',
             'address'                 => 'required|string',
             'city'                    => 'required|string|max:100',
-            'province'                => 'required|string|max:100',
+            'province'                => ['required', 'string', \Illuminate\Validation\Rule::in($validProvinces)],
             'emergency_contact_name'  => 'required|string|max:200',
             'emergency_contact_phone' => 'required|string|max:30',
+        ], [
+            'date_of_birth.before_or_equal' => 'Applicants must be at least 16 years of age to apply.',
+            'date_of_birth.required'        => 'Date of birth is required.',
+            'province.in'                   => 'Please select a valid Zimbabwean province from the list.',
+            'province.required'             => 'Please select your province.',
         ]);
 
         ApplicantPersonalInfo::updateOrCreate(
@@ -430,7 +460,7 @@ class ApplicationController extends Controller
             'program_of_study'        => 'required|string|max:255',
             'field_of_study'          => 'required|string|max:255',
             'current_year_level'      => 'required|string|max:100',
-            'academic_qualification'  => 'required|string|max:100',
+            'academic_qualification'  => 'nullable|string|max:100',
             'expected_graduation_date'=> 'nullable|date',
             'gpa'                     => 'nullable|string|max:50',
         ]);
